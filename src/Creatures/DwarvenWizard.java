@@ -1,7 +1,7 @@
 package Creatures;
 
 import cards.CreatureCard;
-import acm.graphics.*;
+import acm.graphics.GImage;
 
 public class DwarvenWizard extends CreatureCard{
 
