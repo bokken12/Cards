@@ -7,10 +7,12 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.logging.Handler;
 
 public class MegaServer {
-	static ArrayList<PrintWriter> writers = new ArrayList<PrintWriter>();
+	static final List<PrintWriter> writers = Collections.synchronizedList(new ArrayList<PrintWriter>());
 	static int PORT_NUMBER = 5002;
 	public static void main(String[] args) {
 
