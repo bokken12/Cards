@@ -15,11 +15,11 @@ public class Main {
 
 	private BufferedReader input;
 	private PrintWriter output;
-	
-	
+
+
 	public void run() {
 		Socket s = setupClient();
-		
+
 		try {
 			input = new BufferedReader(new InputStreamReader(s.getInputStream()));
 			output = new PrintWriter(s.getOutputStream());
@@ -27,8 +27,8 @@ public class Main {
 			throw new ErrorException(e);
 		}
 	}
-	
-	
+
+
 	private Socket setupClient() {
 
 		while (true) {
@@ -37,7 +37,7 @@ public class Main {
 
 				return s;
 			} catch (IOException e) {
-				
+
 			}
 		}
 	}
