@@ -1,9 +1,10 @@
 
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.net.Socket;
 
-import acm.*;
+import acm.graphics.*;
 import acm.program.GraphicsProgram;
 import acm.util.ErrorException;
 
@@ -19,25 +20,26 @@ public class Main extends GraphicsProgram{
 
 
 	private static final int PORT_NUMBER = 5002;
-	
+
 	/* Our preferred size. */
 	public static final int APPLICATION_WIDTH = 500;
 	public static final int APPLICATION_HEIGHT = 600;
-	
+
 	/* How many columns the input field should have. */
 	private static final int NUM_COLUMNS = 30;
-	
+
 	/* Input and output streams. */
 	private BufferedReader input;
 	private PrintWriter output;
-	
+
 	/* Text field where the user can enter text to chat with. */
-	private JTextField text;
-	
+	private JTextField usernameText;
+	private JTextField passwordText;
+
 	public void init() {
 		Socket s = connect();
 		println("=== Connection Established! ===");
-		
+
 		/* Extract the input and output streams from the socket. */
 		try {
 			input = new BufferedReader(new InputStreamReader(s.getInputStream()));
@@ -45,11 +47,16 @@ public class Main extends GraphicsProgram{
 		} catch (IOException e) {
 			throw new ErrorException(e);
 		}
-		
+
 		/* Add the text field to the bottom so that we can chat. */
-		text = new JTextField(NUM_COLUMNS);
-		text.addActionListener(this);
-		add(text, SOUTH);
+		usernameText = new JTextField("Username", 10);
+		usernameText.addActionListener(this);
+		//usernameText.addKeyListener(this);
+		add(usernameText, SOUTH);
+		passwordText = new JTextField("Password", 10);
+		passwordText.addActionListener(this);
+		//passwordText.addKeyListener(this);
+		add(passwordText, SOUTH);
 	}
 	public void run() {
 		try {
@@ -57,7 +64,7 @@ public class Main extends GraphicsProgram{
 			while (true) {
 				String line = input.readLine();
 				if (line == null) break;
-				
+
 				println(">>> " + line);
 			}
 		} catch (IOException e) {
@@ -73,27 +80,33 @@ public class Main extends GraphicsProgram{
 
 				return s;
 			} catch (IOException e) {
-
+				fatalError("Error connecting to the server, try again later.");
 			}
-		}
+		}  
 	}
 	public void fatalError(String errorMessage){
+		GLabel error = new GLabel(errorMessage);
+		error.setFont("Dialog-20");
+		add(error, getWidth()/2 - error.getWidth()/2, getHeight()/2 - error.getHeight()/2);
+		pause(5000);
 		closeGame();
 	}
 	public void closeGame(){
-		
+		exit();
 	}
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == text) {
-			sendText(text.getText());
-			
-			/* Clear the text box so that we can send another
-			 * message.
-			 */
-			text.setText("");
+		if (e.getSource() == passwordText) {
+			if(!(usernameText.getText().equals(""))){
+				sendText("--login " + usernameText.getText() + passwordText.getText());
+
+				/* Clear the text box so that we can send another
+				 * message.
+				 */
+				passwordText.setText("");
+			}
 		}
 	}
-	
+
 	/**
 	 * Sends the specified text to the other user.
 	 * 
@@ -105,8 +118,16 @@ public class Main extends GraphicsProgram{
 		 */
 		output.println(line);
 		output.flush();
-		
-		/* For our sanity, display the text we sent. */
-		println("<<< " + line);
+
 	}
+	/*public void KeyPressed(KeyEvent e){
+		if(e.getSource().equals(passwordText)){
+			if(e.getKeyCode() == KeyEvent.VK_ENTER){
+				if(!(usernameText.getText().equals(""))){
+					//TODO send username and password
+				}
+
+	        }
+		}
+	}*/
 }

@@ -8,11 +8,17 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Handler;
+
+import Player.Player;
 
 public class MegaServer {
 	static final List<PrintWriter> writers = Collections.synchronizedList(new ArrayList<PrintWriter>());
+	static final Map<String, String> users = Collections.synchronizedMap(new HashMap<String, String>());
+	static final List<Handler> players = Collections.synchronizedList(new ArrayList<Handler>());
 	static int PORT_NUMBER = 5002;
 	public static void main(String[] args) {
 
@@ -65,6 +71,9 @@ public class MegaServer {
 				while (true) {
 					String line = in.readLine();
 					if(line == null) break;
+					else if(line.substring(0, 7).equals("--login")){
+						out.println("--loginaccepted" + getPlayer().toString());
+					}
 					for(PrintWriter pw: writers){
 						pw.println(">>> " + line);
 					}
@@ -73,5 +82,8 @@ public class MegaServer {
 
 			}
 		}
+	}
+	public static Player getPlayer(){
+		return null;
 	}
 }
