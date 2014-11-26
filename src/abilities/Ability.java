@@ -1,16 +1,16 @@
 package abilities;
 
-import events.BasicEvent;
+import events.TagEvent;
 
 public class Ability {
 	String name;
 	String description;
-	BasicEvent activation;
-	BasicEvent callevent;
+	TagEvent activation;
+	TagEvent callevent;
 	public Ability(){
 		
 	}
-	public boolean passEvent(BasicEvent event){
+	public boolean passEvent(TagEvent event){
 		return false;
 	}
 }

@@ -1,5 +1,7 @@
 package Player;
 
-public class Player {
+import uselessSubclasses.DamageableEntity;
+
+public class Player extends DamageableEntity{
 
 }

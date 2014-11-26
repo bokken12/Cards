@@ -5,18 +5,18 @@ import java.util.HashMap;
 
 import abilities.Ability;
 
-import events.BasicEvent;
+import events.TagEvent;
 
 public class Card {
 	String name;
-	HashMap<BasicEvent, ArrayList<Ability>> listenerMap;
+	HashMap<TagEvent, ArrayList<Ability>> listenerMap;
 	public Card(){
 		
 	}
 	public String getName(){
 		return name;
 	}
-	public void receiveEvent(BasicEvent event){
+	public void receiveEvent(TagEvent event){
 		if(listenerMap.containsKey(event)){
 			for(Ability activatedAbility: listenerMap.get(event)){
 				
