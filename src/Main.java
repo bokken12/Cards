@@ -76,7 +76,7 @@ public class Main extends GraphicsProgram{
 	private Socket connect() {
 		while (true) {
 			try {
-				Socket s = new Socket("Joels-iMac.local", PORT_NUMBER/*random number*/);
+				Socket s = new Socket("Joels-iMac.local", PORT_NUMBER);
 
 				return s;
 			} catch (IOException e) {

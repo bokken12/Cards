@@ -16,6 +16,7 @@ import java.util.logging.Handler;
 import Player.Player;
 
 public class MegaServer {
+	
 	static final List<PrintWriter> writers = Collections.synchronizedList(new ArrayList<PrintWriter>());
 	static final Map<String, String> users = Collections.synchronizedMap(new HashMap<String, String>());
 	static final List<Handler> players = Collections.synchronizedList(new ArrayList<Handler>());
