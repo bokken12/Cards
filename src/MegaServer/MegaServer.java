@@ -15,15 +15,18 @@ import java.util.logging.Handler;
 
 import Player.Player;
 
+
 public class MegaServer {
 	
 	static final List<PrintWriter> writers = Collections.synchronizedList(new ArrayList<PrintWriter>());
 	static final Map<String, String> users = Collections.synchronizedMap(new HashMap<String, String>());
 	static final List<Handler> players = Collections.synchronizedList(new ArrayList<Handler>());
+	static final List<Player> playerdata = Collections.synchronizedList(new ArrayList<Player>());
 	static int PORT_NUMBER = 5002;
 	public static void main(String[] args) {
 
 		ServerSocket listener = null;
+		//TODO Load player data from file
 		try {
 			listener = new ServerSocket(PORT_NUMBER);
 			System.out.println("Waiting for a connection.");
@@ -43,7 +46,7 @@ public class MegaServer {
 			}
 		}
 
-	}
+	} 
 	private static class Handler extends Thread {
 		private String name;
 		private Socket socket;
@@ -58,31 +61,83 @@ public class MegaServer {
 			this.socket = socket;
 		}
 		public void run() {
-			try {
-				System.out.println("Got a connection");
-				// Create character streams for the socket.
-				in = new BufferedReader(new InputStreamReader(
-						socket.getInputStream()));
-				out = new PrintWriter(socket.getOutputStream(), true);
-				writers.add(out);
-				// Request a name from this client.  Keep requesting until
-				// a name is submitted that is not already used.  Note that 
-				// checking for the existence of a name and adding the name
-				// must be done while locking the set of names.
-				while (true) {
-					String line = in.readLine();
-					if(line == null) break;
-					else if(line.substring(0, 7).equals("--login")){
-						out.println("--loginaccepted" + getPlayer().toString());
-					}
-					for(PrintWriter pw: writers){
-						pw.println(">>> " + line);
-					}
+			System.out.println("Got a connection");
+			// Create character streams for the socket.
+			while(true){
+				try {
+					in = new BufferedReader(new InputStreamReader(
+							socket.getInputStream()));
+					break;
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
-			} catch(Exception e) {
+			}
+			while(true){
+				try {
+					out = new PrintWriter(socket.getOutputStream(), true);
+					break;
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			writers.add(out);
+			// Request a name from this client.  Keep requesting until
+			// a name is submitted that is not already used.  Note that 
+			// checking for the existence of a name and adding the name
+			// must be done while locking the set of names.
+			while (true) {
+				String line = "";
+				try {
+					line = in.readLine();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				System.out.println(line);
+				if(line == null) break;
+				else if(line.startsWith("--login")){
+					doLogin(line, out);
 
+				} else if(line.startsWith("--accountCreation")){
+					boolean atemail = false;
+					String email = "";
+					boolean atusername = false;
+					String username = "";
+					boolean atpassword = false;
+					String password = "";
+					for(int i = 0; i < line.length(); i++){
+						if(atpassword){
+							password += line.charAt(i);
+						} else if(atusername){
+							if(line.charAt(i) == ' '){
+								atpassword = true;
+							} else {
+								username += line.charAt(i);
+							}
+						} else if(atemail){
+							if(line.charAt(i) == ' '){
+								atusername = true;
+							} else {
+								email += line.charAt(i);
+							}
+						} else if(line.charAt(i) == ' '){
+							atemail = true;
+						}
+					}
+					playerdata.add(new Player(email, username, password));
+					users.put(username, password);
+					doLogin("--login " + username + " " + password, out);
+				}
 			}
 		}
+	}
+	public static Player doLogin(String params, PrintWriter output){
+		output.println("--loginaccepted");
+		output.flush();
+		System.out.println("got a login");
+		return null;
 	}
 	public static Player getPlayer(){
 		return null;

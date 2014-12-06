@@ -1,4 +1,6 @@
 
+import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
@@ -14,6 +16,9 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 public class Main extends GraphicsProgram{
@@ -35,6 +40,12 @@ public class Main extends GraphicsProgram{
 	/* Text field where the user can enter text to chat with. */
 	private JTextField usernameText;
 	private JTextField passwordText;
+	private JButton createAccount;
+	private JTextField emailText = new JTextField("Enter Email");
+	private JTextField newUsernameText = new JTextField("Enter Username");
+	private JTextField newPasswordText = new JTextField("Enter Password");
+	private JTextField verifyPasswordText = new JTextField("Verify Password");
+	private JPanel south;
 
 	public void init() {
 		Socket s = connect();
@@ -48,15 +59,21 @@ public class Main extends GraphicsProgram{
 			throw new ErrorException(e);
 		}
 
+		south = new JPanel();
 		/* Add the text field to the bottom so that we can chat. */
 		usernameText = new JTextField("Username", 10);
 		usernameText.addActionListener(this);
 		//usernameText.addKeyListener(this);
-		add(usernameText, SOUTH);
+		south.add(usernameText);
 		passwordText = new JTextField("Password", 10);
 		passwordText.addActionListener(this);
 		//passwordText.addKeyListener(this);
-		add(passwordText, SOUTH);
+		south.add(passwordText);
+		createAccount = new JButton("Create Account");
+		createAccount.addActionListener(this);
+		south.add(createAccount);
+		add(south, SOUTH);
+		
 	}
 	public void run() {
 		try {
@@ -95,14 +112,38 @@ public class Main extends GraphicsProgram{
 		exit();
 	}
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == passwordText) {
+		if (e.getSource().equals(passwordText)) {
 			if(!(usernameText.getText().equals(""))){
-				sendText("--login " + usernameText.getText() + passwordText.getText());
+				sendText("--login " + usernameText.getText() + " " + passwordText.getText());
 
 				/* Clear the text box so that we can send another
 				 * message.
 				 */
 				passwordText.setText("");
+			}
+		}
+		if(e.getSource().equals(createAccount)){
+			/*passwordText.setVisible(false);
+			usernameText.setVisible(false);
+			createAccount.setVisible(false);*/
+			south.removeAll();
+
+			south.add(emailText);
+			south.add(newUsernameText);
+			south.add(newPasswordText);
+			south.add(verifyPasswordText);
+			south.revalidate();
+		}
+		if(e.getSource().equals(emailText) || e.getSource().equals(newUsernameText) || e.getSource().equals(newPasswordText) || e.getSource().equals(verifyPasswordText)){
+			if(!(emailText.equals("") || newUsernameText.equals("") || newPasswordText.equals("") || verifyPasswordText.equals(""))){
+				if(newPasswordText.equals(verifyPasswordText)){
+					sendText("--accountCreation " + emailText + " " + newUsernameText + " " + newPasswordText);
+					if(accountCreationConfirmation()){
+						//TODO enter game
+					}
+				}
+			} else {
+				
 			}
 		}
 	}
@@ -119,6 +160,21 @@ public class Main extends GraphicsProgram{
 		output.println(line);
 		output.flush();
 
+	}
+	private boolean accountCreationConfirmation(){
+		while(true){
+			String line = "";
+			try {
+				line = input.readLine();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				line = "";
+			}
+			if(line.startsWith("AccountConfirmed ")){
+				break;
+			}
+		}
+		return true;
 	}
 	/*public void KeyPressed(KeyEvent e){
 		if(e.getSource().equals(passwordText)){
