@@ -130,6 +130,8 @@ public class MegaServer {
 					}
 					playerdata.add(new Player(email, username, password));
 					users.put(username, password);
+					out.println("AccountConfirmed");
+					out.flush();
 					doLogin("--login " + username + " " + password, out);
 				} else if(line.startsWith("--createGame")) {
 					openGames.add(line.substring(13));

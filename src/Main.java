@@ -193,7 +193,7 @@ public class Main extends GraphicsProgram{
 				// TODO Auto-generated catch block
 				line = "";
 			}
-			if(line.startsWith("AccountConfirmed ")){
+			if(line.startsWith("AccountConfirmed")){
 				break;
 			}
 		}
