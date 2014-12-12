@@ -15,6 +15,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -46,6 +47,11 @@ public class Main extends GraphicsProgram{
 	private JTextField newPasswordText = new JTextField("Enter Password");
 	private JTextField verifyPasswordText = new JTextField("Verify Password");
 	private JPanel south;
+	JButton createGame = new JButton("Create Game");
+	JButton refresh = new JButton("Refresh");
+	String username = "";
+	JButton play = new JButton("Play");
+	JButton cards = new JButton("Cards");
 
 	public void init() {
 		Socket s = connect();
@@ -60,7 +66,6 @@ public class Main extends GraphicsProgram{
 		}
 
 		south = new JPanel();
-		/* Add the text field to the bottom so that we can chat. */
 		usernameText = new JTextField("Username", 10);
 		usernameText.addActionListener(this);
 		//usernameText.addKeyListener(this);
@@ -73,7 +78,7 @@ public class Main extends GraphicsProgram{
 		createAccount.addActionListener(this);
 		south.add(createAccount);
 		add(south, SOUTH);
-		
+
 	}
 	public void run() {
 		try {
@@ -82,7 +87,17 @@ public class Main extends GraphicsProgram{
 				String line = input.readLine();
 				if (line == null) break;
 
-				println(">>> " + line);
+				if(line.equals("--loginaccepted")) {
+					removeAll();
+					//ArrayList<String> Games = new ArrayList<String>();
+					add(play, getWidth()/2, 50);
+					add(play, getWidth()/2, 90);
+
+				}
+				if(line.startsWith("--refresh")) {
+					line.substring(10);
+				}
+
 			}
 		} catch (IOException e) {
 			throw new ErrorException(e);
@@ -116,9 +131,7 @@ public class Main extends GraphicsProgram{
 			if(!(usernameText.getText().equals(""))){
 				sendText("--login " + usernameText.getText() + " " + passwordText.getText());
 
-				/* Clear the text box so that we can send another
-				 * message.
-				 */
+				username = usernameText.getText();
 				passwordText.setText("");
 			}
 		}
@@ -143,9 +156,19 @@ public class Main extends GraphicsProgram{
 					}
 				}
 			} else {
-				
+
 			}
+		} 
+		if(e.getSource().equals(createGame)) {
+			sendText("--createGame " + username);
 		}
+		if(e.getSource().equals(refresh)) {
+			sendText("--refresh");
+		}
+		if(e.getSource().equals(play));
+		removeAll();
+		add(refresh);
+		sendText("--refresh");
 	}
 
 	/**
@@ -176,7 +199,8 @@ public class Main extends GraphicsProgram{
 		}
 		return true;
 	}
-	/*public void KeyPressed(KeyEvent e){
+}
+/*public void KeyPressed(KeyEvent e){
 		if(e.getSource().equals(passwordText)){
 			if(e.getKeyCode() == KeyEvent.VK_ENTER){
 				if(!(usernameText.getText().equals(""))){
@@ -186,4 +210,4 @@ public class Main extends GraphicsProgram{
 	        }
 		}
 	}*/
-}
+

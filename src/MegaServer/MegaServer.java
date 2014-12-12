@@ -18,11 +18,15 @@ import Player.Player;
 
 public class MegaServer {
 	
+	static final List<String> openGames = Collections.synchronizedList(new ArrayList<String>());
 	static final List<PrintWriter> writers = Collections.synchronizedList(new ArrayList<PrintWriter>());
 	static final Map<String, String> users = Collections.synchronizedMap(new HashMap<String, String>());
 	static final List<Handler> players = Collections.synchronizedList(new ArrayList<Handler>());
 	static final List<Player> playerdata = Collections.synchronizedList(new ArrayList<Player>());
 	static int PORT_NUMBER = 5002;
+	private static BufferedReader in;
+	private static PrintWriter out;
+	
 	public static void main(String[] args) {
 
 		ServerSocket listener = null;
@@ -50,8 +54,6 @@ public class MegaServer {
 	private static class Handler extends Thread {
 		private String name;
 		private Socket socket;
-		private BufferedReader in;
-		private PrintWriter out;
 
 		/**
 		 * Constructs a handler thread, squirreling away the socket.
@@ -129,10 +131,21 @@ public class MegaServer {
 					playerdata.add(new Player(email, username, password));
 					users.put(username, password);
 					doLogin("--login " + username + " " + password, out);
+				} else if(line.startsWith("--createGame")) {
+					openGames.add(line.substring(13));
+				} else if(line.startsWith("--refresh")) {
+					out.print("--refresh");
+					for(int i = 0; i < openGames.size(); i++) {
+					out.print(openGames.get(i));
+					}
+					out.print("--refresh");
+					out.flush();
 				}
 			}
 		}
 	}
+	
+	
 	public static Player doLogin(String params, PrintWriter output){
 		output.println("--loginaccepted");
 		output.flush();
