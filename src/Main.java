@@ -87,13 +87,7 @@ public class Main extends GraphicsProgram{
 				String line = input.readLine();
 				if (line == null) break;
 
-				if(line.equals("--loginaccepted")) {
-					removeAll();
-					//ArrayList<String> Games = new ArrayList<String>();
-					add(play, getWidth()/2, 50);
-					add(play, getWidth()/2, 90);
 
-				}
 				if(line.startsWith("--refresh")) {
 					line.substring(10);
 				}
@@ -133,21 +127,23 @@ public class Main extends GraphicsProgram{
 
 				username = usernameText.getText();
 				passwordText.setText("");
+				if(loginConfirmation()){
+
+				}
 			}
 		}
-		if(e.getSource().equals(createAccount)){
+		else if(e.getSource().equals(createAccount)){
 			/*passwordText.setVisible(false);
 			usernameText.setVisible(false);
 			createAccount.setVisible(false);*/
 			south.removeAll();
-
 			south.add(emailText);
 			south.add(newUsernameText);
 			south.add(newPasswordText);
 			south.add(verifyPasswordText);
 			south.revalidate();
 		}
-		if(e.getSource().equals(emailText) || e.getSource().equals(newUsernameText) || e.getSource().equals(newPasswordText) || e.getSource().equals(verifyPasswordText)){
+		else if(e.getSource().equals(emailText) || e.getSource().equals(newUsernameText) || e.getSource().equals(newPasswordText) || e.getSource().equals(verifyPasswordText)){
 			if(!(emailText.equals("") || newUsernameText.equals("") || newPasswordText.equals("") || verifyPasswordText.equals(""))){
 				if(newPasswordText.equals(verifyPasswordText)){
 					sendText("--accountCreation " + emailText + " " + newUsernameText + " " + newPasswordText);
@@ -159,14 +155,15 @@ public class Main extends GraphicsProgram{
 
 			}
 		} 
-		if(e.getSource().equals(createGame)) {
+		else if(e.getSource().equals(createGame)) {
 			sendText("--createGame " + username);
 		}
-		if(e.getSource().equals(refresh)) {
+		else if(e.getSource().equals(refresh)) {
 			sendText("--refresh");
 		}
-		if(e.getSource().equals(play));
+		else if(e.getSource().equals(play));
 		removeAll();
+		//I'm not sure how it does it, but I've checked that the refresh is from here. That equals play button is going to have to be examined.
 		add(refresh);
 		sendText("--refresh");
 	}
@@ -194,6 +191,25 @@ public class Main extends GraphicsProgram{
 				line = "";
 			}
 			if(line.startsWith("AccountConfirmed")){
+				break;
+			}
+		}
+		return true;
+	}
+	private boolean loginConfirmation(){
+		while(true){
+			String line = "";
+			try {
+				line = input.readLine();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				line = "";
+			}
+			if(line.startsWith("--loginaccepted")) {
+				removeAll();
+				//ArrayList<String> Games = new ArrayList<String>();
+				add(play, getWidth()/2, 50);
+				add(play, getWidth()/2, 90);
 				break;
 			}
 		}
