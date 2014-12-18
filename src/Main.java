@@ -87,7 +87,7 @@ public class Main extends GraphicsProgram{
 				String line = input.readLine();
 				if (line == null) break;
 
-				if(line.startsWith("--refresh")) {
+				else if(line.startsWith("--refresh")) {
 					line.substring(10);
 				}
 
