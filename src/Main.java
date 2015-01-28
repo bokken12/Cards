@@ -148,6 +148,7 @@ public class Main extends GraphicsProgram{
 				if(newPasswordText.equals(verifyPasswordText)){
 					sendText("--accountCreation " + emailText + " " + newUsernameText + " " + newPasswordText);
 					if(accountCreationConfirmation()){
+						
 						//TODO enter game
 					}
 				}
@@ -187,7 +188,6 @@ public class Main extends GraphicsProgram{
 			try {
 				line = input.readLine();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				line = "";
 			}
 			if(line.startsWith("AccountConfirmed")){
