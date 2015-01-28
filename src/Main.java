@@ -1,15 +1,12 @@
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.net.Socket;
-
-import acm.graphics.*;
-import acm.program.GraphicsProgram;
-import acm.util.ErrorException;
-
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -17,12 +14,9 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.*;
 
-public class Main extends GraphicsProgram{
+public class Main extends JFrame implements ActionListener {
 
 
 	private static final int PORT_NUMBER = 5002;
@@ -43,7 +37,7 @@ public class Main extends GraphicsProgram{
 	private JTextField passwordText;
 	private JButton createAccount;
 	private JTextField emailText = new JTextField("Enter Email");
-	private JTextField newUsernameText = new JTextField("Enter Username");
+	private JTextField newUsernameText  = new JTextField("Enter Username");
 	private JTextField newPasswordText = new JTextField("Enter Password");
 	private JTextField verifyPasswordText = new JTextField("Verify Password");
 	private JPanel south;
@@ -52,18 +46,20 @@ public class Main extends GraphicsProgram{
 	String username = "";
 	JButton play = new JButton("Play");
 	JButton cards = new JButton("Cards");
-	boolean bigButFace = false;
-
+	
+	public void main(String[] args){
+		JFrame frame = new Main();
+	}
 	public void init() {
 		Socket s = connect();
-		println("=== Connection Established! ===");
+		System.out.println("=== Connection Established! ===");
 
 		/* Extract the input and output streams from the socket. */
 		try {
 			input = new BufferedReader(new InputStreamReader(s.getInputStream()));
 			output = new PrintWriter(s.getOutputStream());
 		} catch (IOException e) {
-			throw new ErrorException(e);
+			System.out.println("AAaaAAAAaaaaaAAAAA");
 		}
 
 		south = new JPanel();
@@ -78,9 +74,15 @@ public class Main extends GraphicsProgram{
 		createAccount = new JButton("Create Account");
 		createAccount.addActionListener(this);
 		south.add(createAccount);
-		add(south, SOUTH);
+		this.add(south);
 	}
-	public void run() {
+	public Main() {
+		super();
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setLayout(new FlowLayout());
+		init();
+		this.pack();
+		this.setVisible(true);
 		try {
 			/* Continuously read messages from the source. */
 			while (true) {
@@ -93,9 +95,9 @@ public class Main extends GraphicsProgram{
 
 			}
 		} catch (IOException e) {
-			throw new ErrorException(e);
+			System.out.println("AAAAAaaaAAaaAaaa");
 		}
-		println("=== Connection Closed ===");
+		System.out.println("=== Connection Closed ===");
 	}
 
 	private Socket connect() {
@@ -110,14 +112,19 @@ public class Main extends GraphicsProgram{
 		}  
 	}
 	public void fatalError(String errorMessage){
-		GLabel error = new GLabel(errorMessage);
-		error.setFont("Dialog-20");
-		add(error, getWidth()/2 - error.getWidth()/2, getHeight()/2 - error.getHeight()/2);
-		pause(5000);
+		JLabel error = new JLabel(errorMessage);
+		//error.setFont("Dialog-20");
+		this.add(error, getWidth()/2 - error.getWidth()/2, getHeight()/2 - error.getHeight()/2);
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		closeGame();
 	}
 	public void closeGame(){
-		exit();
+		System.exit(0);
 	}
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource().equals(passwordText)) {
