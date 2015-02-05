@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -32,7 +33,7 @@ public class MegaServer {
 		ServerSocket listener = null;
 		//TODO Load player data from file
 		try {
-			listener = new ServerSocket(PORT_NUMBER);
+			listener = new ServerSocket(PORT_NUMBER, 100, InetAddress.getByName("10.0.1.13"));
 			System.out.println("Waiting for a connection.");
 
 			while (true) {
@@ -61,7 +62,9 @@ public class MegaServer {
 		 */
 		public Handler(Socket socket) {
 			this.socket = socket;
+			System.out.println(socket.getInetAddress().toString());
 		}
+
 		public void run() {
 			System.out.println("Got a connection");
 			// Create character streams for the socket.
