@@ -104,7 +104,7 @@ public class Main extends JFrame implements ActionListener {
 	private Socket connect() {
 		while (true) {
 			try {
-				Socket s = new Socket(/*"Joels-iMac.local""127.0.0.1"*/InetAddress.getByName("24.130.146.148"), PORT_NUMBER);
+				Socket s = new Socket(/*"Joels-iMac.local""127.0.0.1"*/InetAddress.getByName(/*"24.130.146.148"*/"127.0.0.1"), PORT_NUMBER);
 				System.out.println("Socket achieved");
 				return s;
 			} catch (IOException e) {
