@@ -46,8 +46,8 @@ public class Main extends JFrame implements ActionListener {
 	String username = "";
 	JButton play = new JButton("Play");
 	JButton cards = new JButton("Cards");
-	
-	public void main(String[] args){
+
+	public static void main(String[] args){
 		JFrame frame = new Main();
 	}
 	public void init() {
@@ -103,11 +103,12 @@ public class Main extends JFrame implements ActionListener {
 	private Socket connect() {
 		while (true) {
 			try {
-				Socket s = new Socket("Joels-iMac.local", PORT_NUMBER);
-
+				Socket s = new Socket(/*"Joels-iMac.local"*/"127.0.0.1", PORT_NUMBER);
+				System.out.println("Socket achieved");
 				return s;
 			} catch (IOException e) {
-				fatalError("Error connecting to the server, try again later.");
+				System.out.println("no connection");
+				//fatalError("Error connecting to the server, try again later.");
 			}
 		}  
 	}
@@ -154,7 +155,7 @@ public class Main extends JFrame implements ActionListener {
 				if(newPasswordText.equals(verifyPasswordText)){
 					sendText("--accountCreation " + emailText + " " + newUsernameText + " " + newPasswordText);
 					if(accountCreationConfirmation()){
-						
+
 						//TODO enter game
 					}
 				}
