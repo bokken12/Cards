@@ -144,12 +144,18 @@ public class Main extends JFrame implements ActionListener {
 			/*passwordText.setVisible(false);
 			usernameText.setVisible(false);
 			createAccount.setVisible(false);*/
-			south.removeAll();
-			south.add(emailText);
-			south.add(newUsernameText);
-			south.add(newPasswordText);
-			south.add(verifyPasswordText);
-			south.revalidate();
+			SwingUtilities.invokeLater(new Runnable() 
+		    {
+		      public void run()
+		      {
+		    	  	south.removeAll();
+					south.add(emailText);
+					south.add(newUsernameText);
+					south.add(newPasswordText);
+					south.add(verifyPasswordText);
+					south.revalidate();
+		      }
+		    });
 		}
 		else if(e.getSource().equals(emailText) || e.getSource().equals(newUsernameText) || e.getSource().equals(newPasswordText) || e.getSource().equals(verifyPasswordText)){
 			if(!(emailText.equals("") || newUsernameText.equals("") || newPasswordText.equals("") || verifyPasswordText.equals(""))){
