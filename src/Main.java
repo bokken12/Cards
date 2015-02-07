@@ -43,6 +43,8 @@ public class Main extends JFrame implements ActionListener {
 	private JTextField newUsernameText  = new JTextField("Enter Username");
 	private JTextField newPasswordText = new JTextField("Enter Password");
 	private JTextField verifyPasswordText = new JTextField("Verify Password");
+	private JButton newcreateAccount = new JButton("Create Account");
+	
 	private JPanel south;
 	JButton createGame = new JButton("Create Game");
 	JButton refresh = new JButton("Refresh");
@@ -163,11 +165,13 @@ public class Main extends JFrame implements ActionListener {
 					newPasswordText.addActionListener(frame);
 					south.add(verifyPasswordText);
 					verifyPasswordText.addActionListener(frame);
+					south.add(newcreateAccount);
+					newcreateAccount.addActionListener(frame);
 					south.revalidate();
 		      }
 		    });
 		}
-		else if(e.getSource().equals(emailText) || e.getSource().equals(newUsernameText) || e.getSource().equals(newPasswordText) || e.getSource().equals(verifyPasswordText)){
+		else if(e.getSource().equals(emailText) || e.getSource().equals(newUsernameText) || e.getSource().equals(newPasswordText) || e.getSource().equals(verifyPasswordText) || e.getSource().equals(newcreateAccount)){
 			if (DEBUG) System.out.println("Got text entry");
 			if(!(emailText.getText().equals("") || newUsernameText.getText().equals("") || newPasswordText.getText().equals("") || verifyPasswordText.getText().equals(""))){
 				if(newPasswordText.getText().equals(verifyPasswordText.getText())){
