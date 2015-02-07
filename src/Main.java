@@ -19,6 +19,7 @@ import javax.swing.*;
 
 public class Main extends JFrame implements ActionListener {
 
+	private static final boolean DEBUG = true;
 
 	private static final int PORT_NUMBER = 5002;
 
@@ -30,10 +31,11 @@ public class Main extends JFrame implements ActionListener {
 	private static final int NUM_COLUMNS = 30;
 
 	/* Input and output streams. */
-	private BufferedReader input;
-	private PrintWriter output;
+	private static BufferedReader input;
+	private static PrintWriter output;
 
 	/* Text field where the user can enter text to chat with. */
+	static Main frame;
 	private JTextField usernameText;
 	private JTextField passwordText;
 	private JButton createAccount;
@@ -49,7 +51,23 @@ public class Main extends JFrame implements ActionListener {
 	JButton cards = new JButton("Cards");
 
 	public static void main(String[] args){
-		JFrame frame = new Main();
+		frame = new Main();
+		System.out.println("We're done initializing!");
+		try {
+			/* Continuously read messages from the source. */
+			while (true) {
+				String line = input.readLine();
+				if (line == null) break;
+
+				else if(line.startsWith("--refresh")) {
+					line.substring(10);
+				}
+
+			}
+		} catch (IOException e) {
+			System.out.println("AAAAAaaaAAaaAaaa");
+		}
+		System.out.println("=== Connection Closed ===");
 	}
 	public void init() {
 		Socket s = connect();
@@ -64,6 +82,7 @@ public class Main extends JFrame implements ActionListener {
 		}
 
 		south = new JPanel();
+		south.setLayout(new FlowLayout());
 		usernameText = new JTextField("Username", 10);
 		usernameText.addActionListener(this);
 		//usernameText.addKeyListener(this);
@@ -84,23 +103,10 @@ public class Main extends JFrame implements ActionListener {
 		init();
 		this.pack();
 		this.setVisible(true);
-		try {
-			/* Continuously read messages from the source. */
-			while (true) {
-				String line = input.readLine();
-				if (line == null) break;
-
-				else if(line.startsWith("--refresh")) {
-					line.substring(10);
-				}
-
-			}
-		} catch (IOException e) {
-			System.out.println("AAAAAaaaAAaaAaaa");
-		}
-		System.out.println("=== Connection Closed ===");
 	}
+	public void run(){
 
+	}
 	private Socket connect() {
 		while (true) {
 			try {
@@ -150,24 +156,30 @@ public class Main extends JFrame implements ActionListener {
 		      {
 		    	  	south.removeAll();
 					south.add(emailText);
+					emailText.addActionListener(frame);
 					south.add(newUsernameText);
+					newUsernameText.addActionListener(frame);
 					south.add(newPasswordText);
+					newPasswordText.addActionListener(frame);
 					south.add(verifyPasswordText);
+					verifyPasswordText.addActionListener(frame);
 					south.revalidate();
 		      }
 		    });
 		}
 		else if(e.getSource().equals(emailText) || e.getSource().equals(newUsernameText) || e.getSource().equals(newPasswordText) || e.getSource().equals(verifyPasswordText)){
-			if(!(emailText.equals("") || newUsernameText.equals("") || newPasswordText.equals("") || verifyPasswordText.equals(""))){
-				if(newPasswordText.equals(verifyPasswordText)){
+			if (DEBUG) System.out.println("Got text entry");
+			if(!(emailText.getText().equals("") || newUsernameText.getText().equals("") || newPasswordText.getText().equals("") || verifyPasswordText.getText().equals(""))){
+				if(newPasswordText.getText().equals(verifyPasswordText.getText())){
 					sendText("--accountCreation " + emailText + " " + newUsernameText + " " + newPasswordText);
+					if (DEBUG) System.out.println("Waiting for confirmation on creating an account");
 					if(accountCreationConfirmation()){
 
 						//TODO enter game
 					}
 				}
 			} else {
-
+				if (DEBUG) System.out.println("Didn't verify: |" + newPasswordText.getText() + "| |" + verifyPasswordText.getText() + "|");
 			}
 		} 
 		else if(e.getSource().equals(createGame)) {
@@ -176,11 +188,12 @@ public class Main extends JFrame implements ActionListener {
 		else if(e.getSource().equals(refresh)) {
 			sendText("--refresh");
 		}
-		else if(e.getSource().equals(play));
-		removeAll();
-		//I'm not sure how it does it, but I've checked that the refresh is from here. That equals play button is going to have to be examined.
-		add(refresh);
-		sendText("--refresh"); 
+		else if(e.getSource().equals(play)){
+			removeAll();
+			//I'm not sure how it does it, but I've checked that the refresh is from here. That equals play button is going to have to be examined.
+			add(refresh);
+			sendText("--refresh"); 
+		}
 	}
 
 	/**
