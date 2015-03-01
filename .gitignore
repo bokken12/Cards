@@ -12,3 +12,7 @@ bin/Main.class
 *.class
 
 bin/Main.class
+
+*.class
+
+bin/MegaServer/MegaServer.class

@@ -133,7 +133,8 @@ public class MegaServer {
 					}
 					playerdata.add(new Player(email, username, password));
 					users.put(username, password);
-					out.println("AccountConfirmed");
+					out.println("AccountConfirmed ");
+					System.out.println("Account got some confirmation");
 					out.flush();
 					doLogin("--login " + username + " " + password, out);
 				} else if(line.startsWith("--createGame")) {
@@ -152,7 +153,7 @@ public class MegaServer {
 	
 	
 	public static Player doLogin(String params, PrintWriter output){
-		output.println("--loginaccepted");
+		output.println("--loginaccepted ");
 		output.flush();
 		System.out.println("got a login");
 		return null;

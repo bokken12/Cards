@@ -14,6 +14,7 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Set;
 
 import javax.swing.*;
 
@@ -51,6 +52,7 @@ public class Main extends JFrame implements ActionListener {
 	String username = "";
 	JButton play = new JButton("Play");
 	JButton cards = new JButton("Cards");
+	static String currentline = "";
 
 	public static void main(String[] args){
 		frame = new Main();
@@ -58,11 +60,11 @@ public class Main extends JFrame implements ActionListener {
 		try {
 			/* Continuously read messages from the source. */
 			while (true) {
-				String line = input.readLine();
-				if (line == null) break;
+				currentline = input.readLine();
+				//if (line == null) break;
 
-				else if(line.startsWith("--refresh")) {
-					line.substring(10);
+				/*else */if(currentline.startsWith("--refresh")) {
+					currentline.substring(10);
 				}
 
 			}
@@ -178,7 +180,7 @@ public class Main extends JFrame implements ActionListener {
 					sendText("--accountCreation " + emailText + " " + newUsernameText + " " + newPasswordText);
 					if (DEBUG) System.out.println("Waiting for confirmation on creating an account");
 					if(accountCreationConfirmation()){
-
+						if (DEBUG) System.out.println("I gots confirmation!");
 						//TODO enter game
 					}
 				}
@@ -215,13 +217,7 @@ public class Main extends JFrame implements ActionListener {
 	}
 	private boolean accountCreationConfirmation(){
 		while(true){
-			String line = "";
-			try {
-				line = input.readLine();
-			} catch (IOException e) {
-				line = "";
-			}
-			if(line.startsWith("AccountConfirmed")){
+			if(currentline.startsWith("AccountConfirmed")){
 				break;
 			}
 		}
@@ -229,14 +225,7 @@ public class Main extends JFrame implements ActionListener {
 	}
 	private boolean loginConfirmation(){
 		while(true){
-			String line = "";
-			try {
-				line = input.readLine();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				line = "";
-			}
-			if(line.startsWith("--loginaccepted")) {
+			if(currentline.startsWith("--loginaccepted")) {
 				removeAll();
 				//ArrayList<String> Games = new ArrayList<String>();
 				add(play, getWidth()/2, 50);
