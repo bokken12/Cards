@@ -141,13 +141,7 @@ public class Main extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource().equals(passwordText)) {
 			if(!(usernameText.getText().equals(""))){
-				sendText("--login " + usernameText.getText() + " " + passwordText.getText());
-
-				username = usernameText.getText();
-				passwordText.setText("");
-				if(loginConfirmation()){
-
-				}
+				doLogin(usernameText.getText(), passwordText.getText());
 			}
 		}
 		else if(e.getSource().equals(createAccount)){
@@ -177,11 +171,11 @@ public class Main extends JFrame implements ActionListener {
 			if (DEBUG) System.out.println("Got text entry");
 			if(!(emailText.getText().equals("") || newUsernameText.getText().equals("") || newPasswordText.getText().equals("") || verifyPasswordText.getText().equals(""))){
 				if(newPasswordText.getText().equals(verifyPasswordText.getText())){
-					sendText("--accountCreation " + emailText + " " + newUsernameText + " " + newPasswordText);
+					sendText("--accountCreation " + emailText.getText() + " " + newUsernameText.getText() + " " + newPasswordText.getText());
 					if (DEBUG) System.out.println("Waiting for confirmation on creating an account");
 					if(accountCreationConfirmation()){
 						if (DEBUG) System.out.println("I gots confirmation!");
-						//TODO enter game
+						doLogin(newUsernameText.getText(), newPasswordText.getText());
 					}
 				}
 			} else {
@@ -234,6 +228,12 @@ public class Main extends JFrame implements ActionListener {
 			}
 		}
 		return true;
+	}
+	public void doLogin(String username, String password){
+		sendText("--login " + username + " " + passwordText);
+		if(loginConfirmation()){
+			//TODO enter game
+		}
 	}
 }
 /*public void KeyPressed(KeyEvent e){
