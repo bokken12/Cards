@@ -220,10 +220,6 @@ public class Main extends JFrame implements ActionListener {
 	private boolean loginConfirmation(){
 		while(true){
 			if(currentline.startsWith("--loginaccepted")) {
-				removeAll();
-				//ArrayList<String> Games = new ArrayList<String>();
-				add(play, getWidth()/2, 50);
-				add(play, getWidth()/2, 90);
 				break;
 			}
 		}
@@ -232,6 +228,7 @@ public class Main extends JFrame implements ActionListener {
 	public void doLogin(String username, String password){
 		sendText("--login " + username + " " + passwordText);
 		if(loginConfirmation()){
+			if (DEBUG) System.out.println("fahsjk");
 			//TODO enter game
 		}
 	}
