@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Handler;
 
+import cards.Card;
 import Player.Player;
 
 
@@ -130,12 +131,13 @@ public class MegaServer {
 							atemail = true;
 						}
 					}
-					playerdata.add(new Player(email, username, password));
+					Player player = new Player(email, username, password, new ArrayList<Card>(), new Card[10][40], 0, new ArrayList<String>(), 0);
+					playerdata.add(player);
 					users.put(username, password);
 					out.println("AccountConfirmed ");
 					System.out.println("Account got some confirmation");
 					out.flush();
-					doLogin("--login " + username + " " + password, out);
+					//doLogin("--login " + username + " " + password, out);
 				} else if(line.startsWith("--createGame")) {
 					openGames.add(line.substring(13));
 				} else if(line.startsWith("--refresh")) {

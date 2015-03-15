@@ -13,6 +13,9 @@ public class Card {
 	public Card(){
 		
 	}
+	public static Card fromName(String name){
+		return null;
+	}
 	public String getName(){
 		return name;
 	}
