@@ -5,9 +5,11 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.Socket;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.InetAddress;
@@ -16,13 +18,17 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Set;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
+
+import MegaServer.MegaServer;
 
 public class Main extends JFrame implements ActionListener {
 
 	private static final boolean DEBUG = true;
 
-	private static final int PORT_NUMBER = 5002;
+	
+
 
 	/* Our preferred size. */
 	public static final int APPLICATION_WIDTH = 500;
@@ -118,7 +124,7 @@ public class Main extends JFrame implements ActionListener {
 	private Socket connect() {
 		while (true) {
 			try {
-				Socket s = new Socket(/*/*"Joels-iMac-3""127.0.0.1"InetAddress.getByName("24.130.146.148"), PORT_NUMBER, */InetAddress.getByName("10.0.1.13"), PORT_NUMBER);
+				Socket s = new Socket(InetAddress.getByName(MegaServer.HOSTNAME), MegaServer.PORT_NUMBER);
 				System.out.println("Socket achieved");
 				return s;
 			} catch (IOException e) {
@@ -168,7 +174,8 @@ public class Main extends JFrame implements ActionListener {
 					verifyPasswordText.addActionListener(frame);
 					south.add(newcreateAccount);
 					newcreateAccount.addActionListener(frame);
-					south.revalidate();
+					
+					frame.pack();
 		      }
 		    });
 		}
@@ -236,6 +243,7 @@ public class Main extends JFrame implements ActionListener {
 	
 	public void MENU() {
 		
+		Game game = new Game();
 	}
 	
 }
