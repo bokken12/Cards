@@ -11,6 +11,7 @@ import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 
 public class Game extends JFrame implements ActionListener{
@@ -18,7 +19,8 @@ public class Game extends JFrame implements ActionListener{
 	public Game() {
 		super();
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
+		JPanel content = (JPanel) this.getContentPane();
+		content.setLayout(new BoxLayout(content, BoxLayout.X_AXIS));
 		
 		BufferedImage img = null;
 		try {
@@ -29,7 +31,7 @@ public class Game extends JFrame implements ActionListener{
 		ImageIcon icon = new ImageIcon(img);
 		JLabel label = new JLabel(icon);
 		label.setAlignmentX(Component.CENTER_ALIGNMENT);
-		this.add(label);
+		content.add(label);
 		
 		this.pack();
 		this.setVisible(true);
@@ -39,6 +41,10 @@ public class Game extends JFrame implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		
 		
+	}
+	
+	public static void main(String[] args) {
+		Game a = new Game();
 	}
 
 }
