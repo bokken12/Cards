@@ -230,9 +230,14 @@ public class Main extends JFrame implements ActionListener {
 		sendText("--login " + username + " " + passwordText);
 		if(loginConfirmation()){
 			if (DEBUG) System.out.println("fahsjk");
-			//TODO enter game
+			MENU();
 		}
 	}
+	
+	public void MENU() {
+		
+	}
+	
 }
 /*public void KeyPressed(KeyEvent e){
 		if(e.getSource().equals(passwordText)){
