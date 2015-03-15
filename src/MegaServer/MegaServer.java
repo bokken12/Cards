@@ -29,7 +29,7 @@ public class MegaServer {
 	private static BufferedReader in;
 	private static PrintWriter out;
 	
-	public static final String HOSTNAME = /*10.0.1.13*/ "127.0.0.1";
+	public static final String HOSTNAME = "10.0.1.13"/* "127.0.0.1"*/;
 	
 	public static void main(String[] args) {
 
