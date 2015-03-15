@@ -1,16 +1,16 @@
 package abilities;
 
-import events.TagEvent;
+import events.GameEvent;
+import events.GameListener;
 
-public class Ability {
+public class Ability implements GameListener{
 	String name;
 	String description;
-	TagEvent activation;
-	TagEvent callevent;
+	GameEvent activation;
+	GameEvent callevent;
 	public Ability(){
 		
 	}
-	public boolean passEvent(TagEvent event){
-		return false;
+	public void passEvent(GameEvent event){
 	}
 }
