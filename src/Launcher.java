@@ -30,7 +30,7 @@ public class Launcher extends JFrame implements ActionListener {
 
 	private static final boolean DEBUG = true;
 
-	
+
 
 
 	/* Our preferred size. */
@@ -54,7 +54,7 @@ public class Launcher extends JFrame implements ActionListener {
 	private static JTextField newPasswordText = new JTextField("Enter Password");
 	private JTextField verifyPasswordText = new JTextField("Verify Password");
 	private JButton newcreateAccount = new JButton("Create Account");
-	
+
 	private JPanel south;
 	JButton createGame = new JButton("Create Game");
 	JButton refresh = new JButton("Refresh");
@@ -78,6 +78,24 @@ public class Launcher extends JFrame implements ActionListener {
 				} else if (currentline.startsWith("AccountConfirmed")){
 					System.out.println("Account confirmed! Yay!");
 					doLogin(newUsernameText.getText(), newPasswordText.getText());
+				} else if(currentline.startsWith("--loginaccepted")) {
+					Player player;
+					String subbedLine = currentline.substring(17);
+					ArrayList<Card> collection = new ArrayList<Card>();
+					ArrayList<String> collectionStrings = new ArrayList<String>(Arrays.asList((subbedLine.substring(subbedLine.indexOf("cardCollection=") + 15, subbedLine.indexOf(", decks") - 1)).split(",")));
+					for(String cardname:collectionStrings){
+						collection.add(Card.fromName(cardname));
+					}			
+					player = new Player(subbedLine.substring(subbedLine.indexOf("email=") + 6, subbedLine.indexOf(", username") - 1), 
+							subbedLine.substring(subbedLine.indexOf("username=") + 9, subbedLine.indexOf(", password") - 1), 
+							subbedLine.substring(subbedLine.indexOf("password=") + 9, subbedLine.indexOf(", cardCollection") - 1), 
+							collection, 
+							getDecksFromString((subbedLine.substring(subbedLine.indexOf("decks=") + 6, subbedLine.indexOf(", rank") - 1))), 
+							Integer.parseInt(subbedLine.substring(subbedLine.indexOf("rank=") + 5, subbedLine.indexOf(", friends") - 1)), 
+							new ArrayList<String>(Arrays.asList((subbedLine.substring(subbedLine.indexOf("friends=") + 8, subbedLine.indexOf(", gold") - 1)).split(","))), 
+							Integer.parseInt(subbedLine.substring(subbedLine.lastIndexOf("gold=") + 5, subbedLine.indexOf("]") - 1))
+							);
+					menu(player);
 				}
 			}
 		} catch (IOException e) {
@@ -85,7 +103,7 @@ public class Launcher extends JFrame implements ActionListener {
 		}
 		System.out.println("=== Connection Closed ===");
 	}
-	
+
 	public void init() {
 		Socket s = connect();
 		System.out.println("=== Connection Established! ===");
@@ -151,7 +169,7 @@ public class Launcher extends JFrame implements ActionListener {
 	public void closeGame(){
 		System.exit(0);
 	}
-	
+
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource().equals(passwordText)) {
 			if(!(usernameText.getText().equals(""))){
@@ -163,10 +181,10 @@ public class Launcher extends JFrame implements ActionListener {
 			usernameText.setVisible(false);
 			createAccount.setVisible(false);*/
 			SwingUtilities.invokeLater(new Runnable() 
-		    {
-		      public void run()
-		      {
-		    	  	south.removeAll();
+			{
+				public void run()
+				{
+					south.removeAll();
 					south.add(emailText);
 					emailText.addActionListener(frame);
 					south.add(newUsernameText);
@@ -177,10 +195,10 @@ public class Launcher extends JFrame implements ActionListener {
 					verifyPasswordText.addActionListener(frame);
 					south.add(newcreateAccount);
 					newcreateAccount.addActionListener(frame);
-					
+
 					frame.pack();
-		      }
-		    });
+				}
+			});
 		}
 		else if(e.getSource().equals(emailText) || e.getSource().equals(newUsernameText) || e.getSource().equals(newPasswordText) || e.getSource().equals(verifyPasswordText) || e.getSource().equals(newcreateAccount)){
 			if (DEBUG) System.out.println("Got text entry");
@@ -254,17 +272,17 @@ public class Launcher extends JFrame implements ActionListener {
 	}
 	public static void doLogin(String username, String password){
 		sendText("--login " + username + " " + password);
-		menu(loginConfirmation());
+		//menu(loginConfirmation());
 	}
-	
+
 	public static void menu(Player player) {
-		
+
 		Game game = new Game();
 	}
 	public static Card[][] getDecksFromString(String string){
 		return new Card[10][40];
 	}
-	
+
 }
 /*public void KeyPressed(KeyEvent e){
 		if(e.getSource().equals(passwordText)){
