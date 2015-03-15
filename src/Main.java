@@ -63,16 +63,20 @@ public class Main extends JFrame implements ActionListener {
 				currentline = input.readLine();
 				//if (line == null) break;
 
-				/*else */if(currentline.startsWith("--refresh")) {
+				/*else */
+				if(currentline.startsWith("--refresh")) {
 					currentline.substring(10);
+				} else if (currentline.startsWith("AccountConfirmed")){
+					System.out.println("Account confirmed! Yay!");
+					// doLogin(newUsernameText.getText(), newPasswordText.getText());
 				}
-
 			}
 		} catch (IOException e) {
 			System.out.println("AAAAAaaaAAaaAaaa");
 		}
 		System.out.println("=== Connection Closed ===");
 	}
+	
 	public void init() {
 		Socket s = connect();
 		System.out.println("=== Connection Established! ===");
@@ -138,6 +142,7 @@ public class Main extends JFrame implements ActionListener {
 	public void closeGame(){
 		System.exit(0);
 	}
+	
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource().equals(passwordText)) {
 			if(!(usernameText.getText().equals(""))){
@@ -173,10 +178,6 @@ public class Main extends JFrame implements ActionListener {
 				if(newPasswordText.getText().equals(verifyPasswordText.getText())){
 					sendText("--accountCreation " + emailText.getText() + " " + newUsernameText.getText() + " " + newPasswordText.getText());
 					if (DEBUG) System.out.println("Waiting for confirmation on creating an account");
-					if(accountCreationConfirmation()){
-						if (DEBUG) System.out.println("I gots confirmation!");
-						doLogin(newUsernameText.getText(), newPasswordText.getText());
-					}
 				}
 			} else {
 				if (DEBUG) System.out.println("Didn't verify: |" + newPasswordText.getText() + "| |" + verifyPasswordText.getText() + "|");

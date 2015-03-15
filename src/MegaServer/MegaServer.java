@@ -88,10 +88,7 @@ public class MegaServer {
 				}
 			}
 			writers.add(out);
-			// Request a name from this client.  Keep requesting until
-			// a name is submitted that is not already used.  Note that 
-			// checking for the existence of a name and adding the name
-			// must be done while locking the set of names.
+			
 			while (true) {
 				String line = "";
 				try {
