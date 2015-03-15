@@ -11,14 +11,13 @@ import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 
 
 
 public class Game extends JFrame implements ActionListener{
 
-	JLayeredPane content = (JLayeredPane) this.getContentPane();
+	JPanel content = (JPanel) this.getContentPane();
 	
 	public Game() {
 		super();
