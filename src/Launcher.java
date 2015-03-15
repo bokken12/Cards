@@ -14,11 +14,15 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Set;
 
 import javax.swing.*;
 
-public class Main extends JFrame implements ActionListener {
+import Player.Player;
+import cards.Card;
+
+public class Launcher extends JFrame implements ActionListener {
 
 	private static final boolean DEBUG = true;
 
@@ -36,13 +40,13 @@ public class Main extends JFrame implements ActionListener {
 	private static PrintWriter output;
 
 	/* Text field where the user can enter text to chat with. */
-	static Main frame;
+	static Launcher frame;
 	private JTextField usernameText;
-	private JTextField passwordText;
+	private static JTextField passwordText;
 	private JButton createAccount;
 	private JTextField emailText = new JTextField("Enter Email");
-	private JTextField newUsernameText  = new JTextField("Enter Username");
-	private JTextField newPasswordText = new JTextField("Enter Password");
+	private static JTextField newUsernameText  = new JTextField("Enter Username");
+	private static JTextField newPasswordText = new JTextField("Enter Password");
 	private JTextField verifyPasswordText = new JTextField("Verify Password");
 	private JButton newcreateAccount = new JButton("Create Account");
 	
@@ -55,7 +59,7 @@ public class Main extends JFrame implements ActionListener {
 	static String currentline = "";
 
 	public static void main(String[] args){
-		frame = new Main();
+		frame = new Launcher();
 		System.out.println("We're done initializing!");
 		try {
 			/* Continuously read messages from the source. */
@@ -68,7 +72,7 @@ public class Main extends JFrame implements ActionListener {
 					currentline.substring(10);
 				} else if (currentline.startsWith("AccountConfirmed")){
 					System.out.println("Account confirmed! Yay!");
-					// doLogin(newUsernameText.getText(), newPasswordText.getText());
+					doLogin(newUsernameText.getText(), newPasswordText.getText());
 				}
 			}
 		} catch (IOException e) {
@@ -104,7 +108,7 @@ public class Main extends JFrame implements ActionListener {
 		south.add(createAccount);
 		this.add(south);
 	}
-	public Main() {
+	public Launcher() {
 		super();
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setLayout(new FlowLayout());
@@ -202,7 +206,7 @@ public class Main extends JFrame implements ActionListener {
 	 * 
 	 * @param line The text to send.
 	 */
-	private void sendText(String line) {
+	private static void sendText(String line) {
 		/* Output the data and flush the output stream to force
 		 * the data to send.
 		 */
@@ -218,24 +222,40 @@ public class Main extends JFrame implements ActionListener {
 		}
 		return true;
 	}
-	private boolean loginConfirmation(){
+	private static Player loginConfirmation(){
+		Player player;
 		while(true){
 			if(currentline.startsWith("--loginaccepted")) {
+				String args = currentline.substring(17);
+				ArrayList<Card> collection = new ArrayList<Card>();
+				ArrayList<String> collectionStrings = new ArrayList<String>(Arrays.asList((args.substring(args.indexOf("cardCollection=") + 15, args.indexOf(", decks") - 1)).split(",")));
+				for(String cardname:collectionStrings){
+					collection.add(Card.fromName(cardname));
+				}			
+				player = new Player(args.substring(args.indexOf("email=") + 6, args.indexOf(", username") - 1), 
+						args.substring(args.indexOf("username=") + 9, args.indexOf(", password") - 1), 
+						args.substring(args.indexOf("password=") + 9, args.indexOf(", cardCollection") - 1), 
+						collection, 
+						getDecksFromString((args.substring(args.indexOf("decks=") + 6, args.indexOf(", rank") - 1))), 
+						Integer.parseInt(args.substring(args.indexOf("rank=") + 5, args.indexOf(", friends") - 1)), 
+						new ArrayList<String>(Arrays.asList((args.substring(args.indexOf("friends=") + 8, args.indexOf(", gold") - 1)).split(","))), 
+						Integer.parseInt(args.substring(args.lastIndexOf("gold=") + 5, args.indexOf("]") - 1))
+						);
 				break;
 			}
 		}
-		return true;
+		return player;
 	}
-	public void doLogin(String username, String password){
-		sendText("--login " + username + " " + passwordText);
-		if(loginConfirmation()){
-			if (DEBUG) System.out.println("fahsjk");
-			MENU();
-		}
+	public static void doLogin(String username, String password){
+		sendText("--login " + username + " " + password);
+		menu(loginConfirmation());
 	}
 	
-	public void MENU() {
+	public static void menu(Player player) {
 		
+	}
+	public static Card[][] getDecksFromString(String string){
+		return new Card[10][40];
 	}
 	
 }
