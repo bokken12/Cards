@@ -93,7 +93,7 @@ public class Launcher extends JFrame implements ActionListener {
 							getDecksFromString((subbedLine.substring(subbedLine.indexOf("decks=") + 6, subbedLine.indexOf(", rank")))), 
 							Integer.parseInt(subbedLine.substring(subbedLine.indexOf("rank=") + 5, subbedLine.indexOf(", friends"))), 
 							new ArrayList<String>(Arrays.asList((subbedLine.substring(subbedLine.indexOf("friends=") + 8, subbedLine.indexOf(", gold"))).split(","))), 
-							Integer.parseInt(subbedLine.substring(subbedLine.indexOf("gold=") + 5, subbedLine.indexOf("]")))
+							Integer.parseInt(subbedLine.substring(subbedLine.indexOf("gold=") + 5, subbedLine.lastIndexOf("]")))
 							);
 					menu(player);
 				}
