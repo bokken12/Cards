@@ -82,18 +82,18 @@ public class Launcher extends JFrame implements ActionListener {
 					Player player;
 					String subbedLine = currentline.substring(17);
 					ArrayList<Card> collection = new ArrayList<Card>();
-					ArrayList<String> collectionStrings = new ArrayList<String>(Arrays.asList((subbedLine.substring(subbedLine.indexOf("cardCollection=") + 15, subbedLine.indexOf(", decks") - 1)).split(",")));
+					ArrayList<String> collectionStrings = new ArrayList<String>(Arrays.asList((subbedLine.substring(subbedLine.indexOf("cardCollection=") + 15, subbedLine.indexOf(", decks"))).split(",")));
 					for(String cardname:collectionStrings){
 						collection.add(Card.fromName(cardname));
 					}			
-					player = new Player(subbedLine.substring(subbedLine.indexOf("email=") + 6, subbedLine.indexOf(", username") - 1), 
-							subbedLine.substring(subbedLine.indexOf("username=") + 9, subbedLine.indexOf(", password") - 1), 
-							subbedLine.substring(subbedLine.indexOf("password=") + 9, subbedLine.indexOf(", cardCollection") - 1), 
+					player = new Player(subbedLine.substring(subbedLine.indexOf("email=") + 6, subbedLine.indexOf(", username")), 
+							subbedLine.substring(subbedLine.indexOf("username=") + 9, subbedLine.indexOf(", password")), 
+							subbedLine.substring(subbedLine.indexOf("password=") + 9, subbedLine.indexOf(", cardCollection")), 
 							collection, 
-							getDecksFromString((subbedLine.substring(subbedLine.indexOf("decks=") + 6, subbedLine.indexOf(", rank") - 1))), 
-							Integer.parseInt(subbedLine.substring(subbedLine.indexOf("rank=") + 5, subbedLine.indexOf(", friends") - 1)), 
-							new ArrayList<String>(Arrays.asList((subbedLine.substring(subbedLine.indexOf("friends=") + 8, subbedLine.indexOf(", gold") - 1)).split(","))), 
-							Integer.parseInt(subbedLine.substring(subbedLine.lastIndexOf("gold=") + 5, subbedLine.indexOf("]") - 1))
+							getDecksFromString((subbedLine.substring(subbedLine.indexOf("decks=") + 6, subbedLine.indexOf(", rank")))), 
+							Integer.parseInt(subbedLine.substring(subbedLine.indexOf("rank=") + 5, subbedLine.indexOf(", friends"))), 
+							new ArrayList<String>(Arrays.asList((subbedLine.substring(subbedLine.indexOf("friends=") + 8, subbedLine.indexOf(", gold"))).split(","))), 
+							Integer.parseInt(subbedLine.substring(subbedLine.indexOf("gold=") + 5, subbedLine.indexOf("]")))
 							);
 					menu(player);
 				}
