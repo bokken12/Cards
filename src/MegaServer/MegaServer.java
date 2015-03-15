@@ -25,16 +25,18 @@ public class MegaServer {
 	static final Map<String, String> users = Collections.synchronizedMap(new HashMap<String, String>());
 	static final List<Handler> players = Collections.synchronizedList(new ArrayList<Handler>());
 	static final List<Player> playerdata = Collections.synchronizedList(new ArrayList<Player>());
-	static int PORT_NUMBER = 5002;
+	public static int PORT_NUMBER = 5002;
 	private static BufferedReader in;
 	private static PrintWriter out;
+	
+	public static final String HOSTNAME = /*10.0.1.13*/ "127.0.0.1";
 	
 	public static void main(String[] args) {
 
 		ServerSocket listener = null;
 		//TODO Load player data from file
 		try {
-			listener = new ServerSocket(PORT_NUMBER, 100, InetAddress.getByName("10.0.1.13"));
+			listener = new ServerSocket(PORT_NUMBER, 100, InetAddress.getByName(HOSTNAME));
 			System.out.println("Waiting for a connection.");
 
 			while (true) {
