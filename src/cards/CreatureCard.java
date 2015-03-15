@@ -8,5 +8,7 @@ public class CreatureCard extends DamageableEntity {
 	int power;
 	int toughness;
 	Image image;
+	String text;
+	
 	
 }

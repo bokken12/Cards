@@ -74,7 +74,7 @@ public class Main extends JFrame implements ActionListener {
 					currentline.substring(10);
 				} else if (currentline.startsWith("AccountConfirmed")){
 					System.out.println("Account confirmed! Yay!");
-					// doLogin(newUsernameText.getText(), newPasswordText.getText());
+					//doLogin(newUsernameText.getText(), newPasswordText.getText());
 				}
 			}
 		} catch (IOException e) {
@@ -237,14 +237,11 @@ public class Main extends JFrame implements ActionListener {
 		sendText("--login " + username + " " + passwordText);
 		if(loginConfirmation()){
 			if (DEBUG) System.out.println("fahsjk");
-			MENU();
+			Game game = new Game();
 		}
 	}
 	
-	public void MENU() {
-		
-		Game game = new Game();
-	}
+	
 	
 }
 /*public void KeyPressed(KeyEvent e){

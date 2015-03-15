@@ -11,20 +11,32 @@ import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
+
 
 
 public class Game extends JFrame implements ActionListener{
 
+	JLayeredPane content = (JLayeredPane) this.getContentPane();
+	
 	public Game() {
 		super();
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		JPanel content = (JPanel) this.getContentPane();
+		
 		content.setLayout(new BoxLayout(content, BoxLayout.X_AXIS));
 		
+		makeImage("MenuBackground.jpg");
+		makeImage("playbutton.png");
+		
+		this.pack();
+		this.setVisible(true);
+	}
+
+	public void makeImage(String image) {
 		BufferedImage img = null;
 		try {
-		    img = ImageIO.read(new File("MenuBackground.jpg"));
+		    img = ImageIO.read(new File(image));
 		} catch (IOException e) {
 			System.out.println("wohtpoge");
 		}
@@ -32,11 +44,8 @@ public class Game extends JFrame implements ActionListener{
 		JLabel label = new JLabel(icon);
 		label.setAlignmentX(Component.CENTER_ALIGNMENT);
 		content.add(label);
-		
-		this.pack();
-		this.setVisible(true);
 	}
-
+	
 	
 	public void actionPerformed(ActionEvent e) {
 		
