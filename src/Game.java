@@ -1,5 +1,8 @@
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -18,31 +21,26 @@ import javax.swing.JPanel;
 public class Game extends JFrame implements ActionListener{
 
 	JPanel content = (JPanel) this.getContentPane();
+	private static final Dimension SIZE = new Dimension(400, 350);
+	private static final Dimension SIZE2 = new Dimension(4000, 3500);
 	
 	public Game() {
 		super();
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
-		content.setLayout(new BoxLayout(content, BoxLayout.X_AXIS));
-		
-		makeImage("MenuBackground.jpg");
-		makeImage("playbutton.png");
-		
-		this.pack();
-		this.setVisible(true);
-	}
-
-	public void makeImage(String image) {
+		JPanel panel = new JPanel();
+		panel.setPreferredSize(SIZE);
+		panel.setMaximumSize(SIZE2);
 		BufferedImage img = null;
 		try {
-		    img = ImageIO.read(new File(image));
+		    img = ImageIO.read(new File("MenuBackground.jpg"));
 		} catch (IOException e) {
 			System.out.println("wohtpoge");
 		}
 		ImageIcon icon = new ImageIcon(img);
 		JLabel label = new JLabel(icon);
-		label.setAlignmentX(Component.CENTER_ALIGNMENT);
-		content.add(label);
+		panel.add(label);
+		content.add(panel);
+		
 	}
 	
 	
@@ -50,6 +48,7 @@ public class Game extends JFrame implements ActionListener{
 		
 		
 	}
+	
 	
 	public static void main(String[] args) {
 		Game a = new Game();
