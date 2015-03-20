@@ -16,6 +16,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import Player.Player;
+
 
 
 public class Game extends JFrame implements ActionListener{
@@ -24,7 +26,7 @@ public class Game extends JFrame implements ActionListener{
 	private static final Dimension SIZE = new Dimension(400, 350);
 	private static final Dimension SIZE2 = new Dimension(4000, 3500);
 	
-	public Game() {
+	public Game(Player player) {
 		super();
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		JPanel panel = new JPanel();
@@ -39,7 +41,22 @@ public class Game extends JFrame implements ActionListener{
 		ImageIcon icon = new ImageIcon(img);
 		JLabel label = new JLabel(icon);
 		panel.add(label);
+		
+		
+		BufferedImage img2 = null;
+		try {
+		    img2 = ImageIO.read(new File("playbutton.png"));
+		} catch (IOException e) {
+			System.out.println("wohtpoge");
+		}
+		ImageIcon icon2 = new ImageIcon(img2);
+		JLabel label2 = new JLabel(icon2);
+		panel.add(label2);
+		
+		
 		content.add(panel);
+		this.pack();
+		this.setVisible(true);
 		
 	}
 	
@@ -50,8 +67,6 @@ public class Game extends JFrame implements ActionListener{
 	}
 	
 	
-	public static void main(String[] args) {
-		Game a = new Game();
-	}
+	
 
 }

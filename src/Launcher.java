@@ -277,7 +277,7 @@ public class Launcher extends JFrame implements ActionListener {
 
 	public static void menu(Player player) {
 
-		Game game = new Game();
+		Game game = new Game(player);
 	}
 	public static Card[][] getDecksFromString(String string){
 		return new Card[10][40];
