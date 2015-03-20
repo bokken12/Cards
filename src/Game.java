@@ -22,6 +22,12 @@ import Player.Player;
 
 
 public class Game extends JFrame implements ActionListener{
+	
+	JButton play = new JButton("Play");
+	JButton play2 = new JButton("Play");
+	JButton settings = new JButton("Settings");
+	JButton cards = new JButton("Cards");
+
 
 	JPanel content = (JPanel) this.getContentPane();
 	private static final Dimension SIZE = new Dimension(400, 350);
@@ -43,12 +49,15 @@ public class Game extends JFrame implements ActionListener{
 		JLabel label = new JLabel(icon);
 		panel.add(label);
 		
-		JButton play = new JButton("Play");
-		JButton settings = new JButton("Settings");
-		JButton cards = new JButton("Cards");
 		play.addActionListener(this);
 		cards.addActionListener(this);
 		settings.addActionListener(this);
+		play2.addActionListener(this);
+		
+		
+		add(play);
+		add(cards);
+		add(settings);
 		
 		content.add(panel);
 		this.pack();
@@ -59,10 +68,23 @@ public class Game extends JFrame implements ActionListener{
 	
 	public void actionPerformed(ActionEvent e) {
 		
+		if(e.getSource().equals(play)) {
+			
+		} else if(e.getSource().equals(cards)) {
+			
+		} else if(e.getSource().equals(settings)) {
+			
+		} else if(e.getSource().equals(play2)) {
+			autoMatch();
+		} 
+	}
+	
+	public void playMenu() {
 		
 	}
 	
+	public void autoMatch() {
+		
+	}
 	
-	
-
 }
