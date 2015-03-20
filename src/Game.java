@@ -12,6 +12,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -42,17 +43,12 @@ public class Game extends JFrame implements ActionListener{
 		JLabel label = new JLabel(icon);
 		panel.add(label);
 		
-		
-		BufferedImage img2 = null;
-		try {
-		    img2 = ImageIO.read(new File("playbutton.png"));
-		} catch (IOException e) {
-			System.out.println("wohtpoge");
-		}
-		ImageIcon icon2 = new ImageIcon(img2);
-		JLabel label2 = new JLabel(icon2);
-		panel.add(label2);
-		
+		JButton play = new JButton("Play");
+		JButton settings = new JButton("Settings");
+		JButton cards = new JButton("Cards");
+		play.addActionListener(this);
+		cards.addActionListener(this);
+		settings.addActionListener(this);
 		
 		content.add(panel);
 		this.pack();
