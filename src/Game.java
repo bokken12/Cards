@@ -62,7 +62,4 @@ public class Game extends JFrame implements ActionListener{
 		
 	}
 	
-	
-	
-
 }
