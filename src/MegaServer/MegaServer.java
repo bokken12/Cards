@@ -131,7 +131,7 @@ public class MegaServer {
 							atemail = true;
 						}
 					}
-					Player player = new Player(email, username, password, new ArrayList<Card>(), new Card[10][40], 0, new ArrayList<String>(), 0);
+					Player player = new Player(email, username, password, new ArrayList<Card>(), new HashMap<String, Card[]>(), 0, new ArrayList<String>(), 0);
 					playerdata.add(player);
 					users.put(username, password);
 					out.println("AccountConfirmed ");
@@ -154,7 +154,7 @@ public class MegaServer {
 	
 	
 	public static Player doLogin(String params, PrintWriter output){
-		output.println("--loginaccepted " + (new Player("email", "username", "password", new ArrayList<Card>(), new Card[10][40], 0, new ArrayList<String>(), 0)).toString());
+		output.println("--loginaccepted " + (new Player("email", "username", "password", new ArrayList<Card>(), new HashMap<String, Card[]>(), 0, new ArrayList<String>(), 0)).toString());
 		output.flush();
 		System.out.println("got a login");
 		return null;

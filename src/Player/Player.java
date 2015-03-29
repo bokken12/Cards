@@ -2,6 +2,7 @@ package Player;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 
 import cards.Card;
 
@@ -10,7 +11,7 @@ public class Player {
 	String username;
 	String password;
 	ArrayList<Card> cardCollection;
-	Card[][] decks = new Card[10][40];
+	HashMap<String,Card[]> decks = new HashMap<String, Card[]>();
 	int rank;
 	ArrayList<String> friends = new ArrayList<String>();
 	int gold;
@@ -21,7 +22,7 @@ public class Player {
 	public String toString() {
 		return "Player [email=" + email + ", username=" + username
 				+ ", password=" + password + ", cardCollection="
-				+ cardCollection + ", decks=" + Arrays.deepToString(decks)
+				+ cardCollection + ", decks=" //decks.toString()
 				+ ", rank=" + rank + ", friends=" + friends
 				+ ", gold=" + gold + "]";
 	}
@@ -34,8 +35,9 @@ public class Player {
 	public void removeCardFromCollection(Card card){
 		cardCollection.remove(card);
 	}
-	public void setDeck(int i, Card[] deck){
-		decks[i] = deck;
+	public void setDeck(String name, Card[] deck){
+		decks.remove(name);
+		decks.put(name, deck);
 	}
 	public String getEmail() {
 		return email;
@@ -61,10 +63,10 @@ public class Player {
 	public void setCardCollection(ArrayList<Card> cardCollection) {
 		this.cardCollection = cardCollection;
 	}
-	public Card[][] getDecks() {
+	public HashMap<String, Card[]> getDecks() {
 		return decks;
 	}
-	public void setDecks(Card[][] decks) {
+	public void setDecks(HashMap<String, Card[]> decks) {
 		this.decks = decks;
 	}
 	public int getRank() {
@@ -86,7 +88,7 @@ public class Player {
 		this.gold = gold;
 	}
 	public Player(String email, String username, String password,
-			ArrayList<Card> cardCollection, Card[][] decks, int rank,
+			ArrayList<Card> cardCollection, HashMap<String, Card[]> decks, int rank,
 			ArrayList<String> friends, int gold) {
 		this.email = email;
 		this.username = username;

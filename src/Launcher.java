@@ -17,6 +17,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Set;
 
 import javax.imageio.ImageIO;
@@ -279,8 +280,8 @@ public class Launcher extends JFrame implements ActionListener {
 
 		Game game = new Game(player);
 	}
-	public static Card[][] getDecksFromString(String string){
-		return new Card[10][40];
+	public static HashMap<String, Card[]> getDecksFromString(String string){
+		return new HashMap<String, Card[]>();
 	}
 
 }
