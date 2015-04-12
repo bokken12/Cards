@@ -41,32 +41,13 @@ public class Game extends JFrame implements ActionListener{
 		player = playyer;
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		panel.setPreferredSize(SIZE);
-		panel.setMaximumSize(SIZE2);
-		BufferedImage img = null;
-		try {
-		    img = ImageIO.read(new File("MenuBackground.jpg"));
-		} catch (IOException e) {
-			System.out.println("wohtpoge");
-		}
-		ImageIcon icon = new ImageIcon(img);
-		label = new JLabel(icon);
-		panel.add(label);
-		
-		play.addActionListener(this);
-		cards.addActionListener(this);
-		settings.addActionListener(this);
-		
-		
-		panel.add(play);
-		panel.add(cards);
-		panel.add(settings);
-		
-		content.add(panel);
+		content.add(new Content(this));
 		this.pack();
 		this.setVisible(true);
 		
 	}
+	
+	
 	
 	
 	public void actionPerformed(ActionEvent e) {
