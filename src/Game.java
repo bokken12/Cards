@@ -6,8 +6,11 @@ import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.Socket;
 
 import javax.imageio.ImageIO;
 import javax.swing.BoxLayout;
@@ -18,6 +21,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import Player.Player;
+import Player.SimplePlayerProfile;
 
 
 
@@ -27,15 +31,18 @@ public class Game extends JFrame implements ActionListener{
 	JButton play2 = new JButton("Play");
 	JButton settings = new JButton("Settings");
 	JButton cards = new JButton("Cards");
-
+	BufferedReader input;
+	PrintWriter output;
 
 	JPanel content = (JPanel) this.getContentPane();
 	private static final Dimension SIZE = new Dimension(400, 350);
 	private static final Dimension SIZE2 = new Dimension(4000, 3500);
 	
-	public Game(Player player) {
+	public Game(Player player, BufferedReader input, PrintWriter output) {
 		super();
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.input = input;
+		this.output = output;
 		JPanel panel = new JPanel();
 		panel.setPreferredSize(SIZE);
 		panel.setMaximumSize(SIZE2);
@@ -66,6 +73,8 @@ public class Game extends JFrame implements ActionListener{
 	}
 	
 	
+
+
 	public void actionPerformed(ActionEvent e) {
 		
 		if(e.getSource().equals(play)) {
@@ -83,7 +92,8 @@ public class Game extends JFrame implements ActionListener{
 		
 	}
 	
-	public void autoMatch() {
+	public SimplePlayerProfile autoMatch() {
+		return null;
 		
 	}
 	

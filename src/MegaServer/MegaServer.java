@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.logging.Handler;
 
 import cards.Card;
+import Player.GamePlayer;
 import Player.Player;
 
 
@@ -25,6 +26,7 @@ public class MegaServer {
 	static final Map<String, String> users = Collections.synchronizedMap(new HashMap<String, String>());
 	static final List<Handler> players = Collections.synchronizedList(new ArrayList<Handler>());
 	static final List<Player> playerdata = Collections.synchronizedList(new ArrayList<Player>());
+	static final Map<Integer, Handler> waitingForGames = Collections.synchronizedMap(new HashMap<Integer, Handler>());
 	public static int PORT_NUMBER = 5002;
 	private static BufferedReader in;
 	private static PrintWriter out;
@@ -55,9 +57,10 @@ public class MegaServer {
 		}
 
 	} 
-	private static class Handler extends Thread {
+	static class Handler extends Thread {
 		private String name;
 		private Socket socket;
+		private Player player;
 
 		/**
 		 * Constructs a handler thread, squirreling away the socket.
@@ -151,7 +154,6 @@ public class MegaServer {
 			}
 		}
 	}
-	
 	
 	public static Player doLogin(String params, PrintWriter output){
 		output.println("--loginaccepted " + (new Player("email", "username", "password", new ArrayList<Card>(), new Card[10][40], 0, new ArrayList<String>(), 0)).toString());

@@ -20,7 +20,12 @@ import java.util.Arrays;
 import java.util.Set;
 
 import javax.imageio.ImageIO;
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 
 import Player.Player;
 import cards.Card;
@@ -62,6 +67,7 @@ public class Launcher extends JFrame implements ActionListener {
 	JButton play = new JButton("Play");
 	JButton cards = new JButton("Cards");
 	static String currentline = "";
+	java.util.Timer timer = new java.util.Timer();
 
 	public static void main(String[] args){
 		frame = new Launcher();
@@ -277,10 +283,14 @@ public class Launcher extends JFrame implements ActionListener {
 
 	public static void menu(Player player) {
 
-		Game game = new Game(player);
+		Game game = new Game(player, input, output);
+		frame.dispose();
 	}
 	public static Card[][] getDecksFromString(String string){
 		return new Card[10][40];
+	}
+	public void showErrorMessage(String message){
+		
 	}
 
 }
