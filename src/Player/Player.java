@@ -13,6 +13,7 @@ public class Player {
 	ArrayList<Card> cardCollection;
 	HashMap<String,Card[]> decks = new HashMap<String, Card[]>();
 	int rank;
+
 	ArrayList<String> friends = new ArrayList<String>();
 	int gold;
 	public void addCardToCollection(Card card){

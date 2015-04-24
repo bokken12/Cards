@@ -99,11 +99,11 @@ public class Content extends JPanel implements ActionListener {
          decklist.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
          decklist.createVerticalScrollBar();
          decklist.getViewport().setPreferredSize(b);
-         String[] decks = (String[]) player.getDecks().keySet().toArray();
-         for(int i = 0; i < player.getDecks().size(); i++) {
-        	 JLabel a = new JLabel(decks[i]);
-        	 decklist.add(a);
-         }
+        // String[] decks = (String[]) player.getDecks().keySet().toArray();
+        // for(int i = 0; i < player.getDecks().size(); i++) {
+        //	 JLabel a = new JLabel(decks[i]);
+        //	 decklist.add(a);
+         //}
          add(decklist);
         
          JScrollPane cardlist = new JScrollPane();
