@@ -7,6 +7,7 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -22,16 +23,23 @@ public class Content extends JPanel implements ActionListener {
 	JButton settings = new JButton("Settings");
 	JButton cards = new JButton("Cards");
 	JPanel foo = new JPanel();
+	JScrollPane decklist = new JScrollPane();
 	Player player;
+	boolean paint1 = false;
 
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		background.paintIcon(this, g, 0, 0);
+
+		if(paint1) {
+
+		} else {
+			background.paintIcon(this, g, 0, 0);
+		}
 
 	}
 
 	public Content(Game parent, Player p) {
-		
+
 		player = p;
 
 		int height = background.getIconHeight();
@@ -43,7 +51,7 @@ public class Content extends JPanel implements ActionListener {
 		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 
 		add(Box.createHorizontalGlue());
-		
+
 		foo.setLayout(new BoxLayout(foo, BoxLayout.PAGE_AXIS));
 		foo.add(Box.createVerticalGlue());
 		foo.add(play);
@@ -72,41 +80,50 @@ public class Content extends JPanel implements ActionListener {
 
 		} else if(e.getSource().equals(settings)) {
 
+		} else if(e.getSource().equals(decklist)) {
+			
 		}
 
 
 	}
 
 	public void playMenu() {
-		
+
 		System.out.println("PlayMenu");
-		
-		 this.removeAll();
-         this.revalidate();
-         this.repaint();
+
+		this.removeAll();
+		this.revalidate();
+		this.repaint();
 	}
-	
+
 	public void CardsMenu() {
-		 this.removeAll();
-         this.revalidate();
-         this.repaint();
-         Dimension b = new Dimension(50, 50);
-         
-         add(Box.createHorizontalGlue());
-         JScrollPane decklist = new JScrollPane();
-         add(Box.createHorizontalGlue());
-         decklist.setPreferredSize(b);
-         decklist.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-         decklist.createVerticalScrollBar();
-         decklist.getViewport().setPreferredSize(b);
-        // String[] decks = (String[]) player.getDecks().keySet().toArray();
-        // for(int i = 0; i < player.getDecks().size(); i++) {
-        //	 JLabel a = new JLabel(decks[i]);
-        //	 decklist.add(a);
-         //}
-         add(decklist);
-        
-         JScrollPane cardlist = new JScrollPane();
-         
+		this.removeAll();
+		this.revalidate();
+		this.repaint();
+		Dimension b = new Dimension(50, 50);
+
+		add(Box.createHorizontalGlue());
+		
+		add(Box.createHorizontalGlue());
+		decklist.setPreferredSize(b);
+		decklist.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		decklist.createVerticalScrollBar();
+		decklist.getViewport().setPreferredSize(b);
+		
+		
+		String[] decks =  player.getDecks().keySet().toArray(new String[10]);
+		for(int i = 0; i < player.getDecks().size(); i++) {
+			JLabel a = new JLabel(decks[i]);
+			decklist.add(a);
+		}
+		add(decklist);
+		
+		CardList cl = new CardList(player);
+		add(cl);
+		
+		JCheckBox a = new JCheckBox("Show all cards");
+		add(a);
+		
+
 	}
 }

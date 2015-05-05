@@ -3,13 +3,18 @@ package cards;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import abilities.Ability;
+import javax.swing.ImageIcon;
 
+import abilities.Ability;
 import events.GameEvent;
 
 public class Card {
 	String name;
 	HashMap<GameEvent, ArrayList<Ability>> listenerMap;
+	ImageIcon image;
+	int imX;
+	int imY;
+	
 	public Card(){
 		
 	}
@@ -26,4 +31,10 @@ public class Card {
 			}
 		}
 	}
+	
+	public ImageIcon getImageIcon() {
+		return image;
+		
+	}
+
 }

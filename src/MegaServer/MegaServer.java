@@ -15,6 +15,8 @@ import java.util.Map;
 import java.util.logging.Handler;
 
 import cards.Card;
+import cards.Cards;
+import Creatures.*;
 import Player.GamePlayer;
 import Player.Player;
 
@@ -30,6 +32,7 @@ public class MegaServer {
 	public static int PORT_NUMBER = 5002;
 	private static BufferedReader in;
 	private static PrintWriter out;
+	static Cards c = new Cards();
 	
 	public static final String HOSTNAME = /*"10.0.1.13"*/ "127.0.0.1";
 	
@@ -134,7 +137,7 @@ public class MegaServer {
 							atemail = true;
 						}
 					}
-					Player player = new Player(email, username, password, new ArrayList<Card>(), new HashMap<String, Card[]>(), 0, new ArrayList<String>(), 0);
+					Player player = new Player(email, username, password, starterCards(), new HashMap<String, Card[]>(), 0, new ArrayList<String>(), 0);
 					playerdata.add(player);
 					users.put(username, password);
 					out.println("AccountConfirmed ");
@@ -156,7 +159,7 @@ public class MegaServer {
 	}
 	
 	public static Player doLogin(String params, PrintWriter output){
-		output.println("--loginaccepted " + (new Player("email", "username", "password", new ArrayList<Card>(), new HashMap<String, Card[]>(), 0, new ArrayList<String>(), 0)).toString());
+		output.println("--loginaccepted " + (new Player("email", "username", "password", new 		ArrayList<Card>(), new HashMap<String, Card[]>(), 0, new ArrayList<String>(), 0)).toString());
 		output.flush();
 		System.out.println("got a login");
 		return null;
@@ -164,4 +167,9 @@ public class MegaServer {
 	public static Player getPlayer(){
 		return null;
 	}
+	
+	public static ArrayList<Card> starterCards() {
+		return c.getStarterCards();
+	}
+	
 }

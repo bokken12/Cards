@@ -266,7 +266,7 @@ public class Launcher extends JFrame implements ActionListener {
 				player = new Player(args.substring(args.indexOf("email=") + 6, args.indexOf(", username") - 1), 
 						args.substring(args.indexOf("username=") + 9, args.indexOf(", password") - 1), 
 						args.substring(args.indexOf("password=") + 9, args.indexOf(", cardCollection") - 1), 
-						collection, 
+						collection,
 						getDecksFromString((args.substring(args.indexOf("decks=") + 6, args.indexOf(", rank") - 1))), 
 						Integer.parseInt(args.substring(args.indexOf("rank=") + 5, args.indexOf(", friends") - 1)), 
 						new ArrayList<String>(Arrays.asList((args.substring(args.indexOf("friends=") + 8, args.indexOf(", gold") - 1)).split(","))), 

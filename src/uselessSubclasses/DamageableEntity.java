@@ -2,6 +2,6 @@ package uselessSubclasses;
 
 import cards.Card;
 
-public class DamageableEntity extends Card{
+public class DamageableEntity {
 
 }
