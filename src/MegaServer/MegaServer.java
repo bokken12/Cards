@@ -159,7 +159,12 @@ public class MegaServer {
 	}
 	
 	public static Player doLogin(String params, PrintWriter output){
+<<<<<<< HEAD
 		output.println("--loginaccepted " + (new Player("email", "username", "password", new 		ArrayList<Card>(), new HashMap<String, Card[]>(), 0, new ArrayList<String>(), 0)).toString());
+=======
+		Paramer param = new Paramer(params);
+		output.println("--loginaccepted " + param.nextParam() + param.nextParam());
+>>>>>>> FETCH_HEAD
 		output.flush();
 		System.out.println("got a login");
 		return null;
@@ -168,8 +173,12 @@ public class MegaServer {
 		return null;
 	}
 	
+<<<<<<< HEAD
 	public static ArrayList<Card> starterCards() {
 		return c.getStarterCards();
 	}
 	
 }
+=======
+}
+>>>>>>> FETCH_HEAD
