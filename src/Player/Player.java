@@ -10,20 +10,28 @@ public class Player {
 	String email;
 	String username;
 	String password;
-	ArrayList<Card> cardCollection;
-	HashMap<String,Card[]> decks = new HashMap<String, Card[]>();
+	ArrayList<Integer> cardCollection;
+	HashMap<String, int[]> decks = new HashMap<String, int[]>();
 	int rank;
 
 	ArrayList<String> friends = new ArrayList<String>();
 	int gold;
-	public void addCardToCollection(Card card){
+	public void addCardToCollection(int card){
 		cardCollection.add(card);
 	}
 	@Override
 	public String toString() {
+
+		ArrayList<String> a = (ArrayList<String>) decks.keySet();
+		String s = "";
+		for(int i = 0; i < a.size(); i++) {
+			s = s + a.get(i) + "|" +decks.get(a.get(i)) + "|";
+		}
+
+
 		return "Player [email=" + email + ", username=" + username
 				+ ", password=" + password + ", cardCollection="
-				+ cardCollection + ", decks=" //decks.toString()
+				+ cardCollection + ", decks=" + s
 				+ ", rank=" + rank + ", friends=" + friends
 				+ ", gold=" + gold + "]";
 	}
@@ -36,7 +44,7 @@ public class Player {
 	public void removeCardFromCollection(Card card){
 		cardCollection.remove(card);
 	}
-	public void setDeck(String name, Card[] deck){
+	public void setDeck(String name, int[] deck){
 		decks.remove(name);
 		decks.put(name, deck);
 	}
@@ -58,16 +66,16 @@ public class Player {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	public ArrayList<Card> getCardCollection() {
+	public ArrayList<Integer> getCardCollection() {
 		return cardCollection;
 	}
-	public void setCardCollection(ArrayList<Card> cardCollection) {
+	public void setCardCollection(ArrayList<Integer> cardCollection) {
 		this.cardCollection = cardCollection;
 	}
-	public HashMap<String, Card[]> getDecks() {
+	public HashMap<String, int[]> getDecks() {
 		return decks;
 	}
-	public void setDecks(HashMap<String, Card[]> decks) {
+	public void setDecks(HashMap<String, int[]> decks) {
 		this.decks = decks;
 	}
 	public int getRank() {
@@ -89,7 +97,7 @@ public class Player {
 		this.gold = gold;
 	}
 	public Player(String email, String username, String password,
-			ArrayList<Card> cardCollection, HashMap<String, Card[]> decks, int rank,
+			ArrayList<Integer> cardCollection, HashMap<String, int[]> decks, int rank,
 			ArrayList<String> friends, int gold) {
 		this.email = email;
 		this.username = username;
