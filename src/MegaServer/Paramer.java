@@ -20,7 +20,7 @@ public class Paramer {
 		}
 	}
 	public String getParam(int integer){
-		return getParam(integer);
+		return getParam(integer, params);
 	}
 	public String getParam(int integer, String string){
 		if(integer <= 1){

@@ -16,7 +16,6 @@ import java.util.logging.Handler;
 
 import cards.Card;
 import cards.Cards;
-import Creatures.*;
 import Player.GamePlayer;
 import Player.Player;
 
@@ -34,7 +33,7 @@ public class MegaServer {
 	private static PrintWriter out;
 	static Cards c = new Cards();
 	
-	public static final String HOSTNAME = /*"10.0.1.13"*/ "127.0.0.1";
+	public static final String HOSTNAME = "10.0.1.13"/* "127.0.0.1"*/;
 	
 	public static void main(String[] args) {
 
@@ -159,12 +158,8 @@ public class MegaServer {
 	}
 	
 	public static Player doLogin(String params, PrintWriter output){
-<<<<<<< HEAD
-		output.println("--loginaccepted " + (new Player("email", "username", "password", new 		ArrayList<Card>(), new HashMap<String, Card[]>(), 0, new ArrayList<String>(), 0)).toString());
-=======
 		Paramer param = new Paramer(params);
 		output.println("--loginaccepted " + param.nextParam() + param.nextParam());
->>>>>>> FETCH_HEAD
 		output.flush();
 		System.out.println("got a login");
 		return null;
@@ -173,12 +168,8 @@ public class MegaServer {
 		return null;
 	}
 	
-<<<<<<< HEAD
 	public static ArrayList<Card> starterCards() {
 		return c.getStarterCards();
 	}
 	
 }
-=======
-}
->>>>>>> FETCH_HEAD

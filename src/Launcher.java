@@ -257,6 +257,7 @@ public class Launcher extends JFrame implements ActionListener {
 		Player player;
 		while(true){
 			if(currentline.startsWith("--loginaccepted")) {
+				System.out.println("Parsing login acceptance");
 				String args = currentline.substring(17);
 				ArrayList<Card> collection = new ArrayList<Card>();
 				ArrayList<String> collectionStrings = new ArrayList<String>(Arrays.asList((args.substring(args.indexOf("cardCollection=") + 15, args.indexOf(", decks") - 1)).split(",")));
