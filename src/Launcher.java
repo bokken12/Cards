@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Set;
+import java.util.StringTokenizer;
 
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
@@ -88,11 +89,11 @@ public class Launcher extends JFrame implements ActionListener {
 				} else if(currentline.startsWith("--loginaccepted")) {
 					Player player;
 					String subbedLine = currentline.substring(17);
-					ArrayList<Card> collection = new ArrayList<Card>();
+					ArrayList<Integer> collection = new ArrayList<Integer>();
 					ArrayList<String> collectionStrings = new ArrayList<String>(Arrays.asList((subbedLine.substring(subbedLine.indexOf("cardCollection=") + 15, subbedLine.indexOf(", decks"))).split(",")));
-					for(String cardname:collectionStrings){
-						collection.add(Card.fromName(cardname));
-					}			
+					for(int i = 0; i < collectionStrings.size(); i++) {
+						collection.add(Integer.parseInt(collectionStrings.get(i)));
+					}
 					player = new Player(subbedLine.substring(subbedLine.indexOf("email=") + 6, subbedLine.indexOf(", username")), 
 							subbedLine.substring(subbedLine.indexOf("username=") + 9, subbedLine.indexOf(", password")), 
 							subbedLine.substring(subbedLine.indexOf("password=") + 9, subbedLine.indexOf(", cardCollection")), 
@@ -259,11 +260,13 @@ public class Launcher extends JFrame implements ActionListener {
 			if(currentline.startsWith("--loginaccepted")) {
 				System.out.println("Parsing login acceptance");
 				String args = currentline.substring(17);
-				ArrayList<Card> collection = new ArrayList<Card>();
+				ArrayList<Integer> collection = new ArrayList<Integer>();
 				ArrayList<String> collectionStrings = new ArrayList<String>(Arrays.asList((args.substring(args.indexOf("cardCollection=") + 15, args.indexOf(", decks") - 1)).split(",")));
-				for(String cardname:collectionStrings){
-					collection.add(Card.fromName(cardname));
-				}			
+				for(int i = 0; i < collectionStrings.size(); i++) {
+					collection.add(Integer.parseInt(collectionStrings.get(i)));
+				}
+				
+				
 				player = new Player(args.substring(args.indexOf("email=") + 6, args.indexOf(", username") - 1), 
 						args.substring(args.indexOf("username=") + 9, args.indexOf(", password") - 1), 
 						args.substring(args.indexOf("password=") + 9, args.indexOf(", cardCollection") - 1), 
@@ -288,9 +291,32 @@ public class Launcher extends JFrame implements ActionListener {
 		Game game = new Game(player, input, output);
 		frame.dispose();
 	}
-	public static HashMap<String, Card[]> getDecksFromString(String string){
-		return new HashMap<String, Card[]>();
+	public static HashMap<String, int[]> getDecksFromString(String string){
+		HashMap<String, int[]> ret = new HashMap<String, int[]>();
+		
+		StringTokenizer t = new StringTokenizer(string, "|");
+		
+		while(t.hasMoreTokens()) {
+			String a = t.nextToken();
+			int[] arr = getArray(t.nextToken());
+			
+			ret.put(a, arr);
+		}
+		
+		return ret;
+		
 	}
+	
+	public static int[] getArray(String ar) {
+
+		String[] digitwords = ar.split("\\D+");
+		int[] result = new int[digitwords.length];
+		for (int i = 0; i < result.length; i++) {
+		    result[i] = Integer.parseInt(digitwords[i]);
+		}
+		return result;
+	}
+	
 	public void showErrorMessage(String message){
 		
 	}

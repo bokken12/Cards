@@ -26,7 +26,8 @@ public class MegaServer {
 	static final List<PrintWriter> writers = Collections.synchronizedList(new ArrayList<PrintWriter>());
 	static final Map<String, String> users = Collections.synchronizedMap(new HashMap<String, String>());
 	static final List<Handler> players = Collections.synchronizedList(new ArrayList<Handler>());
-	static final List<Player> playerdata = Collections.synchronizedList(new ArrayList<Player>());
+	//	static final List<Player> userdata = Collections.synchronizedList(new ArrayList<Player>());
+	static HashMap<String, Player> userdatas = new HashMap<String, Player>();
 	static final Map<Integer, Handler> waitingForGames = Collections.synchronizedMap(new HashMap<Integer, Handler>());
 	public static int PORT_NUMBER = 5002;
 	private static BufferedReader in;
@@ -37,6 +38,7 @@ public class MegaServer {
 	
 	public static void main(String[] args) {
 
+		Cards.Init();
 		ServerSocket listener = null;
 		//TODO Load player data from file
 		try {
@@ -108,7 +110,7 @@ public class MegaServer {
 				System.out.println(line);
 				if(line == null) break;
 				else if(line.startsWith("--login")){
-					doLogin(line, out);
+					//doLogin(line, out);
 
 				} else if(line.startsWith("--accountCreation")){
 					boolean atemail = false;
@@ -136,8 +138,8 @@ public class MegaServer {
 							atemail = true;
 						}
 					}
-					Player player = new Player(email, username, password, starterCards(), new HashMap<String, Card[]>(), 0, new ArrayList<String>(), 0);
-					playerdata.add(player);
+					Player player = new Player(email, username, password, starterCards(), new HashMap<String, int[]>(), 0, new ArrayList<String>(), 0);
+					userdatas.put(username, player);
 					users.put(username, password);
 					out.println("AccountConfirmed ");
 					System.out.println("Account got some confirmation");
@@ -159,7 +161,8 @@ public class MegaServer {
 	
 	public static Player doLogin(String params, PrintWriter output){
 		Paramer param = new Paramer(params);
-		output.println("--loginaccepted " + param.nextParam() + param.nextParam());
+		System.out.println("--loginaccepted " + (new Player("email", "username", "password", new ArrayList<Integer>(), new HashMap<String, int[]>(), 0, new ArrayList<String>(), 0)).toString());
+		output.println("--loginaccepted " + (new Player("email", "username", "password", new ArrayList<Integer>(), new HashMap<String, int[]>(), 0, new ArrayList<String>(), 0)).toString());
 		output.flush();
 		System.out.println("got a login");
 		return null;
@@ -168,8 +171,20 @@ public class MegaServer {
 		return null;
 	}
 	
-	public static ArrayList<Card> starterCards() {
+	public static ArrayList<Integer> starterCards() {
 		return c.getStarterCards();
+	}
+	
+	public void login(String username, String password) {
+		if(users.containsKey(username)) {
+			if(users.get(username).equals(password)) {
+				Player a = userdatas.get(username);
+				
+				out.println("--loginaccepted " + a.toString());
+				out.flush();
+				System.out.println("got a login");
+			}
+		}
 	}
 	
 }

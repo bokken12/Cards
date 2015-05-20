@@ -3,13 +3,14 @@ import java.awt.Graphics;
 import javax.swing.JScrollPane;
 
 import cards.Card;
+import cards.Cards;
 import Player.Player;
 
 
 public class CardList extends JScrollPane {
 	
 	public Player player;
-	public Card[] deck = null;
+	public int[] deck = null;
 
 	public CardList(Player playyer) {
 		player = playyer;
@@ -23,12 +24,16 @@ public class CardList extends JScrollPane {
 		
 		if(deck == null) {
 		for(int i = 0; i < player.getCardCollection().size(); i++) {
-			player.getCardCollection().get(i).getImageIcon().paintIcon(this, g, 0, 0);
+			
+			int a = player.getCardCollection().get(i);
+			
+			Card b = Cards.getCardFromID(a);
+			b.getImageIcon().paintIcon(this, g, 0, 0);
 		}
 		}
 	}
 	
-	public void setDeck(Card[] d) {
+	public void setDeck(int[] d) {
 		deck = d;
 		
 		repaint();

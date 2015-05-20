@@ -4,6 +4,8 @@ import java.awt.Image;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.swing.ImageIcon;
+
 import uselessSubclasses.DamageableEntity;
 import events.GameEvent;
 import events.GameListener;
@@ -14,7 +16,7 @@ public class CreatureCard extends Card {
 	int cost;
 	String name;
 	
-	public CreatureCard(String n, int p, int t, int c, HashMap<GameEvent, ArrayList<Runnable>> a) {
+	public CreatureCard(String n, int p, int t, int c, ImageIcon img, HashMap<GameEvent, ArrayList<Runnable>> a, int id) {
 		
 		power = p;
 		name = n;
