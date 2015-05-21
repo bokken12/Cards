@@ -87,6 +87,7 @@ public class Launcher extends JFrame implements ActionListener {
 					System.out.println("Account confirmed! Yay!");
 					doLogin(newUsernameText.getText(), newPasswordText.getText());
 				} else if(currentline.startsWith("--loginaccepted")) {
+					System.out.println("Started Logging in");
 					Player player;
 					String subbedLine = currentline.substring(17);
 					ArrayList<Integer> collection = new ArrayList<Integer>();
@@ -103,6 +104,7 @@ public class Launcher extends JFrame implements ActionListener {
 							new ArrayList<String>(Arrays.asList((subbedLine.substring(subbedLine.indexOf("friends=") + 8, subbedLine.indexOf(", gold"))).split(","))), 
 							Integer.parseInt(subbedLine.substring(subbedLine.indexOf("gold=") + 5, subbedLine.lastIndexOf("]")))
 							);
+					System.out.println("Finished Logging in");
 					menu(player);
 				}
 			}
@@ -147,9 +149,9 @@ public class Launcher extends JFrame implements ActionListener {
 		this.pack();
 		this.setVisible(true);
 	}
-	public void run(){
-
-	}
+	
+	
+	
 	private Socket connect() {
 		while (true) {
 			try {

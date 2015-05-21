@@ -12,6 +12,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.StringTokenizer;
 import java.util.logging.Handler;
 
 import cards.Card;
@@ -27,14 +28,14 @@ public class MegaServer {
 	static final Map<String, String> users = Collections.synchronizedMap(new HashMap<String, String>());
 	static final List<Handler> players = Collections.synchronizedList(new ArrayList<Handler>());
 	//	static final List<Player> userdata = Collections.synchronizedList(new ArrayList<Player>());
-	static HashMap<String, Player> userdatas = new HashMap<String, Player>();
+	static HashMap<String, Player> userdata = new HashMap<String, Player>();
 	static final Map<Integer, Handler> waitingForGames = Collections.synchronizedMap(new HashMap<Integer, Handler>());
 	public static int PORT_NUMBER = 5002;
 	private static BufferedReader in;
 	private static PrintWriter out;
 	static Cards c = new Cards();
 	
-	public static final String HOSTNAME = "10.0.1.13"/* "127.0.0.1"*/;
+	public static final String HOSTNAME = /*"10.0.1.13"*/ "127.0.0.1";
 	
 	public static void main(String[] args) {
 
@@ -110,7 +111,9 @@ public class MegaServer {
 				System.out.println(line);
 				if(line == null) break;
 				else if(line.startsWith("--login")){
-					//doLogin(line, out);
+					System.out.println(line);
+					doLogin(line, out);
+					
 
 				} else if(line.startsWith("--accountCreation")){
 					boolean atemail = false;
@@ -139,7 +142,8 @@ public class MegaServer {
 						}
 					}
 					Player player = new Player(email, username, password, starterCards(), new HashMap<String, int[]>(), 0, new ArrayList<String>(), 0);
-					userdatas.put(username, player);
+					userdata.put(username, player);
+					System.out.println("Username: " + username + " Password: " + password);
 					users.put(username, password);
 					out.println("AccountConfirmed ");
 					System.out.println("Account got some confirmation");
@@ -160,9 +164,19 @@ public class MegaServer {
 	}
 	
 	public static Player doLogin(String params, PrintWriter output){
-		Paramer param = new Paramer(params);
-		System.out.println("--loginaccepted " + (new Player("email", "username", "password", new ArrayList<Integer>(), new HashMap<String, int[]>(), 0, new ArrayList<String>(), 0)).toString());
-		output.println("--loginaccepted " + (new Player("email", "username", "password", new ArrayList<Integer>(), new HashMap<String, int[]>(), 0, new ArrayList<String>(), 0)).toString());
+		//System.out.println("--loginaccepted " + (new Player("email", "username", "password", new ArrayList<Integer>(), new HashMap<String, int[]>(), 0, new ArrayList<String>(), 0)).toString());
+		//output.println("--loginaccepted " + (new Player("email", "username", "password", new ArrayList<Integer>(), new HashMap<String, int[]>(), 0, new ArrayList<String>(), 0)).toString());
+		StringTokenizer a = new StringTokenizer(params, " ");
+		a.nextToken();
+		String b = a.nextToken();
+		String c = a.nextToken();
+		System.out.println("Username is " + b + " and is it in data? " + users.containsKey(b) + " is Pasword in data? " + users.get(b).equals(c));
+		System.out.println("Sending Login Acceptance to player");
+		if(users.containsKey(b) && users.get(b).equals(c)) {
+			System.out.println("Actually Sending Login Acceptance to player");
+
+			output.println("--loginaccepted " + userdata.get(b).toString());
+		}
 		output.flush();
 		System.out.println("got a login");
 		return null;
@@ -178,7 +192,7 @@ public class MegaServer {
 	public void login(String username, String password) {
 		if(users.containsKey(username)) {
 			if(users.get(username).equals(password)) {
-				Player a = userdatas.get(username);
+				Player a = userdata.get(username);
 				
 				out.println("--loginaccepted " + a.toString());
 				out.flush();

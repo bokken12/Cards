@@ -3,6 +3,8 @@ package Player;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Set;
 
 import cards.Card;
 
@@ -22,10 +24,11 @@ public class Player {
 	@Override
 	public String toString() {
 
-		ArrayList<String> a = (ArrayList<String>) decks.keySet();
+		Set<String> a = decks.keySet();
+		Iterator<String> y = a.iterator();
 		String s = "";
 		for(int i = 0; i < a.size(); i++) {
-			s = s + a.get(i) + "|" +decks.get(a.get(i)) + "|";
+			s = s + y.next() + "|" +decks.get(y.next()) + "|";
 		}
 
 
