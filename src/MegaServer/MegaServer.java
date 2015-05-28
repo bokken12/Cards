@@ -19,24 +19,25 @@ import cards.Card;
 import cards.Cards;
 import Player.GamePlayer;
 import Player.Player;
+import Player.SimplePlayerProfile;
+import Player.SimplerProfile;
 
 
 public class MegaServer {
-	
-	static final List<String> openGames = Collections.synchronizedList(new ArrayList<String>());
+
 	static final List<PrintWriter> writers = Collections.synchronizedList(new ArrayList<PrintWriter>());
+	static final List<SimplerProfile> playing = Collections.synchronizedList(new ArrayList<SimplerProfile>());
+
 	static final Map<String, String> users = Collections.synchronizedMap(new HashMap<String, String>());
-	static final List<Handler> players = Collections.synchronizedList(new ArrayList<Handler>());
+	static final HashMap<String, Handler> players = new HashMap<String, Handler>();
 	//	static final List<Player> userdata = Collections.synchronizedList(new ArrayList<Player>());
 	static HashMap<String, Player> userdata = new HashMap<String, Player>();
 	static final Map<Integer, Handler> waitingForGames = Collections.synchronizedMap(new HashMap<Integer, Handler>());
 	public static int PORT_NUMBER = 5002;
-	private static BufferedReader in;
-	private static PrintWriter out;
 	static Cards c = new Cards();
-	
+
 	public static final String HOSTNAME = /*"10.0.1.13"*/ "127.0.0.1";
-	
+
 	public static void main(String[] args) {
 
 		Cards.Init();
@@ -66,7 +67,8 @@ public class MegaServer {
 		private String name;
 		private Socket socket;
 		private Player player;
-
+		private static BufferedReader in;
+		private static PrintWriter out;
 		/**
 		 * Constructs a handler thread, squirreling away the socket.
 		 * All the interesting work is done in the run method.
@@ -74,6 +76,11 @@ public class MegaServer {
 		public Handler(Socket socket) {
 			this.socket = socket;
 			System.out.println(socket.getInetAddress().toString());
+		}
+		
+		
+		public void send(String s) {
+			out.println(s);
 		}
 
 		public void run() {
@@ -99,7 +106,7 @@ public class MegaServer {
 				}
 			}
 			writers.add(out);
-			
+
 			while (true) {
 				String line = "";
 				try {
@@ -113,7 +120,7 @@ public class MegaServer {
 				else if(line.startsWith("--login")){
 					System.out.println(line);
 					doLogin(line, out);
-					
+
 
 				} else if(line.startsWith("--accountCreation")){
 					boolean atemail = false;
@@ -149,20 +156,31 @@ public class MegaServer {
 					System.out.println("Account got some confirmation");
 					out.flush();
 					//doLogin("--login " + username + " " + password, out);
-				} else if(line.startsWith("--createGame")) {
-					openGames.add(line.substring(13));
 				} else if(line.startsWith("--refresh")) {
 					out.print("--refresh");
-					for(int i = 0; i < openGames.size(); i++) {
-					out.print(openGames.get(i));
-					}
+
 					out.print("--refresh");
 					out.flush();
+				}
+				else if(line.startsWith("--Playing")) {
+					int rank = Integer.parseInt(line.substring(9), line.indexOf(" "));
+					String username = line.substring(line.indexOf(" "));
+					if(playing.size() == 0) {
+						SimplerProfile prof = new SimplerProfile(username, rank);
+						playing.add(prof);
+					} else {
+						SimplePlayerProfile profile1 = new SimplePlayerProfile(username, rank);
+						SimplePlayerProfile profile2 = new SimplePlayerProfile(playing.get(0).getName(), playing.get(0).getRank());
+						
+						Handler h = players.get(playing.get(0).getName());
+						h.send("--match " + profile1.toString());
+						out.println("--match " + profile2.toString());
+					}
 				}
 			}
 		}
 	}
-	
+
 	public static Player doLogin(String params, PrintWriter output){
 		//System.out.println("--loginaccepted " + (new Player("email", "username", "password", new ArrayList<Integer>(), new HashMap<String, int[]>(), 0, new ArrayList<String>(), 0)).toString());
 		//output.println("--loginaccepted " + (new Player("email", "username", "password", new ArrayList<Integer>(), new HashMap<String, int[]>(), 0, new ArrayList<String>(), 0)).toString());
@@ -184,21 +202,9 @@ public class MegaServer {
 	public static Player getPlayer(){
 		return null;
 	}
-	
+
 	public static ArrayList<Integer> starterCards() {
 		return c.getStarterCards();
 	}
-	
-	public void login(String username, String password) {
-		if(users.containsKey(username)) {
-			if(users.get(username).equals(password)) {
-				Player a = userdata.get(username);
-				
-				out.println("--loginaccepted " + a.toString());
-				out.flush();
-				System.out.println("got a login");
-			}
-		}
-	}
-	
+
 }

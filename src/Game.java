@@ -26,7 +26,7 @@ import Player.SimplePlayerProfile;
 
 
 public class Game extends JFrame{
-	
+
 	JButton play = new JButton("Play");
 	JButton settings = new JButton("Settings");
 	JButton cards = new JButton("Cards");
@@ -48,21 +48,39 @@ public class Game extends JFrame{
 
 		super();
 		player = playyer;
-		a = new Content(this, player);
+		a = new Content(this, player, output);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);		this.input = input;
 		this.output = output;
 		content.add(a);
 		this.pack();
 		this.setVisible(true);
-		
+
+		System.out.println("reading for lines");
+		while (true) {
+			String currentline = "";
+			
+			try {
+				currentline = input.readLine();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			if (currentline == null) break;
+			
+			else if(currentline.startsWith("--match")) {
+				System.out.println("Got a match! :O");
+			}
+		}
+
+
 	}
-	
-	
-	
-	
+
+
+
+
 	public SimplePlayerProfile autoMatch() {
 		return null;
-		
+
 	}
 
 }

@@ -2,6 +2,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.PrintWriter;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -24,6 +25,7 @@ public class Content extends JPanel implements ActionListener {
 	JButton cards = new JButton("Cards");
 	JPanel foo = new JPanel();
 	JScrollPane decklist = new JScrollPane();
+	PrintWriter output;
 	Player player;
 	boolean paint1 = false;
 
@@ -38,7 +40,9 @@ public class Content extends JPanel implements ActionListener {
 
 	}
 
-	public Content(Game parent, Player p) {
+	public Content(Game parent, Player p, PrintWriter out) {
+		
+		output = out;
 
 		player = p;
 
@@ -74,7 +78,10 @@ public class Content extends JPanel implements ActionListener {
 
 		if(e.getSource().equals(play)) {
 			System.out.println(":()");
+			output.println("--Playing" + player.getUsername() + " " + player.getRank());
 			playMenu();
+			
+			
 		} else if(e.getSource().equals(cards)) {
 			CardsMenu();
 

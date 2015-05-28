@@ -78,7 +78,7 @@ public class Launcher extends JFrame implements ActionListener {
 			/* Continuously read messages from the source. */
 			while (true) {
 				currentline = input.readLine();
-				//if (line == null) break;
+				if (currentline == null) break;
 
 				/*else */
 				if(currentline.startsWith("--refresh")) {
@@ -91,8 +91,8 @@ public class Launcher extends JFrame implements ActionListener {
 					Player player;
 					String subbedLine = currentline.substring(17);
 					ArrayList<Integer> collection = new ArrayList<Integer>();
-					ArrayList<String> collectionStrings = new ArrayList<String>(Arrays.asList((subbedLine.substring(subbedLine.indexOf("cardCollection=") + 15, subbedLine.indexOf(", decks"))).split(",")));
-					for(int i = 0; i < collectionStrings.size(); i++) {
+					ArrayList<String> collectionStrings = new ArrayList<String>(Arrays.asList((subbedLine.substring(subbedLine.indexOf("cardCollection=") + 16, subbedLine.indexOf(", decks") - 1)).split(",")));
+					for(int i = 0; i < collectionStrings.size() - 1; i++) {
 						collection.add(Integer.parseInt(collectionStrings.get(i)));
 					}
 					player = new Player(subbedLine.substring(subbedLine.indexOf("email=") + 6, subbedLine.indexOf(", username")), 
@@ -221,15 +221,11 @@ public class Launcher extends JFrame implements ActionListener {
 				if (DEBUG) System.out.println("Didn't verify: |" + newPasswordText.getText() + "| |" + verifyPasswordText.getText() + "|");
 			}
 		} 
-		else if(e.getSource().equals(createGame)) {
-			sendText("--createGame " + username);
-		}
 		else if(e.getSource().equals(refresh)) {
 			sendText("--refresh");
 		}
 		else if(e.getSource().equals(play)){
 			removeAll();
-			//I'm not sure how it does it, but I've checked that the refresh is from here. That equals play button is going to have to be examined.
 			add(refresh);
 			sendText("--refresh"); 
 		}
