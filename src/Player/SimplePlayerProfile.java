@@ -17,4 +17,8 @@ public class SimplePlayerProfile {
 	public int getrank() {
 		return rank;
 	}
+	
+	public String toString() {
+		return name + "," + rank;
+	}
 }

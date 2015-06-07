@@ -44,43 +44,24 @@ public class Game extends JFrame{
 	private static final Dimension SIZE = new Dimension(400, 350);
 	private static final Dimension SIZE2 = new Dimension(400, 350);
 
-	public Game(Player playyer, BufferedReader input, PrintWriter output) {
+	public Game(Player playyer, PrintWriter output) {
 
 		super();
 		player = playyer;
 		a = new Content(this, player, output);
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);		this.input = input;
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.output = output;
 		content.add(a);
 		this.pack();
 		this.setVisible(true);
 
-		System.out.println("reading for lines");
-		while (true) {
-			String currentline = "";
-			
-			try {
-				currentline = input.readLine();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			if (currentline == null) break;
-			
-			else if(currentline.startsWith("--match")) {
-				System.out.println("Got a match! :O");
-			}
-		}
+		
+		
 
 
 	}
 
-
-
-
-	public SimplePlayerProfile autoMatch() {
-		return null;
-
+	public void toContent(String s) {
+		a.handleMessage(s);
 	}
-
 }

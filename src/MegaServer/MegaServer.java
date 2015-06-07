@@ -67,8 +67,8 @@ public class MegaServer {
 		private String name;
 		private Socket socket;
 		private Player player;
-		private static BufferedReader in;
-		private static PrintWriter out;
+		private BufferedReader in;
+		private PrintWriter out;
 		/**
 		 * Constructs a handler thread, squirreling away the socket.
 		 * All the interesting work is done in the run method.
@@ -81,6 +81,7 @@ public class MegaServer {
 		
 		public void send(String s) {
 			out.println(s);
+			out.flush();
 		}
 
 		public void run() {
@@ -150,31 +151,31 @@ public class MegaServer {
 					}
 					Player player = new Player(email, username, password, starterCards(), new HashMap<String, int[]>(), 0, new ArrayList<String>(), 0);
 					userdata.put(username, player);
+					players.put(username, this);
 					System.out.println("Username: " + username + " Password: " + password);
 					users.put(username, password);
 					out.println("AccountConfirmed ");
 					System.out.println("Account got some confirmation");
 					out.flush();
 					//doLogin("--login " + username + " " + password, out);
-				} else if(line.startsWith("--refresh")) {
-					out.print("--refresh");
-
-					out.print("--refresh");
-					out.flush();
-				}
-				else if(line.startsWith("--Playing")) {
-					int rank = Integer.parseInt(line.substring(9), line.indexOf(" "));
-					String username = line.substring(line.indexOf(" "));
+				} else if(line.startsWith("--Playing")) {
+					String[] items = line.split(" ");
+					int rank = Integer.parseInt(items[1]);
+					String username = items[2]; 
 					if(playing.size() == 0) {
 						SimplerProfile prof = new SimplerProfile(username, rank);
 						playing.add(prof);
+						System.out.println("Someone Joined Playing");
+						out.println("--wait");
+						out.flush();
 					} else {
 						SimplePlayerProfile profile1 = new SimplePlayerProfile(username, rank);
 						SimplePlayerProfile profile2 = new SimplePlayerProfile(playing.get(0).getName(), playing.get(0).getRank());
 						
 						Handler h = players.get(playing.get(0).getName());
+						System.out.println("Matching new " + profile1 + " to existing " + profile2);
 						h.send("--match " + profile1.toString());
-						out.println("--match " + profile2.toString());
+						send("--match " + profile2.toString());
 					}
 				}
 			}

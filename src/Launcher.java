@@ -71,6 +71,8 @@ public class Launcher extends JFrame implements ActionListener {
 	static String currentline = "";
 	java.util.Timer timer = new java.util.Timer();
 
+	static Game game;
+
 	public static void main(String[] args){
 		frame = new Launcher();
 		System.out.println("We're done initializing!");
@@ -79,7 +81,8 @@ public class Launcher extends JFrame implements ActionListener {
 			while (true) {
 				currentline = input.readLine();
 				if (currentline == null) break;
-
+				
+				System.out.println("Launcher got " + currentline);
 				/*else */
 				if(currentline.startsWith("--refresh")) {
 					currentline.substring(10);
@@ -106,6 +109,11 @@ public class Launcher extends JFrame implements ActionListener {
 							);
 					System.out.println("Finished Logging in");
 					menu(player);
+				} else if(currentline.startsWith("--match")) {
+					game.toContent(currentline);
+				} else if(currentline.startsWith("--wait")) {
+					game.toContent(currentline);
+					//System.out.println("Waiting...");
 				}
 			}
 		} catch (IOException e) {
@@ -149,9 +157,9 @@ public class Launcher extends JFrame implements ActionListener {
 		this.pack();
 		this.setVisible(true);
 	}
-	
-	
-	
+
+
+
 	private Socket connect() {
 		while (true) {
 			try {
@@ -263,8 +271,8 @@ public class Launcher extends JFrame implements ActionListener {
 				for(int i = 0; i < collectionStrings.size(); i++) {
 					collection.add(Integer.parseInt(collectionStrings.get(i)));
 				}
-				
-				
+
+
 				player = new Player(args.substring(args.indexOf("email=") + 6, args.indexOf(", username") - 1), 
 						args.substring(args.indexOf("username=") + 9, args.indexOf(", password") - 1), 
 						args.substring(args.indexOf("password=") + 9, args.indexOf(", cardCollection") - 1), 
@@ -284,39 +292,40 @@ public class Launcher extends JFrame implements ActionListener {
 		//menu(loginConfirmation());
 	}
 
-	public static void menu(Player player) {
+	public void menu(Player player) {
 
-		Game game = new Game(player, input, output);
+		game = new Game(player, output);
 		frame.dispose();
+		this.setVisible(false);
 	}
 	public static HashMap<String, int[]> getDecksFromString(String string){
 		HashMap<String, int[]> ret = new HashMap<String, int[]>();
-		
+
 		StringTokenizer t = new StringTokenizer(string, "|");
-		
+
 		while(t.hasMoreTokens()) {
 			String a = t.nextToken();
 			int[] arr = getArray(t.nextToken());
-			
+
 			ret.put(a, arr);
 		}
-		
+
 		return ret;
-		
+
 	}
-	
+
 	public static int[] getArray(String ar) {
 
 		String[] digitwords = ar.split("\\D+");
 		int[] result = new int[digitwords.length];
 		for (int i = 0; i < result.length; i++) {
-		    result[i] = Integer.parseInt(digitwords[i]);
+			result[i] = Integer.parseInt(digitwords[i]);
 		}
 		return result;
 	}
-	
+
 	public void showErrorMessage(String message){
-		
+
 	}
 
 }

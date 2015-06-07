@@ -2,6 +2,8 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.PrintWriter;
 
 import javax.swing.Box;
@@ -15,6 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import Player.Player;
+import Player.SimplePlayerProfile;
 
 
 public class Content extends JPanel implements ActionListener {
@@ -28,6 +31,7 @@ public class Content extends JPanel implements ActionListener {
 	PrintWriter output;
 	Player player;
 	boolean paint1 = false;
+	volatile SimplePlayerProfile match;
 
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
@@ -78,9 +82,7 @@ public class Content extends JPanel implements ActionListener {
 
 		if(e.getSource().equals(play)) {
 			System.out.println(":()");
-			output.println("--Playing" + player.getUsername() + " " + player.getRank());
 			playMenu();
-			
 			
 		} else if(e.getSource().equals(cards)) {
 			CardsMenu();
@@ -98,6 +100,8 @@ public class Content extends JPanel implements ActionListener {
 
 		System.out.println("PlayMenu");
 
+		SimplePlayerProfile a = autoMatch();
+		
 		this.removeAll();
 		this.revalidate();
 		this.repaint();
@@ -132,5 +136,38 @@ public class Content extends JPanel implements ActionListener {
 		add(a);
 		
 
+	}
+	
+	public SimplePlayerProfile autoMatch() {
+		
+		output.println("--Playing " + player.getRank() + " " + player.getUsername());
+		output.flush();
+		
+		System.out.println("Automatching");
+		
+//		String l = "";
+//		try {
+//			l = input.readLine();
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		System.out.println("Line = " + l);
+//		if(l.startsWith("--match")) {
+//			return new SimplePlayerProfile(l.substring(7, l.indexOf(",")), Integer.parseInt(l.substring(l.indexOf(","))));
+//		} else if(l.startsWith("--wait")) {
+//			System.out.println("Waiting...");
+//		}
+		return null;
+//
+	}
+	
+	public void handleMessage(String m) {
+		if(m.startsWith("--match")) {
+			match = new SimplePlayerProfile(m.substring(7, m.indexOf(",")), Integer.parseInt(m.substring(m.indexOf(",") + 1)));
+			System.out.println("found a match!");
+		} else if(m.startsWith("--wait")) {
+			System.out.println("Waiting...");
+		}
 	}
 }
