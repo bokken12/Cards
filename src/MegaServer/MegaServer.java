@@ -66,9 +66,10 @@ public class MegaServer {
 	static class Handler extends Thread {
 		private String name;
 		private Socket socket;
-		private Player player;
+		private Player pllayer;
 		private BufferedReader in;
-		private PrintWriter out;
+		private 
+		PrintWriter out;
 		/**
 		 * Constructs a handler thread, squirreling away the socket.
 		 * All the interesting work is done in the run method.
@@ -117,7 +118,19 @@ public class MegaServer {
 					e.printStackTrace();
 				}
 				System.out.println(line);
-				if(line == null) break;
+				if(line == null) {
+					if(players.containsKey(name)) {
+						players.remove(name);
+					}
+					if(users.containsKey(name)) {
+						users.remove(name);
+					}
+					if(playing.get(0).getName().equals(name)) {
+						playing.remove(0);
+					}
+					
+					break;
+				}
 				else if(line.startsWith("--login")){
 					System.out.println(line);
 					doLogin(line, out);
@@ -150,6 +163,15 @@ public class MegaServer {
 						}
 					}
 					Player player = new Player(email, username, password, starterCards(), new HashMap<String, int[]>(), 0, new ArrayList<String>(), 0);
+					pllayer = player;
+					name = username;
+					HashMap<String, int[]> dacks = new HashMap<String, int[]>();
+					int[] a = new int[2];
+					a[0] = 0;
+					a[1] = 1;
+					dacks.put("Starter", a);
+					player.setDecks(dacks);
+					
 					userdata.put(username, player);
 					players.put(username, this);
 					System.out.println("Username: " + username + " Password: " + password);

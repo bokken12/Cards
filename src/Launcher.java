@@ -1,36 +1,24 @@
 
-import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.Socket;
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.InetAddress;
-import java.net.ServerSocket;
-import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Set;
 import java.util.StringTokenizer;
-
-import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
-
 import Player.Player;
-import cards.Card;
 import MegaServer.MegaServer;
 
 public class Launcher extends JFrame implements ActionListener {
@@ -232,11 +220,7 @@ public class Launcher extends JFrame implements ActionListener {
 		else if(e.getSource().equals(refresh)) {
 			sendText("--refresh");
 		}
-		else if(e.getSource().equals(play)){
-			removeAll();
-			add(refresh);
-			sendText("--refresh"); 
-		}
+	
 	}
 
 	/**
@@ -292,11 +276,11 @@ public class Launcher extends JFrame implements ActionListener {
 		//menu(loginConfirmation());
 	}
 
-	public void menu(Player player) {
+	public static void menu(Player player) {
 
 		game = new Game(player, output);
 		frame.dispose();
-		this.setVisible(false);
+		//this.setVisible(false);
 	}
 	public static HashMap<String, int[]> getDecksFromString(String string){
 		HashMap<String, int[]> ret = new HashMap<String, int[]>();
@@ -305,7 +289,10 @@ public class Launcher extends JFrame implements ActionListener {
 
 		while(t.hasMoreTokens()) {
 			String a = t.nextToken();
-			int[] arr = getArray(t.nextToken());
+			int[] arr = null;
+			if(t.hasMoreTokens()) {
+			arr = getArray(t.nextToken());
+			}
 
 			ret.put(a, arr);
 		}
@@ -316,7 +303,7 @@ public class Launcher extends JFrame implements ActionListener {
 
 	public static int[] getArray(String ar) {
 
-		String[] digitwords = ar.split("\\D+");
+		String[] digitwords = ar.substring(1, ar.length() - 1).split(", ");
 		int[] result = new int[digitwords.length];
 		for (int i = 0; i < result.length; i++) {
 			result[i] = Integer.parseInt(digitwords[i]);

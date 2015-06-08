@@ -28,7 +28,12 @@ public class Player {
 		Iterator<String> y = a.iterator();
 		String s = "";
 		for(int i = 0; i < a.size(); i++) {
-			s = s + y.next() + "|" +decks.get(y.next()) + "|";
+			if(y.hasNext()) {
+			String buh = y.next();
+			s = s + buh + "|";   
+			s = s + Arrays.toString(decks.get(buh)) + "|";
+			}
+		
 		}
 
 

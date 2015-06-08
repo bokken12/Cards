@@ -1,3 +1,4 @@
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
@@ -5,6 +6,8 @@ import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -29,15 +32,20 @@ public class Content extends JPanel implements ActionListener {
 	JPanel foo = new JPanel();
 	JScrollPane decklist = new JScrollPane();
 	PrintWriter output;
+	ArrayList<JButton> deckButtons = new ArrayList<JButton>();
 	Player player;
 	boolean paint1 = false;
+	
 	volatile SimplePlayerProfile match;
 
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 
 		if(paint1) {
-
+			background.paintIcon(this, g, 0, 0);
+			JLabel wait = new JLabel("Finding a match...");
+			add(wait);
+			paint1 = false;
 		} else {
 			background.paintIcon(this, g, 0, 0);
 		}
@@ -91,6 +99,8 @@ public class Content extends JPanel implements ActionListener {
 
 		} else if(e.getSource().equals(decklist)) {
 			
+		} else if(deckButtons.contains(e.getSource())) {
+			int[] theDeck = player.getDecks().get(((JButton) e.getSource()).getText());
 		}
 
 
@@ -166,8 +176,26 @@ public class Content extends JPanel implements ActionListener {
 		if(m.startsWith("--match")) {
 			match = new SimplePlayerProfile(m.substring(7, m.indexOf(",")), Integer.parseInt(m.substring(m.indexOf(",") + 1)));
 			System.out.println("found a match!");
+			matchScreen();
 		} else if(m.startsWith("--wait")) {
 			System.out.println("Waiting...");
+			JLabel wait = new JLabel("Finding a match...");
+			paint1 = true;
+			repaint();
+			JLabel wait1 = new JLabel("Finding a match...");
+			add(wait1);
+		}
+	}
+	
+	public void matchScreen() {
+		HashMap<String, int[]> deecks = player.getDecks();
+		Object[] a = deecks.keySet().toArray();
+		
+		for(int  i = 0; i < a.length; i++) {
+			JButton b = new JButton(a[i].toString());
+			b.addActionListener(this);
+			deckButtons.add(b);
+			add(b);
 		}
 	}
 }
