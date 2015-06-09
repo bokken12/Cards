@@ -35,7 +35,7 @@ public class Content extends JPanel implements ActionListener {
 	ArrayList<JButton> deckButtons = new ArrayList<JButton>();
 	Player player;
 	boolean paint1 = false;
-	
+
 	volatile SimplePlayerProfile match;
 
 	public void paintComponent(Graphics g) {
@@ -53,7 +53,7 @@ public class Content extends JPanel implements ActionListener {
 	}
 
 	public Content(Game parent, Player p, PrintWriter out) {
-		
+
 		output = out;
 
 		player = p;
@@ -91,14 +91,14 @@ public class Content extends JPanel implements ActionListener {
 		if(e.getSource().equals(play)) {
 			System.out.println(":()");
 			playMenu();
-			
+
 		} else if(e.getSource().equals(cards)) {
 			CardsMenu();
 
 		} else if(e.getSource().equals(settings)) {
 
 		} else if(e.getSource().equals(decklist)) {
-			
+
 		} else if(deckButtons.contains(e.getSource())) {
 			int[] theDeck = player.getDecks().get(((JButton) e.getSource()).getText());
 		}
@@ -111,7 +111,7 @@ public class Content extends JPanel implements ActionListener {
 		System.out.println("PlayMenu");
 
 		SimplePlayerProfile a = autoMatch();
-		
+
 		this.removeAll();
 		this.revalidate();
 		this.repaint();
@@ -124,54 +124,54 @@ public class Content extends JPanel implements ActionListener {
 		Dimension b = new Dimension(50, 50);
 
 		add(Box.createHorizontalGlue());
-		
+
 		add(Box.createHorizontalGlue());
 		decklist.setPreferredSize(b);
 		decklist.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		decklist.createVerticalScrollBar();
 		decklist.getViewport().setPreferredSize(b);
-		
-		
+
+
 		String[] decks =  player.getDecks().keySet().toArray(new String[10]);
 		for(int i = 0; i < player.getDecks().size(); i++) {
 			JLabel a = new JLabel(decks[i]);
 			decklist.add(a);
 		}
 		add(decklist);
-		
+
 		CardList cl = new CardList(player);
 		add(cl);
-		
+
 		JCheckBox a = new JCheckBox("Show all cards");
 		add(a);
-		
+
 
 	}
-	
+
 	public SimplePlayerProfile autoMatch() {
-		
+
 		output.println("--Playing " + player.getRank() + " " + player.getUsername());
 		output.flush();
-		
+
 		System.out.println("Automatching");
-		
-//		String l = "";
-//		try {
-//			l = input.readLine();
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		System.out.println("Line = " + l);
-//		if(l.startsWith("--match")) {
-//			return new SimplePlayerProfile(l.substring(7, l.indexOf(",")), Integer.parseInt(l.substring(l.indexOf(","))));
-//		} else if(l.startsWith("--wait")) {
-//			System.out.println("Waiting...");
-//		}
+
+		//		String l = "";
+		//		try {
+		//			l = input.readLine();
+		//		} catch (IOException e) {
+		//			// TODO Auto-generated catch block
+		//			e.printStackTrace();
+		//		}
+		//		System.out.println("Line = " + l);
+		//		if(l.startsWith("--match")) {
+		//			return new SimplePlayerProfile(l.substring(7, l.indexOf(",")), Integer.parseInt(l.substring(l.indexOf(","))));
+		//		} else if(l.startsWith("--wait")) {
+		//			System.out.println("Waiting...");
+		//		}
 		return null;
-//
+		//
 	}
-	
+
 	public void handleMessage(String m) {
 		if(m.startsWith("--match")) {
 			match = new SimplePlayerProfile(m.substring(7, m.indexOf(",")), Integer.parseInt(m.substring(m.indexOf(",") + 1)));
@@ -182,20 +182,24 @@ public class Content extends JPanel implements ActionListener {
 			JLabel wait = new JLabel("Finding a match...");
 			paint1 = true;
 			repaint();
-			JLabel wait1 = new JLabel("Finding a match...");
-			add(wait1);
+			add(wait);
 		}
 	}
-	
+
 	public void matchScreen() {
 		HashMap<String, int[]> deecks = player.getDecks();
 		Object[] a = deecks.keySet().toArray();
-		
+		System.out.println(a);
+
 		for(int  i = 0; i < a.length; i++) {
 			JButton b = new JButton(a[i].toString());
+			System.out.println(b.toString());
+			System.out.println(deecks);
 			b.addActionListener(this);
 			deckButtons.add(b);
 			add(b);
+			repaint();
+			
 		}
 	}
 }

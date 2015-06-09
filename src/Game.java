@@ -55,10 +55,6 @@ public class Game extends JFrame{
 		this.pack();
 		this.setVisible(true);
 
-		
-		
-
-
 	}
 
 	public void toContent(String s) {

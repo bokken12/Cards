@@ -171,7 +171,7 @@ public class MegaServer {
 					a[1] = 1;
 					dacks.put("Starter", a);
 					player.setDecks(dacks);
-					
+					if(!(users.containsKey(username))) {
 					userdata.put(username, player);
 					players.put(username, this);
 					System.out.println("Username: " + username + " Password: " + password);
@@ -179,6 +179,9 @@ public class MegaServer {
 					out.println("AccountConfirmed ");
 					System.out.println("Account got some confirmation");
 					out.flush();
+					} else {
+						System.out.println("Username " + username + " already taken, account not confirmed");
+					}
 					//doLogin("--login " + username + " " + password, out);
 				} else if(line.startsWith("--Playing")) {
 					String[] items = line.split(" ");
