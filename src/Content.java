@@ -1,24 +1,18 @@
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
-
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-
 import Player.Player;
 import Player.SimplePlayerProfile;
 
@@ -34,6 +28,7 @@ public class Content extends JPanel implements ActionListener {
 	PrintWriter output;
 	ArrayList<JButton> deckButtons = new ArrayList<JButton>();
 	Player player;
+	JLabel wait = new JLabel();
 	boolean paint1 = false;
 
 	volatile SimplePlayerProfile match;
@@ -41,14 +36,8 @@ public class Content extends JPanel implements ActionListener {
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 
-		if(paint1) {
-			background.paintIcon(this, g, 0, 0);
-			JLabel wait = new JLabel("Finding a match...");
-			add(wait);
-			paint1 = false;
-		} else {
-			background.paintIcon(this, g, 0, 0);
-		}
+		background.paintIcon(this, g, 0, 0);
+
 
 	}
 
@@ -179,27 +168,37 @@ public class Content extends JPanel implements ActionListener {
 			matchScreen();
 		} else if(m.startsWith("--wait")) {
 			System.out.println("Waiting...");
-			JLabel wait = new JLabel("Finding a match...");
-			paint1 = true;
-			repaint();
+			wait = new JLabel("Finding a match...");
+			add(Box.createHorizontalGlue());
 			add(wait);
+			add(Box.createHorizontalGlue());
+			revalidate();
 		}
 	}
 
 	public void matchScreen() {
+		this.removeAll();
+		this.revalidate();
+		this.repaint();
 		HashMap<String, int[]> deecks = player.getDecks();
 		Object[] a = deecks.keySet().toArray();
 		System.out.println(a);
 
+		add(Box.createHorizontalGlue());
+		wait.setText("Choose a deck:");
+		add(wait);
 		for(int  i = 0; i < a.length; i++) {
 			JButton b = new JButton(a[i].toString());
 			System.out.println(b.toString());
 			System.out.println(deecks);
 			b.addActionListener(this);
 			deckButtons.add(b);
+
 			add(b);
-			repaint();
 			
+
 		}
+		add(Box.createHorizontalGlue());
+		revalidate();
 	}
 }

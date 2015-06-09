@@ -68,8 +68,7 @@ public class MegaServer {
 		private Socket socket;
 		private Player pllayer;
 		private BufferedReader in;
-		private 
-		PrintWriter out;
+		private PrintWriter out;
 		/**
 		 * Constructs a handler thread, squirreling away the socket.
 		 * All the interesting work is done in the run method.
@@ -78,8 +77,8 @@ public class MegaServer {
 			this.socket = socket;
 			System.out.println(socket.getInetAddress().toString());
 		}
-		
-		
+
+
 		public void send(String s) {
 			out.println(s);
 			out.flush();
@@ -122,18 +121,17 @@ public class MegaServer {
 					if(players.containsKey(name)) {
 						players.remove(name);
 					}
-					if(users.containsKey(name)) {
-						users.remove(name);
+					if(playing.size() > 0) {
+						if(playing.get(0).getName().equals(name)) {
+							playing.remove(0);
+						}
 					}
-					if(playing.get(0).getName().equals(name)) {
-						playing.remove(0);
-					}
-					
+
 					break;
 				}
 				else if(line.startsWith("--login")){
 					System.out.println(line);
-					doLogin(line, out);
+					doLogin(line, out, this);
 
 
 				} else if(line.startsWith("--accountCreation")){
@@ -172,13 +170,13 @@ public class MegaServer {
 					dacks.put("Starter", a);
 					player.setDecks(dacks);
 					if(!(users.containsKey(username))) {
-					userdata.put(username, player);
-					players.put(username, this);
-					System.out.println("Username: " + username + " Password: " + password);
-					users.put(username, password);
-					out.println("AccountConfirmed ");
-					System.out.println("Account got some confirmation");
-					out.flush();
+						userdata.put(username, player);
+						players.put(username, this);
+						System.out.println("Username: " + username + " Password: " + password);
+						users.put(username, password);
+						out.println("AccountConfirmed ");
+						System.out.println("Account got some confirmation");
+						out.flush();
 					} else {
 						System.out.println("Username " + username + " already taken, account not confirmed");
 					}
@@ -196,7 +194,7 @@ public class MegaServer {
 					} else {
 						SimplePlayerProfile profile1 = new SimplePlayerProfile(username, rank);
 						SimplePlayerProfile profile2 = new SimplePlayerProfile(playing.get(0).getName(), playing.get(0).getRank());
-						
+
 						Handler h = players.get(playing.get(0).getName());
 						System.out.println("Matching new " + profile1 + " to existing " + profile2);
 						h.send("--match " + profile1.toString());
@@ -207,14 +205,16 @@ public class MegaServer {
 		}
 	}
 
-	public static Player doLogin(String params, PrintWriter output){
+	public static Player doLogin(String params, PrintWriter output, Handler h){
 		//System.out.println("--loginaccepted " + (new Player("email", "username", "password", new ArrayList<Integer>(), new HashMap<String, int[]>(), 0, new ArrayList<String>(), 0)).toString());
 		//output.println("--loginaccepted " + (new Player("email", "username", "password", new ArrayList<Integer>(), new HashMap<String, int[]>(), 0, new ArrayList<String>(), 0)).toString());
+		
 		StringTokenizer a = new StringTokenizer(params, " ");
 		a.nextToken();
 		String b = a.nextToken();
 		String c = a.nextToken();
-		System.out.println("Username is " + b + " and is it in data? " + users.containsKey(b) + " is Pasword in data? " + users.get(b).equals(c));
+		System.out.println("Username is " + b + " and is it in data? " + users.containsKey(b));
+		if(users.containsKey(b)) System.out.println(" is Pasword in data? " + users.get(b).equals(c));
 		System.out.println("Sending Login Acceptance to player");
 		if(users.containsKey(b) && users.get(b).equals(c)) {
 			System.out.println("Actually Sending Login Acceptance to player");
@@ -223,6 +223,7 @@ public class MegaServer {
 		}
 		output.flush();
 		System.out.println("got a login");
+		players.put(b, h);
 		return null;
 	}
 	public static Player getPlayer(){
