@@ -1,10 +1,15 @@
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
+
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
@@ -13,6 +18,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+
 import Player.Player;
 import Player.SimplePlayerProfile;
 
@@ -20,23 +26,39 @@ import Player.SimplePlayerProfile;
 public class Content extends JPanel implements ActionListener {
 
 	ImageIcon background = new ImageIcon("MenuBackground.jpg");
+	ImageIcon screen = new ImageIcon("CardScreen.png");
 	JButton play = new JButton("Play");
 	JButton settings = new JButton("Settings");
 	JButton cards = new JButton("Cards");
+	JButton endTurn = new JButton("End Turn");
+	JButton attack = new JButton("Attack");
 	JPanel foo = new JPanel();
+	JPanel buttons = new JPanel();
+	JPanel field = new JPanel();
 	JScrollPane decklist = new JScrollPane();
+	ArrayList<Integer> selectedCards = new ArrayList<Integer>();
 	PrintWriter output;
+	boolean startTurn;
 	ArrayList<JButton> deckButtons = new ArrayList<JButton>();
 	Player player;
+	Game game;
 	JLabel wait = new JLabel();
-	boolean paint1 = false;
+	boolean clear = false;
+	boolean turn;
+	ArrayList<Integer> deck;
 
 	volatile SimplePlayerProfile match;
 
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 
-		background.paintIcon(this, g, 0, 0);
+		if(clear) {
+			screen.setImage(screen.getImage().getScaledInstance((int) 1200, 800, Image.SCALE_DEFAULT));
+			screen.paintIcon(this, g, 0, 0);
+
+		} else {
+			background.paintIcon(this, g, 0, 0);
+		}
 
 
 	}
@@ -44,7 +66,7 @@ public class Content extends JPanel implements ActionListener {
 	public Content(Game parent, Player p, PrintWriter out) {
 
 		output = out;
-
+		game = parent;
 		player = p;
 
 		int height = background.getIconHeight();
@@ -58,6 +80,8 @@ public class Content extends JPanel implements ActionListener {
 		add(Box.createHorizontalGlue());
 
 		foo.setLayout(new BoxLayout(foo, BoxLayout.PAGE_AXIS));
+		field.setLayout(new BoxLayout(field, BoxLayout.Y_AXIS));
+		buttons.setLayout(new BoxLayout(buttons, BoxLayout.Y_AXIS));
 		foo.add(Box.createVerticalGlue());
 		foo.add(play);
 		play.setAlignmentX(CENTER_ALIGNMENT);
@@ -77,6 +101,8 @@ public class Content extends JPanel implements ActionListener {
 
 	public void actionPerformed(ActionEvent e) {
 
+		System.out.println("Got an event!");
+
 		if(e.getSource().equals(play)) {
 			System.out.println(":()");
 			playMenu();
@@ -89,7 +115,26 @@ public class Content extends JPanel implements ActionListener {
 		} else if(e.getSource().equals(decklist)) {
 
 		} else if(deckButtons.contains(e.getSource())) {
+			System.out.println("Got Deck Button Click");
 			int[] theDeck = player.getDecks().get(((JButton) e.getSource()).getText());
+			for(int i = 0; i < theDeck.length - 1; i++) {
+				deck.add(theDeck[i]);
+			}
+			clear = true;
+			game.setSize(new Dimension(1200, 800));
+			this.removeAll();
+
+			add(field);
+			buttons.add(endTurn);
+			add(buttons);
+
+			this.revalidate();
+
+		} else if(e.getSource().equals(endTurn)) {
+			output.println("--turn");
+		} else if(e.getSource().equals(attack)) {
+			output.println("--attack " + selectedCards.toString());
+
 		}
 
 
@@ -144,26 +189,18 @@ public class Content extends JPanel implements ActionListener {
 
 		System.out.println("Automatching");
 
-		//		String l = "";
-		//		try {
-		//			l = input.readLine();
-		//		} catch (IOException e) {
-		//			// TODO Auto-generated catch block
-		//			e.printStackTrace();
-		//		}
-		//		System.out.println("Line = " + l);
-		//		if(l.startsWith("--match")) {
-		//			return new SimplePlayerProfile(l.substring(7, l.indexOf(",")), Integer.parseInt(l.substring(l.indexOf(","))));
-		//		} else if(l.startsWith("--wait")) {
-		//			System.out.println("Waiting...");
-		//		}
 		return null;
-		//
 	}
 
 	public void handleMessage(String m) {
 		if(m.startsWith("--match")) {
-			match = new SimplePlayerProfile(m.substring(7, m.indexOf(",")), Integer.parseInt(m.substring(m.indexOf(",") + 1)));
+			match = new SimplePlayerProfile(m.substring(7, m.indexOf(",")), Integer.parseInt(m.substring(m.indexOf(",") + 1, m.length() - 2)));
+			int turn = Integer.parseInt(m.substring(m.length() - 1));
+			if(turn == 1) {
+				startTurn = true;
+			} else {
+				startTurn = false;
+			}
 			System.out.println("found a match!");
 			matchScreen();
 		} else if(m.startsWith("--wait")) {
@@ -173,6 +210,13 @@ public class Content extends JPanel implements ActionListener {
 			add(wait);
 			add(Box.createHorizontalGlue());
 			revalidate();
+		} else if(m.startsWith("--block")) {
+
+		} else if(m.startsWith("--turn")) {
+
+
+		} else if(m.startsWith("--continue")) {
+
 		}
 	}
 
@@ -195,10 +239,19 @@ public class Content extends JPanel implements ActionListener {
 			deckButtons.add(b);
 
 			add(b);
-			
+
 
 		}
 		add(Box.createHorizontalGlue());
 		revalidate();
+	}
+
+	public int drawCard() {
+		Random rand = new Random();
+		int card = rand.nextInt();
+		
+		int a = deck.get(card);
+		deck.remove(card);
+		return a;
 	}
 }

@@ -39,7 +39,6 @@ public class Launcher extends JFrame implements ActionListener {
 	private static BufferedReader input;
 	private static PrintWriter output;
 
-	/* Text field where the user can enter text to chat with. */
 	static Launcher frame;
 	private JTextField usernameText;
 	private static JTextField passwordText;

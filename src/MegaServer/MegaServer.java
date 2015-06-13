@@ -197,9 +197,12 @@ public class MegaServer {
 
 						Handler h = players.get(playing.get(0).getName());
 						System.out.println("Matching new " + profile1 + " to existing " + profile2);
-						h.send("--match " + profile1.toString());
-						send("--match " + profile2.toString());
+						h.send("--match " + profile1.toString() + " 1");
+						send("--match " + profile2.toString() + " 2");
+						playing.remove(new SimplerProfile(playing.get(0).getName(), playing.get(0).getRank()));
 					}
+				} else if(line.startsWith("--turn")) {
+					
 				}
 			}
 		}
@@ -226,7 +229,7 @@ public class MegaServer {
 		players.put(b, h);
 		return null;
 	}
-	public static Player getPlayer(){
+	public static Player getPlayer(String s){
 		return null;
 	}
 
@@ -235,3 +238,4 @@ public class MegaServer {
 	}
 
 }
+ 
