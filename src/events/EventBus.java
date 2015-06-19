@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class EventBus {
+	static EventBus currentbus;
 	HashMap<Class<GameEvent>, HashMap<Integer, ArrayList<GameListener>>> listening = new HashMap<Class<GameEvent>, HashMap<Integer, ArrayList<GameListener>>>();
 	public void addGameListener(Integer priority, Class<GameEvent> e, GameListener l){
 		if(priority.intValue() > 20 || priority.intValue() < 0){
@@ -38,5 +39,8 @@ public class EventBus {
 			}
 		}
 		e.fireEvent();
+	}
+	public static EventBus getBus(){
+		return currentbus;
 	}
 }
