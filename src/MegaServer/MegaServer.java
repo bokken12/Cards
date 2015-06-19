@@ -67,8 +67,9 @@ public class MegaServer {
 		private String name;
 		private Socket socket;
 		private Player pllayer;
-		private BufferedReader in;
-		private PrintWriter out;
+		BufferedReader in;
+		PrintWriter out;
+		GameHandler gh;
 		/**
 		 * Constructs a handler thread, squirreling away the socket.
 		 * All the interesting work is done in the run method.
@@ -179,6 +180,7 @@ public class MegaServer {
 						out.flush();
 					} else {
 						System.out.println("Username " + username + " already taken, account not confirmed");
+						out.println("--nameTaken");
 					}
 					//doLogin("--login " + username + " " + password, out);
 				} else if(line.startsWith("--Playing")) {
@@ -199,19 +201,28 @@ public class MegaServer {
 						System.out.println("Matching new " + profile1 + " to existing " + profile2);
 						h.send("--match " + profile1.toString() + " 1");
 						send("--match " + profile2.toString() + " 2");
+						gh = new GameHandler(this, h);
+						h.setGH(this);
 						playing.remove(new SimplerProfile(playing.get(0).getName(), playing.get(0).getRank()));
 					}
 				} else if(line.startsWith("--turn")) {
-					
+					gh.handleMessage(line);
 				}
+
+
 			}
+
+		}
+		public void setGH(Handler h) {
+			gh = new GameHandler(h, this);
+
 		}
 	}
 
 	public static Player doLogin(String params, PrintWriter output, Handler h){
 		//System.out.println("--loginaccepted " + (new Player("email", "username", "password", new ArrayList<Integer>(), new HashMap<String, int[]>(), 0, new ArrayList<String>(), 0)).toString());
 		//output.println("--loginaccepted " + (new Player("email", "username", "password", new ArrayList<Integer>(), new HashMap<String, int[]>(), 0, new ArrayList<String>(), 0)).toString());
-		
+
 		StringTokenizer a = new StringTokenizer(params, " ");
 		a.nextToken();
 		String b = a.nextToken();
@@ -238,4 +249,3 @@ public class MegaServer {
 	}
 
 }
- 

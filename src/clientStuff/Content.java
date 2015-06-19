@@ -1,3 +1,4 @@
+package clientStuff;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
@@ -19,6 +20,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import events.EventBus;
 import Player.Player;
 import Player.SimplePlayerProfile;
 
@@ -46,6 +48,7 @@ public class Content extends JPanel implements ActionListener {
 	boolean clear = false;
 	boolean turn;
 	ArrayList<Integer> deck;
+	static EventBus bus;
 
 	volatile SimplePlayerProfile match;
 
@@ -117,9 +120,17 @@ public class Content extends JPanel implements ActionListener {
 		} else if(deckButtons.contains(e.getSource())) {
 			System.out.println("Got Deck Button Click");
 			int[] theDeck = player.getDecks().get(((JButton) e.getSource()).getText());
+			ArrayList<Integer> realDeck = new ArrayList<Integer>();
+			Random rand = new Random();
 			for(int i = 0; i < theDeck.length - 1; i++) {
-				deck.add(theDeck[i]);
+				int card = rand.nextInt(theDeck.length - 1);
+				if(theDeck[card] != -1) {
+					int a = theDeck[card];
+					theDeck[card] = -1;
+					realDeck.add(a);
+				}
 			}
+			deck = realDeck;
 			clear = true;
 			game.setSize(new Dimension(1200, 800));
 			this.removeAll();
@@ -127,7 +138,7 @@ public class Content extends JPanel implements ActionListener {
 			add(field);
 			buttons.add(endTurn);
 			add(buttons);
-
+			bus = new EventBus();
 			this.revalidate();
 
 		} else if(e.getSource().equals(endTurn)) {
@@ -213,7 +224,7 @@ public class Content extends JPanel implements ActionListener {
 		} else if(m.startsWith("--block")) {
 
 		} else if(m.startsWith("--turn")) {
-
+			turn = true;
 
 		} else if(m.startsWith("--continue")) {
 
@@ -247,11 +258,11 @@ public class Content extends JPanel implements ActionListener {
 	}
 
 	public int drawCard() {
-		Random rand = new Random();
-		int card = rand.nextInt();
-		
-		int a = deck.get(card);
-		deck.remove(card);
-		return a;
+		return deck.get(0);
+		//call drawCardEvent
+	}
+	
+	public static EventBus getBus() {
+		return bus;
 	}
 }

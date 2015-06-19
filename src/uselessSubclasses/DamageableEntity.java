@@ -2,6 +2,6 @@ package uselessSubclasses;
 
 import cards.Card;
 
-public class DamageableEntity {
-
+public interface DamageableEntity {
+	public abstract void dealDamage(int dmg);
 }

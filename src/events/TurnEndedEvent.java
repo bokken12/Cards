@@ -1,6 +1,6 @@
 package events;
 
-public class DamageEvent extends GameEvent{
+public class TurnEndedEvent extends GameEvent {
 
 	@Override
 	public void fireEvent() {

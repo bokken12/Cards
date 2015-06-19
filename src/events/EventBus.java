@@ -9,7 +9,7 @@ public class EventBus {
 		if(priority.intValue() > 20 || priority.intValue() < 0){
 			throw new IllegalArgumentException("You may only have priorities between 0 and 20");
 		}
-		for(Class<GameEvent> c = e; !(c.equals(GameEvent.class)); c = (Class<GameEvent>) c.getSuperclass()){
+		for(Class<GameEvent> c = e; !(c.equals(GameEvent.class)); c = (Class<GameEvent>) c.getSuperclass()) {
 			if(listening.containsKey(c)){
 				if(listening.get(c).containsKey(priority)){
 					listening.get(c).get(priority).add(l);

@@ -1,3 +1,4 @@
+package clientStuff;
 
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
@@ -48,6 +49,7 @@ public class Launcher extends JFrame implements ActionListener {
 	private static JTextField newPasswordText = new JTextField("Enter Password");
 	private JTextField verifyPasswordText = new JTextField("Verify Password");
 	private JButton newcreateAccount = new JButton("Create Account");
+	static JLabel error = new JLabel("");
 
 	private JPanel south;
 	JButton createGame = new JButton("Create Game");
@@ -101,6 +103,8 @@ public class Launcher extends JFrame implements ActionListener {
 				} else if(currentline.startsWith("--wait")) {
 					game.toContent(currentline);
 					//System.out.println("Waiting...");
+				} else if(currentline.startsWith("--nameTaken")) {
+					error.setText("Username already taken");
 				}
 			}
 		} catch (IOException e) {
@@ -134,6 +138,7 @@ public class Launcher extends JFrame implements ActionListener {
 		createAccount = new JButton("Create Account");
 		createAccount.addActionListener(this);
 		south.add(createAccount);
+		south.add(error);
 		this.add(south);
 	}
 	public Launcher() {
