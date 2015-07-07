@@ -8,9 +8,10 @@ public class Ability implements GameListener{
 	String name;
 	String description;
 	Class<? extends GameEvent> activation;
-	GameEvent callevent;
+	AbilityRunnable a;
 	public Ability(String name, String desc, Class<? extends GameEvent> activation, AbilityRunnable a) {
 
+		this.a = a;
 		this.name = name;
 		description = desc;
 		this.activation = activation;
@@ -18,6 +19,6 @@ public class Ability implements GameListener{
 	}
 
 	public void passEvent(GameEvent event){
-		EventBus.callEvent(callevent);
+		a.run(event);
 	}
 }
