@@ -13,14 +13,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.StringTokenizer;
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
+
+import server.Server;
 import Player.Player;
-import MegaServer.MegaServer;
 
 public class Launcher extends JFrame implements ActionListener {
 
@@ -158,7 +160,7 @@ public class Launcher extends JFrame implements ActionListener {
 	private Socket connect() {
 		while (true) {
 			try {
-				Socket s = new Socket(InetAddress.getByName(MegaServer.HOSTNAME), MegaServer.PORT_NUMBER);
+				Socket s = new Socket(InetAddress.getByName(Server.HOSTNAME), Server.PORT_NUMBER);
 				System.out.println("Socket achieved");
 				return s;
 			} catch (IOException e) {

@@ -1,4 +1,4 @@
-package MegaServer;
+package server;
 
 public class Paramer {
 	String params = "";

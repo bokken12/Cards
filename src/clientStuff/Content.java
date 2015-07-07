@@ -21,6 +21,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import events.EventBus;
+import events.TurnEndedEvent;
+import Player.GamePlayer;
 import Player.Player;
 import Player.SimplePlayerProfile;
 
@@ -49,6 +51,8 @@ public class Content extends JPanel implements ActionListener {
 	boolean turn;
 	ArrayList<Integer> deck;
 	static EventBus bus;
+	GamePlayer u;
+	GamePlayer op;
 
 	volatile SimplePlayerProfile match;
 
@@ -145,6 +149,7 @@ public class Content extends JPanel implements ActionListener {
 		} else if(e.getSource().equals(endTurn)) {
 			System.out.println("Ending Turn?");
 			turn = false;
+			bus.callEvent(new TurnEndedEvent(u));
 			output.println("--turn");
 		} else if(e.getSource().equals(attack)) {
 			output.println("--attack " + selectedCards.toString());
@@ -212,6 +217,8 @@ public class Content extends JPanel implements ActionListener {
 			int turn = Integer.parseInt(m.substring(m.length() - 1));
 			if(turn == 1) {
 				startTurn = true;
+				u = new GamePlayer(1);
+				
 			} else {
 				startTurn = false;
 			}

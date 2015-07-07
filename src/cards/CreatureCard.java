@@ -7,8 +7,8 @@ import java.util.HashMap;
 import javax.swing.ImageIcon;
 
 import clientStuff.Content;
-import MegaServer.GameHandler;
-import MegaServer.MegaServer;
+import server.GameHandler;
+import server.Server;
 import uselessSubclasses.DamageableEntity;
 import events.EventBus;
 import events.GameEvent;

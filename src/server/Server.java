@@ -1,4 +1,4 @@
-package MegaServer;
+package server;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -23,7 +23,7 @@ import Player.SimplePlayerProfile;
 import Player.SimplerProfile;
 
 
-public class MegaServer {
+public class Server {
 
 	static final List<PrintWriter> writers = Collections.synchronizedList(new ArrayList<PrintWriter>());
 	static final List<SimplerProfile> playing = Collections.synchronizedList(new ArrayList<SimplerProfile>());
