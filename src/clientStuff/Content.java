@@ -137,11 +137,14 @@ public class Content extends JPanel implements ActionListener {
 
 			add(field);
 			buttons.add(endTurn);
+			endTurn.addActionListener(this);
 			add(buttons);
 			bus = new EventBus();
 			this.revalidate();
 
 		} else if(e.getSource().equals(endTurn)) {
+			System.out.println("Ending Turn?");
+			turn = false;
 			output.println("--turn");
 		} else if(e.getSource().equals(attack)) {
 			output.println("--attack " + selectedCards.toString());
@@ -225,6 +228,7 @@ public class Content extends JPanel implements ActionListener {
 
 		} else if(m.startsWith("--turn")) {
 			turn = true;
+			System.out.println("My Turn! :)");
 
 		} else if(m.startsWith("--continue")) {
 

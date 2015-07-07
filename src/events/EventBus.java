@@ -5,8 +5,8 @@ import java.util.HashMap;
 
 public class EventBus {
 	static EventBus currentbus;
-	HashMap<Class<GameEvent>, HashMap<Integer, ArrayList<GameListener>>> listening = new HashMap<Class<GameEvent>, HashMap<Integer, ArrayList<GameListener>>>();
-	public void addGameListener(Integer priority, Class<GameEvent> e, GameListener l){
+	static HashMap<Class<GameEvent>, HashMap<Integer, ArrayList<GameListener>>> listening = new HashMap<Class<GameEvent>, HashMap<Integer, ArrayList<GameListener>>>();
+	public static void addGameListener(Integer priority, Class<GameEvent> e, GameListener l){
 		if(priority.intValue() > 20 || priority.intValue() < 0){
 			throw new IllegalArgumentException("You may only have priorities between 0 and 20");
 		}
@@ -28,7 +28,7 @@ public class EventBus {
 			}
 		}
 	}
-	public void callEvent(GameEvent e){
+	public static void callEvent(GameEvent e){
 		if(listening.containsKey(e.getClass())){
 			for(int i = 0; i <= 20; i++){
 				if(listening.get(e).containsKey(i)){

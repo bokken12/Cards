@@ -105,6 +105,9 @@ public class Launcher extends JFrame implements ActionListener {
 					//System.out.println("Waiting...");
 				} else if(currentline.startsWith("--nameTaken")) {
 					error.setText("Username already taken");
+					frame.repaint();
+					frame.pack();
+					
 				}
 			}
 		} catch (IOException e) {
