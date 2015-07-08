@@ -15,10 +15,13 @@ public class Ability implements GameListener{
 		this.name = name;
 		description = desc;
 		this.activation = activation;
-		EventBus.addGameListener(10, activation, this);
 	}
 
 	public void passEvent(GameEvent event){
 		a.run(event);
+	}
+	
+	public void RegisterListeners() {
+		EventBus.addGameListener(10, activation, this);
 	}
 }

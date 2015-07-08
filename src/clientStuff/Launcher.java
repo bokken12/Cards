@@ -85,7 +85,7 @@ public class Launcher extends JFrame implements ActionListener {
 					Player player;
 					String subbedLine = currentline.substring(17);
 					ArrayList<Integer> collection = new ArrayList<Integer>();
-					ArrayList<String> collectionStrings = new ArrayList<String>(Arrays.asList((subbedLine.substring(subbedLine.indexOf("cardCollection=") + 16, subbedLine.indexOf(", decks") - 1)).split(",")));
+					ArrayList<String> collectionStrings = new ArrayList<String>(Arrays.asList((subbedLine.substring(subbedLine.indexOf("cardCollection=") + 16, subbedLine.indexOf(", decks") - 1)).split(", ")));
 					for(int i = 0; i < collectionStrings.size() - 1; i++) {
 						collection.add(Integer.parseInt(collectionStrings.get(i)));
 					}

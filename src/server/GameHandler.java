@@ -36,7 +36,6 @@ public class GameHandler extends Thread{
 
 	public void handleMessage(String m) {
 		if(m.equals("--turn")) {
-			System.out.println("Turning Turn...");
 			if(turn == 2) {
 				turn = 1;
 				out1.println("--turn");

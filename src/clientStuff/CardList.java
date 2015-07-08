@@ -39,4 +39,10 @@ public class CardList extends JScrollPane {
 		
 		repaint();
 	}
+
+
+	public static Card getCardFromID(int c4) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

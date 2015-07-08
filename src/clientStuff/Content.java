@@ -20,6 +20,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import cards.Card;
+import cards.Cards;
 import events.EventBus;
 import events.TurnEndedEvent;
 import Player.GamePlayer;
@@ -39,8 +41,10 @@ public class Content extends JPanel implements ActionListener {
 	JPanel foo = new JPanel();
 	JPanel buttons = new JPanel();
 	JPanel field = new JPanel();
+	JPanel handPanel = new JPanel();
 	JScrollPane decklist = new JScrollPane();
 	ArrayList<Integer> selectedCards = new ArrayList<Integer>();
+	ArrayList<Card> hand = new ArrayList<Card>();
 	PrintWriter output;
 	boolean startTurn;
 	ArrayList<JButton> deckButtons = new ArrayList<JButton>();
@@ -51,8 +55,9 @@ public class Content extends JPanel implements ActionListener {
 	boolean turn;
 	ArrayList<Integer> deck;
 	static EventBus bus;
-	GamePlayer u;
-	GamePlayer op;
+	GamePlayer you;
+	GamePlayer opponent;
+	Cards cardList = new Cards();
 
 	volatile SimplePlayerProfile match;
 
@@ -62,6 +67,10 @@ public class Content extends JPanel implements ActionListener {
 		if(clear) {
 			screen.setImage(screen.getImage().getScaledInstance((int) 1200, 800, Image.SCALE_DEFAULT));
 			screen.paintIcon(this, g, 0, 0);
+			System.out.println("Hand is:" + hand.toString());
+			for(int i = 0; i < hand.size() - 1; i++) {
+				hand.get(i).getImageIcon().paintIcon(this, g, 0, 0);
+			}
 
 		} else {
 			background.paintIcon(this, g, 0, 0);
@@ -135,6 +144,7 @@ public class Content extends JPanel implements ActionListener {
 				}
 			}
 			deck = realDeck;
+			System.out.println("-------deck is: " + deck.toString());
 			clear = true;
 			game.setSize(new Dimension(1200, 800));
 			this.removeAll();
@@ -144,18 +154,44 @@ public class Content extends JPanel implements ActionListener {
 			endTurn.addActionListener(this);
 			add(buttons);
 			bus = new EventBus();
+			int c1 = deck.get(0);
+			deck.remove(0);
+			Card ca1 = CardList.getCardFromID(c1);
+			int c2 = deck.get(0);
+			Card ca2 = CardList.getCardFromID(c2);
+			deck.remove(0);
+			int c3 = deck.get(0);
+			Card ca3 = CardList.getCardFromID(c3);
+			deck.remove(0);
+			int c4 = deck.get(0);
+			Card ca4 = CardList.getCardFromID(c4);
+			deck.remove(0);
+			int c5 = deck.get(0);
+			Card ca5 = CardList.getCardFromID(c5);
+			deck.remove(0);
+			hand.add(ca1);
+			hand.add(ca2);
+			hand.add(ca3);
+			hand.add(ca4);
+			hand.add(ca5);
+			System.out.println("Hand is:" + hand.toString());
+			
+			
+			
 			this.revalidate();
 
 		} else if(e.getSource().equals(endTurn)) {
-			System.out.println("Ending Turn?");
-			turn = false;
-			bus.callEvent(new TurnEndedEvent(u));
-			output.println("--turn");
+			if(turn = true) {
+				System.out.println("Ending Turn?");
+				turn = false;
+				bus.callEvent(new TurnEndedEvent(you));
+				output.println("--turn");
+				output.flush();
+			}
 		} else if(e.getSource().equals(attack)) {
 			output.println("--attack " + selectedCards.toString());
 
 		}
-
 
 	}
 
@@ -217,8 +253,8 @@ public class Content extends JPanel implements ActionListener {
 			int turn = Integer.parseInt(m.substring(m.length() - 1));
 			if(turn == 1) {
 				startTurn = true;
-				u = new GamePlayer(1);
-				
+				you = new GamePlayer(1);
+
 			} else {
 				startTurn = false;
 			}
@@ -272,7 +308,7 @@ public class Content extends JPanel implements ActionListener {
 		return deck.get(0);
 		//call drawCardEvent
 	}
-	
+
 	public static EventBus getBus() {
 		return bus;
 	}

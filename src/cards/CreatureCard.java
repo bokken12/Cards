@@ -6,6 +6,7 @@ import java.util.HashMap;
 
 import javax.swing.ImageIcon;
 
+import abilities.Ability;
 import clientStuff.Content;
 import server.GameHandler;
 import server.Server;
@@ -19,15 +20,16 @@ public class CreatureCard extends Card implements GameListener{
 	int toughness;
 	int cost;
 	String name;
-	HashMap<Class<GameEvent>, ArrayList<Runnable>> listeners;
+	Ability ability;
+	boolean haste = false;
 	
-	public CreatureCard(String n, int p, int t, int c, ImageIcon img, HashMap<Class<GameEvent>, ArrayList<Runnable>> a, int id) {
+	public CreatureCard(String n, int p, int t, int c, ImageIcon img, Ability a, int id) {
 		
 		power = p;
 		name = n;
 		toughness = t;
 		cost = c; 
-		listeners = a;
+		ability = a;
 	}
 
 	public int getPower() {
@@ -47,16 +49,21 @@ public class CreatureCard extends Card implements GameListener{
 	}
 	
 	public void registerListeners() {
-		for(Class<GameEvent> event : listeners.keySet()){
-			Content.getBus().addGameListener(new Integer(1), event, this);
-			//event.addListener(myPriority, this)
-		}
+		ability.RegisterListeners();
 	}
 
 	@Override
 	public void passEvent(GameEvent event) {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	public void giveHaste() {
+		haste = true;
+	}
+	
+	public boolean hasHaste() {
+		return haste;
 	}
 	
 }
