@@ -7,6 +7,7 @@ import java.util.HashMap;
 import javax.swing.ImageIcon;
 
 import abilities.Ability;
+import abilities.AbilityRunnable;
 import clientStuff.Content;
 import server.GameHandler;
 import server.Server;
@@ -15,15 +16,22 @@ import events.EventBus;
 import events.GameEvent;
 import events.GameListener;
 
-public class CreatureCard extends Card implements GameListener{
+public class CreatureCard extends Card implements GameListener {
 	int power;
 	int toughness;
 	int cost;
 	String name;
 	Ability ability;
 	boolean haste = false;
+	String type;
+	AbilityRunnable intoPlay = new AbilityRunnable() {
+		
+		public void run(GameEvent event) {
+			
+		}
+	};
 	
-	public CreatureCard(String n, int p, int t, int c, ImageIcon img, Ability a, int id) {
+	public CreatureCard(String n, int p, int t, int c, ImageIcon img, Ability a, String type, int id) {
 		
 		power = p;
 		name = n;
@@ -65,5 +73,19 @@ public class CreatureCard extends Card implements GameListener{
 	public boolean hasHaste() {
 		return haste;
 	}
+	
+	public String getAbilityText() {
+		return ability.getText();
+	}
+	
+	public void setIntoPlay(AbilityRunnable a) {
+		intoPlay = a;
+	}
+	
+	public AbilityRunnable getIntoPlay() {
+		return intoPlay;
+		
+	}
+
 	
 }

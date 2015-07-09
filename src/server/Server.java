@@ -173,7 +173,6 @@ public class Server {
 					a[4] = 2;
 					a[5] = 3;
 					a[6] = 4;
-					dacks.put("Starter", a);
 					player.setDecks(dacks);
 					if(!(users.containsKey(username))) {
 						userdata.put(username, player);

@@ -24,4 +24,9 @@ public class Ability implements GameListener{
 	public void RegisterListeners() {
 		EventBus.addGameListener(10, activation, this);
 	}
+
+	public String getText() {
+		// TODO Auto-generated method stub
+		return description;
+	}
 }

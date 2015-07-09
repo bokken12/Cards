@@ -23,5 +23,10 @@ public class DamageEvent extends GameEvent{
 	public void setTarget(DamageableEntity target) {
 		this.target = target;
 	}
+	
+	public DamageEvent(int dmg, DamageableEntity target) {
+		this.dmg = dmg;
+		this.target = target;
+	}
 
 }

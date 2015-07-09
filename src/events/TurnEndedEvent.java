@@ -15,5 +15,9 @@ public class TurnEndedEvent extends GameEvent {
 	public TurnEndedEvent(GamePlayer e) {
 		ender = e;
 	}
+	
+	public GamePlayer getPlayer() {
+		return ender;
+	}
 
 }

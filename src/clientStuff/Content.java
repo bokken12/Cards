@@ -22,6 +22,7 @@ import javax.swing.JScrollPane;
 
 import cards.Card;
 import cards.Cards;
+import cards.InPlayCreature;
 import events.EventBus;
 import events.TurnEndedEvent;
 import Player.GamePlayer;
@@ -55,9 +56,10 @@ public class Content extends JPanel implements ActionListener {
 	boolean turn;
 	ArrayList<Integer> deck;
 	static EventBus bus;
-	GamePlayer you;
-	GamePlayer opponent;
+	public static GamePlayer you;
+	public GamePlayer opponent;
 	Cards cardList = new Cards();
+	public static InPlayCreature selectedCard;
 
 	volatile SimplePlayerProfile match;
 
@@ -82,6 +84,7 @@ public class Content extends JPanel implements ActionListener {
 	public Content(Game parent, Player p, PrintWriter out) {
 
 		output = out;
+		
 		game = parent;
 		player = p;
 
@@ -154,28 +157,12 @@ public class Content extends JPanel implements ActionListener {
 			endTurn.addActionListener(this);
 			add(buttons);
 			bus = new EventBus();
-			int c1 = deck.get(0);
-			deck.remove(0);
-			Card ca1 = CardList.getCardFromID(c1);
-			int c2 = deck.get(0);
-			Card ca2 = CardList.getCardFromID(c2);
-			deck.remove(0);
-			int c3 = deck.get(0);
-			Card ca3 = CardList.getCardFromID(c3);
-			deck.remove(0);
-			int c4 = deck.get(0);
-			Card ca4 = CardList.getCardFromID(c4);
-			deck.remove(0);
-			int c5 = deck.get(0);
-			Card ca5 = CardList.getCardFromID(c5);
-			deck.remove(0);
-			hand.add(ca1);
-			hand.add(ca2);
-			hand.add(ca3);
-			hand.add(ca4);
-			hand.add(ca5);
-			System.out.println("Hand is:" + hand.toString());
 			
+			for(Integer i:deck){
+				Card ca = cardList.getCardFromID(i);
+				deck.remove(0);
+				hand.add(ca);
+			}
 			
 			
 			this.revalidate();
