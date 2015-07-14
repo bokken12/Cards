@@ -1,6 +1,7 @@
 package server;
 
 import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -42,7 +43,51 @@ public class Server {
 
 		Cards.Init();
 		ServerSocket listener = null;
-		//TODO Load player data from file
+
+		try {
+			/* Open the file for reading. */
+			BufferedReader br = 
+					new BufferedReader(new FileReader("PlayerData"));
+
+			/* Print all lines from the file. */
+			while (true) {
+				String line = br.readLine();
+				if (line == null) break;
+				if(!(line.startsWith("//"))) {
+
+					String[] a = line.split("-");
+					String name = a[0];
+					String password = a[1];
+					String email = a[7];
+					String cards = a[4];
+					int[] cardzs = getArray(cards);
+					ArrayList<Integer> caards = new ArrayList<Integer>();
+					for(int i = 0; i < cardzs.length; i++) {
+						caards.add(cardzs[i]);
+					}
+					int gold = Integer.parseInt(a[2]);
+					int rank = Integer.parseInt(a[3]);
+					HashMap<String, int[]> decks = getDecksFromString(a[5]);
+					String[] friends = a[6].substring(1, a[6].length() - 1).split(",");
+					ArrayList<String> frieends = new ArrayList<String>();
+					for(int i = 0; i < friends.length; i++) {
+						frieends.add(friends[i]);
+					}
+					
+					users.put(name, password);
+					
+					userdata.put(name, new Player(email, name, password, caards, decks, rank, frieends, gold));
+				}
+
+			}
+
+			/* To be nice, close the file. */
+			br.close();
+		} catch (IOException e) {
+			
+
+		}
+
 		try {
 			listener = new ServerSocket(PORT_NUMBER, 100, InetAddress.getByName(HOSTNAME));
 			System.out.println("Waiting for a connection.");
@@ -51,18 +96,48 @@ public class Server {
 				new Handler(listener.accept()).start();
 			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			//  Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 			try {
 				listener.close();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
+				//  Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 
 	} 
+	
+	public static int[] getArray(String ar) {
+
+		String[] digitwords = ar.substring(1, ar.length() - 1).split(", ");
+		int[] result = new int[digitwords.length];
+		for (int i = 0; i < result.length; i++) {
+			result[i] = Integer.parseInt(digitwords[i]);
+		}
+		return result;
+	}
+	
+	public static HashMap<String, int[]> getDecksFromString(String string){
+		HashMap<String, int[]> ret = new HashMap<String, int[]>();
+
+		StringTokenizer t = new StringTokenizer(string, "|");
+
+		while(t.hasMoreTokens()) {
+			String a = t.nextToken();
+			int[] arr = null;
+			if(t.hasMoreTokens()) {
+			arr = getArray(t.nextToken());
+			}
+
+			ret.put(a, arr);
+		}
+
+		return ret;
+
+	}
+	
 	static class Handler extends Thread {
 		private String name;
 		private Socket socket;
@@ -94,7 +169,7 @@ public class Server {
 							socket.getInputStream()));
 					break;
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
+					
 					e.printStackTrace();
 				}
 			}
@@ -103,7 +178,6 @@ public class Server {
 					out = new PrintWriter(socket.getOutputStream(), true);
 					break;
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -114,7 +188,7 @@ public class Server {
 				try {
 					line = in.readLine();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
+					
 					e.printStackTrace();
 				}
 				System.out.println(line);

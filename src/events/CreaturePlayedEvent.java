@@ -5,6 +5,7 @@ import cards.CreatureCard;
 public class CreaturePlayedEvent extends CardPlayedEvent {
 
 	CreatureCard creature;
+	int lane;
 	
 	@Override
 	public void fireEvent() {
@@ -16,6 +17,14 @@ public class CreaturePlayedEvent extends CardPlayedEvent {
 		this.creature = creature;
 	}
 	
+	public int getLane() {
+		return lane;
+	}
+
+	public void setLane(int lane) {
+		this.lane = lane;
+	}
+
 	public CreatureCard getCreature() {
 		return creature;
 	}

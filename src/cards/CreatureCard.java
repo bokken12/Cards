@@ -8,6 +8,7 @@ import javax.swing.ImageIcon;
 
 import abilities.Ability;
 import abilities.AbilityRunnable;
+import abilities.InPlayRunnable;
 import clientStuff.Content;
 import server.GameHandler;
 import server.Server;
@@ -24,9 +25,10 @@ public class CreatureCard extends Card implements GameListener {
 	Ability ability;
 	boolean haste = false;
 	String type;
-	AbilityRunnable intoPlay = new AbilityRunnable() {
+	ImageIcon image;
+	InPlayRunnable intoPlay = new InPlayRunnable() {
 		
-		public void run(GameEvent event) {
+		public void run(InPlayCreature c) {
 			
 		}
 	};
@@ -38,6 +40,7 @@ public class CreatureCard extends Card implements GameListener {
 		toughness = t;
 		cost = c; 
 		ability = a;
+		image = img;
 	}
 
 	public int getPower() {
@@ -78,13 +81,23 @@ public class CreatureCard extends Card implements GameListener {
 		return ability.getText();
 	}
 	
-	public void setIntoPlay(AbilityRunnable a) {
+	public void setIntoPlay(InPlayRunnable a) {
 		intoPlay = a;
 	}
 	
-	public AbilityRunnable getIntoPlay() {
+	public InPlayRunnable getIntoPlay() {
 		return intoPlay;
 		
+	}
+	
+	@Override
+	public ImageIcon getImageIcon() {
+		return image;
+		
+	}
+	
+	public int getCost() {
+		return cost;
 	}
 
 	

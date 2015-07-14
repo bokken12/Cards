@@ -6,6 +6,8 @@ public class InPlayCreature implements DamageableEntity{
 
 	int power;
 	int health;
+	String type;
+	int maxHealth;
 	
 	
 	@Override
@@ -32,6 +34,15 @@ public class InPlayCreature implements DamageableEntity{
 
 	public void AddHealth(int health) {
 		this.health += health;
+	}
+	
+	public String getType() {
+		return type;
+	}
+	
+	public int getMaxHealth() {
+		return maxHealth;
+		
 	}
 
 }

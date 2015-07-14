@@ -1,7 +1,6 @@
 package abilities;
 
 import java.util.ArrayList;
-
 import events.GameEvent;
 
 public abstract class AbilityRunnable{

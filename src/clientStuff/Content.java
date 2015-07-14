@@ -22,6 +22,7 @@ import javax.swing.JScrollPane;
 
 import cards.Card;
 import cards.Cards;
+import cards.CreatureCard;
 import cards.InPlayCreature;
 import events.EventBus;
 import events.TurnEndedEvent;
@@ -44,7 +45,6 @@ public class Content extends JPanel implements ActionListener {
 	JPanel field = new JPanel();
 	JPanel handPanel = new JPanel();
 	JScrollPane decklist = new JScrollPane();
-	ArrayList<Integer> selectedCards = new ArrayList<Integer>();
 	ArrayList<Card> hand = new ArrayList<Card>();
 	PrintWriter output;
 	boolean startTurn;
@@ -60,6 +60,8 @@ public class Content extends JPanel implements ActionListener {
 	public GamePlayer opponent;
 	Cards cardList = new Cards();
 	public static InPlayCreature selectedCard;
+	static ArrayList<InPlayCreature> cardsInPlay;
+	ArrayList<InPlayCreature> Attacking;
 
 	volatile SimplePlayerProfile match;
 
@@ -69,11 +71,12 @@ public class Content extends JPanel implements ActionListener {
 		if(clear) {
 			screen.setImage(screen.getImage().getScaledInstance((int) 1200, 800, Image.SCALE_DEFAULT));
 			screen.paintIcon(this, g, 0, 0);
-			System.out.println("Hand is:" + hand.toString());
-			for(int i = 0; i < hand.size() - 1; i++) {
-				hand.get(i).getImageIcon().paintIcon(this, g, 0, 0);
-			}
+			//paintCreature( (CreatureCard) hand.get(0), g, 120, 500);
+			for(int i = 0; i < hand.size(); i++) {
+				paintCreature((CreatureCard) hand.get(i), g, i*120 + 50, 600);
 
+			}
+			
 		} else {
 			background.paintIcon(this, g, 0, 0);
 		}
@@ -84,7 +87,7 @@ public class Content extends JPanel implements ActionListener {
 	public Content(Game parent, Player p, PrintWriter out) {
 
 		output = out;
-		
+
 		game = parent;
 		player = p;
 
@@ -112,7 +115,6 @@ public class Content extends JPanel implements ActionListener {
 		foo.add(Box.createVerticalGlue());
 		add(foo);
 		add(Box.createHorizontalGlue());
-
 		play.addActionListener(this);
 		cards.addActionListener(this);
 		settings.addActionListener(this);
@@ -138,12 +140,14 @@ public class Content extends JPanel implements ActionListener {
 			int[] theDeck = player.getDecks().get(((JButton) e.getSource()).getText());
 			ArrayList<Integer> realDeck = new ArrayList<Integer>();
 			Random rand = new Random();
-			for(int i = 0; i < theDeck.length - 1; i++) {
-				int card = rand.nextInt(theDeck.length - 1);
+			for(int i = 0; i < theDeck.length; i++) {
+				int card = rand.nextInt(theDeck.length);
 				if(theDeck[card] != -1) {
 					int a = theDeck[card];
 					theDeck[card] = -1;
 					realDeck.add(a);
+				} else {
+					i--;
 				}
 			}
 			deck = realDeck;
@@ -156,15 +160,18 @@ public class Content extends JPanel implements ActionListener {
 			buttons.add(endTurn);
 			endTurn.addActionListener(this);
 			add(buttons);
+
+			//add(handPanel);
 			bus = new EventBus();
-			
-			for(Integer i:deck){
-				Card ca = cardList.getCardFromID(i);
-				deck.remove(0);
+
+			for(Integer i = 0; i < 5; i++) {
+				Card ca = cardList.getCardFromID(deck.get(i));
 				hand.add(ca);
 			}
-			
-			
+			for(int a = 0; a < 5; a++) {
+				deck.remove(0);
+			}
+
 			this.revalidate();
 
 		} else if(e.getSource().equals(endTurn)) {
@@ -176,7 +183,7 @@ public class Content extends JPanel implements ActionListener {
 				output.flush();
 			}
 		} else if(e.getSource().equals(attack)) {
-			output.println("--attack " + selectedCards.toString());
+			output.println("--attack " + Attacking.toString());
 
 		}
 
@@ -298,5 +305,41 @@ public class Content extends JPanel implements ActionListener {
 
 	public static EventBus getBus() {
 		return bus;
+	}
+
+	public static ArrayList<InPlayCreature> getCards() {
+		return cardsInPlay;
+	}
+
+	public static ArrayList<InPlayCreature> getCardsOfType(String type) {
+		ArrayList<InPlayCreature> ret = new ArrayList<InPlayCreature>();
+		for(int i = 0; i < cardsInPlay.size(); i++) {
+			if(cardsInPlay.get(i).getType().equals(type)) {
+				ret.add(cardsInPlay.get(i));
+			}
+		}
+		return ret;
+	}
+
+
+	public void paintCreature(CreatureCard card, Graphics g, int x, int y) {
+		String power = Integer.toString(card.getPower());
+		String health = Integer.toString(card.getToughness());
+		String text = card.getAbilityText();
+		String cost = Integer.toString(card.getCost());
+		ImageIcon img = card.getImageIcon();
+		ImageIcon template = new ImageIcon("CreatureTemplate.png");
+		template.setImage(template.getImage().getScaledInstance((int) 120, 170, Image.SCALE_DEFAULT));
+		img.setImage(img.getImage().getScaledInstance((int) 92, 83, Image.SCALE_DEFAULT));
+		
+		template.paintIcon(handPanel, g, x, y);
+		img.paintIcon(handPanel, g, x + 12, y + 25);
+		System.out.println("X = " + (x + 10) + " Y = " + (y - 75));
+		System.out.println("Component size: " + this.getWidth() + ", " + this.getHeight());
+		g.drawString(power, x + 20, y + 163);
+		g.drawString(health, x + 92, y + 163);
+		g.drawString(text, x + 10, y - 40);
+
+
 	}
 }
