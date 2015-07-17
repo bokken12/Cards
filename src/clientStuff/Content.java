@@ -3,13 +3,19 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.MouseInfo;
+import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
+import java.util.concurrent.ExecutionException;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -19,10 +25,12 @@ import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.SwingWorker;
 
 import cards.Card;
 import cards.Cards;
 import cards.CreatureCard;
+import cards.HandCard;
 import cards.InPlayCreature;
 import events.EventBus;
 import events.TurnEndedEvent;
@@ -31,7 +39,7 @@ import Player.Player;
 import Player.SimplePlayerProfile;
 
 
-public class Content extends JPanel implements ActionListener {
+public class Content extends JPanel implements ActionListener, MouseListener {
 
 	ImageIcon background = new ImageIcon("MenuBackground.jpg");
 	ImageIcon screen = new ImageIcon("CardScreen.png");
@@ -46,6 +54,7 @@ public class Content extends JPanel implements ActionListener {
 	JPanel handPanel = new JPanel();
 	JScrollPane decklist = new JScrollPane();
 	ArrayList<Card> hand = new ArrayList<Card>();
+	Graphics g;
 	PrintWriter output;
 	boolean startTurn;
 	ArrayList<JButton> deckButtons = new ArrayList<JButton>();
@@ -62,21 +71,31 @@ public class Content extends JPanel implements ActionListener {
 	public static InPlayCreature selectedCard;
 	static ArrayList<InPlayCreature> cardsInPlay;
 	ArrayList<InPlayCreature> Attacking;
+	ArrayList<HandCard> handCards = new ArrayList<HandCard>();
+	HandCard selectedHandCard;
+	Point selecCardPoint = new Point();
+	CardDragger cd = new CardDragger();
 
 	volatile SimplePlayerProfile match;
 
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
+		this.g = g;
 
 		if(clear) {
 			screen.setImage(screen.getImage().getScaledInstance((int) 1200, 800, Image.SCALE_DEFAULT));
 			screen.paintIcon(this, g, 0, 0);
 			//paintCreature( (CreatureCard) hand.get(0), g, 120, 500);
+			int x;
+			int y;
 			for(int i = 0; i < hand.size(); i++) {
-				paintCreature((CreatureCard) hand.get(i), g, i*120 + 50, 600);
+				x = i*120 + 50;
+				y = 600;
+				handCards.add(new HandCard(x, y, x + 120, y + 170, hand.get(i), i));
+				paintCreature((CreatureCard) hand.get(i), g, x, y);
 
 			}
-			
+
 		} else {
 			background.paintIcon(this, g, 0, 0);
 		}
@@ -95,6 +114,7 @@ public class Content extends JPanel implements ActionListener {
 		int width = background.getIconWidth();
 
 		Dimension a = new Dimension(width, height);
+		addMouseListener(this);
 
 		setPreferredSize(a);
 		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
@@ -331,7 +351,7 @@ public class Content extends JPanel implements ActionListener {
 		ImageIcon template = new ImageIcon("CreatureTemplate.png");
 		template.setImage(template.getImage().getScaledInstance((int) 120, 170, Image.SCALE_DEFAULT));
 		img.setImage(img.getImage().getScaledInstance((int) 92, 83, Image.SCALE_DEFAULT));
-		
+
 		template.paintIcon(handPanel, g, x, y);
 		img.paintIcon(handPanel, g, x + 12, y + 25);
 		System.out.println("X = " + (x + 10) + " Y = " + (y - 75));
@@ -339,7 +359,80 @@ public class Content extends JPanel implements ActionListener {
 		g.drawString(power, x + 20, y + 163);
 		g.drawString(health, x + 92, y + 163);
 		g.drawString(text, x + 10, y - 40);
+		g.drawString(cost, x + 100, y + 23);
 
 
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		if(!(cd.isStopped())) {
+			cd.stop();
+		}
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		int x = e.getLocationOnScreen().x;
+		int y = e.getLocationOnScreen().y;
+		for(int i = 0; i < handCards.size(); i++) {
+			if(x > handCards.get(i).getStartX() && x < handCards.get(i).getEndX()) {
+				if(y > handCards.get(i).getStartY() && y < handCards.get(i).getEndY()) {
+					System.out.println("Clicking a Hand Card! :D");
+					selectedHandCard = handCards.get(i);
+					cd.execute();
+					
+
+				}
+			}
+		}
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		selectedHandCard = null;
+	}
+
+
+	private class CardDragger extends SwingWorker<String, Point> {
+
+		boolean stop = false;
+
+		@Override
+		protected String doInBackground() {
+			while(stop = false) {
+				publish(MouseInfo.getPointerInfo().getLocation());
+			}
+			return ":{D";
+
+		}
+
+		public void stop() {
+			stop = true;
+		}
+
+		public boolean isStopped() {
+			return stop;
+		}
+
+		@Override
+		protected void process(List<Point> moves) {
+			selecCardPoint = moves.get(0);
+			repaint();
+		}
+
+		protected void done() {
+
+		}
 	}
 }
