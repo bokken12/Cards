@@ -89,18 +89,26 @@ public class Content extends JPanel implements ActionListener, MouseListener {
 			int x;
 			int y;
 			for(int i = 0; i < hand.size(); i++) {
-				x = i*120 + 50;
-				y = 600;
-				handCards.add(new HandCard(x, y, x + 120, y + 170, hand.get(i), i));
-				paintCreature((CreatureCard) hand.get(i), g, x, y);
-
+				if(selectedCard != null) {
+					if(!(selectedHandCard.getCard().equals(hand.get(i)))) {
+						x = i*120 + 50;
+						y = 600;
+						handCards.add(new HandCard(x, y, x + 120, y + 170, hand.get(i), i));
+						paintCreature((CreatureCard) hand.get(i), g, x, y);
+					} else {
+						paintCreature((CreatureCard) hand.get(i), g, (int) selecCardPoint.getX(), (int) selecCardPoint.getY());
+					}
+				} else {
+					x = i*120 + 50;
+					y = 600;
+					handCards.add(new HandCard(x, y, x + 120, y + 170, hand.get(i), i));
+					paintCreature((CreatureCard) hand.get(i), g, x, y);
+				}
 			}
 
 		} else {
 			background.paintIcon(this, g, 0, 0);
 		}
-
-
 	}
 
 	public Content(Game parent, Player p, PrintWriter out) {
@@ -118,7 +126,6 @@ public class Content extends JPanel implements ActionListener, MouseListener {
 
 		setPreferredSize(a);
 		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
-
 		add(Box.createHorizontalGlue());
 
 		foo.setLayout(new BoxLayout(foo, BoxLayout.PAGE_AXIS));
@@ -180,7 +187,6 @@ public class Content extends JPanel implements ActionListener, MouseListener {
 			buttons.add(endTurn);
 			endTurn.addActionListener(this);
 			add(buttons);
-
 			//add(handPanel);
 			bus = new EventBus();
 
@@ -204,7 +210,6 @@ public class Content extends JPanel implements ActionListener, MouseListener {
 			}
 		} else if(e.getSource().equals(attack)) {
 			output.println("--attack " + Attacking.toString());
-
 		}
 
 	}
@@ -234,7 +239,6 @@ public class Content extends JPanel implements ActionListener, MouseListener {
 		decklist.createVerticalScrollBar();
 		decklist.getViewport().setPreferredSize(b);
 
-
 		String[] decks =  player.getDecks().keySet().toArray(new String[10]);
 		for(int i = 0; i < player.getDecks().size(); i++) {
 			JLabel a = new JLabel(decks[i]);
@@ -247,8 +251,6 @@ public class Content extends JPanel implements ActionListener, MouseListener {
 
 		JCheckBox a = new JCheckBox("Show all cards");
 		add(a);
-
-
 	}
 
 	public SimplePlayerProfile autoMatch() {
@@ -311,8 +313,6 @@ public class Content extends JPanel implements ActionListener, MouseListener {
 			deckButtons.add(b);
 
 			add(b);
-
-
 		}
 		add(Box.createHorizontalGlue());
 		revalidate();
@@ -341,7 +341,6 @@ public class Content extends JPanel implements ActionListener, MouseListener {
 		return ret;
 	}
 
-
 	public void paintCreature(CreatureCard card, Graphics g, int x, int y) {
 		String power = Integer.toString(card.getPower());
 		String health = Integer.toString(card.getToughness());
@@ -360,8 +359,6 @@ public class Content extends JPanel implements ActionListener, MouseListener {
 		g.drawString(health, x + 92, y + 163);
 		g.drawString(text, x + 10, y - 40);
 		g.drawString(cost, x + 100, y + 23);
-
-
 	}
 
 	@Override
@@ -391,8 +388,6 @@ public class Content extends JPanel implements ActionListener, MouseListener {
 					System.out.println("Clicking a Hand Card! :D");
 					selectedHandCard = handCards.get(i);
 					cd.execute();
-					
-
 				}
 			}
 		}

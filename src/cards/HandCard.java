@@ -17,6 +17,10 @@ public class HandCard {
 		this.i = i;
 		
 	}
+	
+	public Card getCard() {
+		return card;
+	}
 
 	public int getI() {
 		return i;
