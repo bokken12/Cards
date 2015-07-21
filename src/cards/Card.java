@@ -36,5 +36,13 @@ public class Card {
 		return image;
 		
 	}
+	
+	public String getText() {
+		return "";
+	}
+	
+	public int getCost() {
+		return 0;
+	}
 
 }

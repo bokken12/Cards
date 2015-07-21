@@ -5,8 +5,8 @@ import java.awt.Graphics;
 
 public class CardOnScreen extends Component {
 
-	@Override
-	public void paintComponent(Graphics g) {
-		super.paintComponent(g);
-	}
+//	@Override
+//	public void paintComponent(Graphics g) {
+//		super.paintComponent(g);
+//	}
 }

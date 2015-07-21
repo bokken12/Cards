@@ -2,7 +2,7 @@ package clientStuff;
 
 public class Notes {
 /*
- * Events don't work |:-(
+ * in second launcher, only 1st 2 cards get clicked
  * 
  * */
  

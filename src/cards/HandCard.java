@@ -62,4 +62,12 @@ public class HandCard {
 		this.endY = endY;
 	}
 
+	@Override
+	public String toString() {
+		return "HandCard[startX=" + startX + ", startY=" + startY + ", endX="
+				+ endX + ", endY=" + endY + ", card=" + card + ", i=" + i + "]";
+	}
+	
+	
+
 }

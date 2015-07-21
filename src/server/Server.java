@@ -263,6 +263,7 @@ public class Server {
 					}
 					//doLogin("--login " + username + " " + password, out);
 				} else if(line.startsWith("--Playing")) {
+					System.out.println(playing.toString());
 					String[] items = line.split(" ");
 					int rank = Integer.parseInt(items[1]);
 					String username = items[2]; 
@@ -282,12 +283,17 @@ public class Server {
 						send("--match " + profile2.toString() + " 2");
 						gh = new GameHandler(this, h);
 						h.setGH(this);
-						playing.remove(new SimplerProfile(playing.get(0).getName(), playing.get(0).getRank()));
+						playing.remove(0);
+						//playing.remove(new SimplerProfile(pllayer.getUsername(), pllayer.getRank()));
 					}
 				} else if(line.startsWith("--turn")) {
 					System.out.println("-------------");
 					gh.handleMessage(line);
-				}
+				}/* else if(line.startsWith("--remPlay")) {
+					if(playing.contains(new SimplerProfile((line.substring(9, line.indexOf("|"))), Integer.parseInt(line.substring(line.indexOf("|")))))) {
+						playing.remove(new SimplerProfile((line.substring(9, line.indexOf("|"))), Integer.parseInt(line.substring(line.indexOf("|")))));
+					}
+				}*/
 
 
 			}

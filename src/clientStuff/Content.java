@@ -53,7 +53,6 @@ public class Content extends JPanel implements ActionListener, MouseListener {
 	JPanel field = new JPanel();
 	JPanel handPanel = new JPanel();
 	JScrollPane decklist = new JScrollPane();
-	ArrayList<Card> hand = new ArrayList<Card>();
 	Graphics g;
 	PrintWriter output;
 	boolean startTurn;
@@ -88,21 +87,22 @@ public class Content extends JPanel implements ActionListener, MouseListener {
 			//paintCreature( (CreatureCard) hand.get(0), g, 120, 500);
 			int x;
 			int y;
-			for(int i = 0; i < hand.size(); i++) {
+
+			for(int i = 0; i < handCards.size(); i++) {
 				if(selectedCard != null) {
-					if(!(selectedHandCard.getCard().equals(hand.get(i)))) {
+					if(!(selectedHandCard.getCard().equals(handCards.get(i)))) {
 						x = i*120 + 50;
 						y = 600;
-						handCards.add(new HandCard(x, y, x + 120, y + 170, hand.get(i), i));
-						paintCreature((CreatureCard) hand.get(i), g, x, y);
+						//handCards.add(new HandCard(x, y, x + 120, y + 170, hand.get(i), i));
+						paintCreature(handCards.get(i), g, x, y);
 					} else {
-						paintCreature((CreatureCard) hand.get(i), g, (int) selecCardPoint.getX(), (int) selecCardPoint.getY());
+						paintCreature(handCards.get(i), g, (int) selecCardPoint.getX(), (int) selecCardPoint.getY());
 					}
 				} else {
 					x = i*120 + 50;
 					y = 600;
-					handCards.add(new HandCard(x, y, x + 120, y + 170, hand.get(i), i));
-					paintCreature((CreatureCard) hand.get(i), g, x, y);
+					//handCards.add(new HandCard(x, y, x + 120, y + 170, hand.get(i), i));
+					paintCreature(handCards.get(i), g, x, y);
 				}
 			}
 
@@ -189,10 +189,14 @@ public class Content extends JPanel implements ActionListener, MouseListener {
 			add(buttons);
 			//add(handPanel);
 			bus = new EventBus();
-
+			int x;
+			int y;
 			for(Integer i = 0; i < 5; i++) {
 				Card ca = cardList.getCardFromID(deck.get(i));
-				hand.add(ca);
+				x = i*120 + 50;
+				y = 600;
+				HandCard c = new HandCard(x, y, x + 120, y + 170,ca,i);
+				handCards.add(c);
 			}
 			for(int a = 0; a < 5; a++) {
 				deck.remove(0);
@@ -298,6 +302,7 @@ public class Content extends JPanel implements ActionListener, MouseListener {
 		this.removeAll();
 		this.revalidate();
 		this.repaint();
+		output.println("--remPlay" + player.getUsername() + "|" + player.getRank());
 		HashMap<String, int[]> deecks = player.getDecks();
 		Object[] a = deecks.keySet().toArray();
 		System.out.println(a);
@@ -341,24 +346,47 @@ public class Content extends JPanel implements ActionListener, MouseListener {
 		return ret;
 	}
 
-	public void paintCreature(CreatureCard card, Graphics g, int x, int y) {
-		String power = Integer.toString(card.getPower());
-		String health = Integer.toString(card.getToughness());
-		String text = card.getAbilityText();
-		String cost = Integer.toString(card.getCost());
+	public void paintCreature(HandCard handcard, Graphics g, int x, int y) {
+
+		Card card = handcard.getCard();
+
+		//		String power = Integer.toString(card.getPower());
+		//		String health = Integer.toString(card.getToughness());
+		//		String text = card.getAbilityText();
+		//		String cost = Integer.toString(card.getCost());
+		//
+		//		ImageIcon img = card.getImageIcon();
+		//		ImageIcon template = new ImageIcon("CreatureTemplate.png");
+		//		template.setImage(template.getImage().getScaledInstance((int) 120, 170, Image.SCALE_DEFAULT));
+		//		img.setImage(img.getImage().getScaledInstance((int) 92, 83, Image.SCALE_DEFAULT));
+		//
+		//		template.paintIcon(handPanel, g, x, y);
+		//		img.paintIcon(handPanel, g, x + 12, y + 25);
+		//		//System.out.println("X = " + (x + 10) + " Y = " + (y - 75));
+		//		//System.out.println("Component size: " + this.getWidth() + ", " + this.getHeight());
+		//		g.drawString(power, x + 20, y + 163);
+		//		g.drawString(health, x + 92, y + 163);
+		//		g.drawString(text, x + 10, y - 40);
+		//		g.drawString(cost, x + 100, y + 23);
+
 		ImageIcon img = card.getImageIcon();
 		ImageIcon template = new ImageIcon("CreatureTemplate.png");
 		template.setImage(template.getImage().getScaledInstance((int) 120, 170, Image.SCALE_DEFAULT));
 		img.setImage(img.getImage().getScaledInstance((int) 92, 83, Image.SCALE_DEFAULT));
-
+		String text = card.getText();
+		String cost = Integer.toString(card.getCost());
 		template.paintIcon(handPanel, g, x, y);
 		img.paintIcon(handPanel, g, x + 12, y + 25);
-		System.out.println("X = " + (x + 10) + " Y = " + (y - 75));
-		System.out.println("Component size: " + this.getWidth() + ", " + this.getHeight());
-		g.drawString(power, x + 20, y + 163);
-		g.drawString(health, x + 92, y + 163);
 		g.drawString(text, x + 10, y - 40);
 		g.drawString(cost, x + 100, y + 23);
+
+		if(card.getClass().equals(CreatureCard.class)) {
+			CreatureCard cc = (CreatureCard) card;
+			String power = Integer.toString(cc.getPower());
+			String health = Integer.toString(cc.getToughness());
+			g.drawString(power, x + 20, y + 163);
+			g.drawString(health, x + 92, y + 163);
+		}
 	}
 
 	@Override
@@ -380,8 +408,11 @@ public class Content extends JPanel implements ActionListener, MouseListener {
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		int x = e.getLocationOnScreen().x;
-		int y = e.getLocationOnScreen().y;
+		System.out.println("Got a click");
+		int x = e.getX();
+		int y = e.getY();
+		System.out.println("X = " + x + ", Y = " + y);
+		System.out.println("Hand = " + handCards);
 		for(int i = 0; i < handCards.size(); i++) {
 			if(x > handCards.get(i).getStartX() && x < handCards.get(i).getEndX()) {
 				if(y > handCards.get(i).getStartY() && y < handCards.get(i).getEndY()) {
@@ -395,16 +426,20 @@ public class Content extends JPanel implements ActionListener, MouseListener {
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
+		if(!(cd.isStopped())) {
+			cd.stop();
+		}
 		selectedHandCard = null;
 	}
 
 
 	private class CardDragger extends SwingWorker<String, Point> {
 
-		boolean stop = false;
+		volatile boolean stop = true;
 
 		@Override
 		protected String doInBackground() {
+			stop = true;
 			while(stop = false) {
 				publish(MouseInfo.getPointerInfo().getLocation());
 			}
