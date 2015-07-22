@@ -1,5 +1,7 @@
 package cards;
 
+import java.awt.Point;
+
 public class HandCard {
 	int startX;
 	int startY;
@@ -7,7 +9,7 @@ public class HandCard {
 	int endY;
 	Card card;
 	int i;
-	
+
 	public HandCard(int x, int y, int x2, int y2, Card card, int i) {
 		this.card = card;
 		this.startX = x;
@@ -15,9 +17,9 @@ public class HandCard {
 		this.endX = x2;
 		this.endY = y2;
 		this.i = i;
-		
+
 	}
-	
+
 	public Card getCard() {
 		return card;
 	}
@@ -67,7 +69,16 @@ public class HandCard {
 		return "HandCard[startX=" + startX + ", startY=" + startY + ", endX="
 				+ endX + ", endY=" + endY + ", card=" + card + ", i=" + i + "]";
 	}
-	
-	
 
+	public boolean containsPoint(Point p) {
+		double x = p.getX();
+		double y = p.getY();
+
+		if(x > this.getStartX() && x <this.getEndX()) {
+			if(y > this.getStartY() && y < this.getEndY()) {
+				return true;
+			}
+		}
+		return false;
+	}
 }

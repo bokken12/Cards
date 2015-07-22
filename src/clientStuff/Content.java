@@ -80,20 +80,18 @@ public class Content extends JPanel implements ActionListener, MouseListener {
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		this.g = g;
-
+	
 		if(clear) {
 			screen.setImage(screen.getImage().getScaledInstance((int) 1200, 800, Image.SCALE_DEFAULT));
 			screen.paintIcon(this, g, 0, 0);
 			//paintCreature( (CreatureCard) hand.get(0), g, 120, 500);
 			int x;
 			int y;
-
 			for(int i = 0; i < handCards.size(); i++) {
-				if(selectedCard != null) {
+				if(!(selectedHandCard == null)) {
 					if(!(selectedHandCard.getCard().equals(handCards.get(i)))) {
 						x = i*120 + 50;
 						y = 600;
-						//handCards.add(new HandCard(x, y, x + 120, y + 170, hand.get(i), i));
 						paintCreature(handCards.get(i), g, x, y);
 					} else {
 						paintCreature(handCards.get(i), g, (int) selecCardPoint.getX(), (int) selecCardPoint.getY());
@@ -101,11 +99,9 @@ public class Content extends JPanel implements ActionListener, MouseListener {
 				} else {
 					x = i*120 + 50;
 					y = 600;
-					//handCards.add(new HandCard(x, y, x + 120, y + 170, hand.get(i), i));
 					paintCreature(handCards.get(i), g, x, y);
 				}
 			}
-
 		} else {
 			background.paintIcon(this, g, 0, 0);
 		}
@@ -292,9 +288,6 @@ public class Content extends JPanel implements ActionListener, MouseListener {
 		} else if(m.startsWith("--turn")) {
 			turn = true;
 			System.out.println("My Turn! :)");
-
-		} else if(m.startsWith("--continue")) {
-
 		}
 	}
 
@@ -409,20 +402,18 @@ public class Content extends JPanel implements ActionListener, MouseListener {
 	@Override
 	public void mousePressed(MouseEvent e) {
 		System.out.println("Got a click");
-		int x = e.getX();
-		int y = e.getY();
-		System.out.println("X = " + x + ", Y = " + y);
-		System.out.println("Hand = " + handCards);
+
+
 		for(int i = 0; i < handCards.size(); i++) {
-			if(x > handCards.get(i).getStartX() && x < handCards.get(i).getEndX()) {
-				if(y > handCards.get(i).getStartY() && y < handCards.get(i).getEndY()) {
-					System.out.println("Clicking a Hand Card! :D");
-					selectedHandCard = handCards.get(i);
-					cd.execute();
-				}
+			if(handCards.get(i).containsPoint(e.getPoint())) {
+				System.out.println("Clicking a Hand Card! :D");
+				selectedHandCard = handCards.get(i);
+				cd.execute();
 			}
 		}
 	}
+
+
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
@@ -439,8 +430,9 @@ public class Content extends JPanel implements ActionListener, MouseListener {
 
 		@Override
 		protected String doInBackground() {
-			stop = true;
-			while(stop = false) {
+			System.out.println("Starting CardDragger...");
+			stop = false;
+			while(stop == false) {
 				publish(MouseInfo.getPointerInfo().getLocation());
 			}
 			return ":{D";

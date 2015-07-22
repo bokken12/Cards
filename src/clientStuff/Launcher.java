@@ -45,6 +45,7 @@ public class Launcher extends JFrame implements ActionListener {
 	static Launcher frame;
 	private JTextField usernameText;
 	private static JTextField passwordText;
+	private JButton login = new JButton("Login");
 	private JButton createAccount;
 	private JTextField emailText = new JTextField("Enter Email");
 	private static JTextField newUsernameText  = new JTextField("Enter Username");
@@ -54,8 +55,6 @@ public class Launcher extends JFrame implements ActionListener {
 	static JLabel error = new JLabel("");
 
 	private JPanel south;
-	JButton createGame = new JButton("Create Game");
-	JButton refresh = new JButton("Refresh");
 	String username = "";
 	JButton play = new JButton("Play");
 	JButton cards = new JButton("Cards");
@@ -72,7 +71,7 @@ public class Launcher extends JFrame implements ActionListener {
 			while (true) {
 				currentline = input.readLine();
 				if (currentline == null) break;
-				
+
 				System.out.println("Launcher got " + currentline);
 				/*else */
 				if(currentline.startsWith("--refresh")) {
@@ -85,7 +84,8 @@ public class Launcher extends JFrame implements ActionListener {
 					Player player;
 					String subbedLine = currentline.substring(17);
 					ArrayList<Integer> collection = new ArrayList<Integer>();
-					ArrayList<String> collectionStrings = new ArrayList<String>(Arrays.asList((subbedLine.substring(subbedLine.indexOf("cardCollection=") + 16, subbedLine.indexOf(", decks") - 1)).split(", ")));
+					ArrayList<String> collectionStrings = new ArrayList<String>(Arrays.asList((subbedLine.substring(subbedLine.indexOf("cardCollection=")
+							+ 16, subbedLine.indexOf(", decks") - 1)).split(", ")));
 					for(int i = 0; i < collectionStrings.size() - 1; i++) {
 						collection.add(Integer.parseInt(collectionStrings.get(i)));
 					}
@@ -109,7 +109,7 @@ public class Launcher extends JFrame implements ActionListener {
 					error.setText("Username already taken");
 					frame.repaint();
 					frame.pack();
-					
+
 				}
 			}
 		} catch (IOException e) {
@@ -134,12 +134,12 @@ public class Launcher extends JFrame implements ActionListener {
 		south.setLayout(new FlowLayout());
 		usernameText = new JTextField("Username", 10);
 		usernameText.addActionListener(this);
-		//usernameText.addKeyListener(this);
 		south.add(usernameText);
 		passwordText = new JTextField("Password", 10);
 		passwordText.addActionListener(this);
-		//passwordText.addKeyListener(this);
 		south.add(passwordText);
+		login.addActionListener(this);
+		south.add(login);
 		createAccount = new JButton("Create Account");
 		createAccount.addActionListener(this);
 		south.add(createAccount);
@@ -186,7 +186,7 @@ public class Launcher extends JFrame implements ActionListener {
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource().equals(passwordText)) {
+		if (e.getSource().equals(passwordText) || e.getSource().equals(login)) {
 			if(!(usernameText.getText().equals(""))){
 				doLogin(usernameText.getText(), passwordText.getText());
 			}
@@ -215,21 +215,20 @@ public class Launcher extends JFrame implements ActionListener {
 				}
 			});
 		}
-		else if(e.getSource().equals(emailText) || e.getSource().equals(newUsernameText) || e.getSource().equals(newPasswordText) || e.getSource().equals(verifyPasswordText) || e.getSource().equals(newcreateAccount)){
+		else if(e.getSource().equals(emailText) || e.getSource().equals(newUsernameText) 
+				|| e.getSource().equals(newPasswordText) || e.getSource().equals(verifyPasswordText) || e.getSource().equals(newcreateAccount)){
 			if (DEBUG) System.out.println("Got text entry");
 			if(!(emailText.getText().equals("") || newUsernameText.getText().equals("") || newPasswordText.getText().equals("") || verifyPasswordText.getText().equals(""))){
 				if(newPasswordText.getText().equals(verifyPasswordText.getText())){
 					sendText("--accountCreation " + emailText.getText() + " " + newUsernameText.getText() + " " + newPasswordText.getText());
 					if (DEBUG) System.out.println("Waiting for confirmation on creating an account");
 				}
-			} else {
+			}else {
 				if (DEBUG) System.out.println("Didn't verify: |" + newPasswordText.getText() + "| |" + verifyPasswordText.getText() + "|");
 			}
 		} 
-		else if(e.getSource().equals(refresh)) {
-			sendText("--refresh");
-		}
-	
+
+
 	}
 
 	/**
@@ -300,7 +299,7 @@ public class Launcher extends JFrame implements ActionListener {
 			String a = t.nextToken();
 			int[] arr = null;
 			if(t.hasMoreTokens()) {
-			arr = getArray(t.nextToken());
+				arr = getArray(t.nextToken());
 			}
 
 			ret.put(a, arr);

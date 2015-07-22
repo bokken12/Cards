@@ -1,19 +1,8 @@
 package cards;
 
-import java.awt.Image;
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import javax.swing.ImageIcon;
-
 import abilities.Ability;
-import abilities.AbilityRunnable;
 import abilities.InPlayRunnable;
-import clientStuff.Content;
-import server.GameHandler;
-import server.Server;
-import uselessSubclasses.DamageableEntity;
-import events.EventBus;
 import events.GameEvent;
 import events.GameListener;
 
