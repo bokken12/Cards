@@ -27,13 +27,18 @@ import Player.SimplerProfile;
 public class Server {
 
 	static final List<PrintWriter> writers = Collections.synchronizedList(new ArrayList<PrintWriter>());
+
+	//people in the waiting for game list
 	static final List<SimplerProfile> playing = Collections.synchronizedList(new ArrayList<SimplerProfile>());
 
+	//all users, online or not
 	static final Map<String, String> users = Collections.synchronizedMap(new HashMap<String, String>());
+
+	//all online players
 	static final HashMap<String, Handler> players = new HashMap<String, Handler>();
-	//	static final List<Player> userdata = Collections.synchronizedList(new ArrayList<Player>());
+
 	static HashMap<String, Player> userdata = new HashMap<String, Player>();
-	static final Map<Integer, Handler> waitingForGames = Collections.synchronizedMap(new HashMap<Integer, Handler>());
+	//static final Map<Integer, Handler> waitingForGames = Collections.synchronizedMap(new HashMap<Integer, Handler>());
 	public static int PORT_NUMBER = 5002;
 	static Cards c = new Cards();
 
@@ -73,9 +78,9 @@ public class Server {
 					for(int i = 0; i < friends.length; i++) {
 						frieends.add(friends[i]);
 					}
-					
+
 					users.put(name, password);
-					
+
 					userdata.put(name, new Player(email, name, password, caards, decks, rank, frieends, gold));
 				}
 
@@ -84,7 +89,7 @@ public class Server {
 			/* To be nice, close the file. */
 			br.close();
 		} catch (IOException e) {
-			
+
 
 		}
 
@@ -108,7 +113,7 @@ public class Server {
 		}
 
 	} 
-	
+
 	public static int[] getArray(String ar) {
 
 		String[] digitwords = ar.substring(1, ar.length() - 1).split(", ");
@@ -118,7 +123,7 @@ public class Server {
 		}
 		return result;
 	}
-	
+
 	public static HashMap<String, int[]> getDecksFromString(String string){
 		HashMap<String, int[]> ret = new HashMap<String, int[]>();
 
@@ -128,7 +133,7 @@ public class Server {
 			String a = t.nextToken();
 			int[] arr = null;
 			if(t.hasMoreTokens()) {
-			arr = getArray(t.nextToken());
+				arr = getArray(t.nextToken());
 			}
 
 			ret.put(a, arr);
@@ -137,7 +142,7 @@ public class Server {
 		return ret;
 
 	}
-	
+
 	static class Handler extends Thread {
 		private String name;
 		private Socket socket;
@@ -169,7 +174,7 @@ public class Server {
 							socket.getInputStream()));
 					break;
 				} catch (IOException e) {
-					
+
 					e.printStackTrace();
 				}
 			}
@@ -188,7 +193,7 @@ public class Server {
 				try {
 					line = in.readLine();
 				} catch (IOException e) {
-					
+
 					e.printStackTrace();
 				}
 				System.out.println(line);
@@ -251,7 +256,7 @@ public class Server {
 					player.setDecks(dacks);
 					if(!(users.containsKey(username))) {
 						userdata.put(username, player);
-						players.put(username, this);
+						//players.put(username, this);
 						System.out.println("Username: " + username + " Password: " + password);
 						users.put(username, password);
 						out.println("AccountConfirmed ");
@@ -313,6 +318,10 @@ public class Server {
 		a.nextToken();
 		String b = a.nextToken();
 		String c = a.nextToken();
+		if((players.containsKey(b))) {
+			System.out.println("Denying login");
+			return null;
+		}
 		System.out.println("Username is " + b + " and is it in data? " + users.containsKey(b));
 		if(users.containsKey(b)) System.out.println(" is Pasword in data? " + users.get(b).equals(c));
 		System.out.println("Sending Login Acceptance to player");
@@ -324,6 +333,7 @@ public class Server {
 		output.flush();
 		System.out.println("got a login");
 		players.put(b, h);
+
 		return null;
 	}
 	public static Player getPlayer(String s){

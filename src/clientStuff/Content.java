@@ -94,6 +94,7 @@ public class Content extends JPanel implements ActionListener, MouseListener {
 						y = 600;
 						paintCreature(handCards.get(i), g, x, y);
 					} else {
+						System.out.println("Painting selected card at: " + selecCardPoint);
 						paintCreature(handCards.get(i), g, (int) selecCardPoint.getX(), (int) selecCardPoint.getY());
 					}
 				} else {

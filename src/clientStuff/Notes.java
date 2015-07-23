@@ -2,7 +2,7 @@ package clientStuff;
 
 public class Notes {
 /*
- * CardDragger is started but doesn't do anything.
+ * CardDragger runs fine, but card is not dragged
  * 
  * */
  
