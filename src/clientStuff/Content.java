@@ -78,6 +78,7 @@ public class Content extends JPanel implements ActionListener, MouseListener {
 	volatile SimplePlayerProfile match;
 
 	public void paintComponent(Graphics g) {
+		System.out.println("Repainting");
 		super.paintComponent(g);
 		this.g = g;
 	
@@ -89,7 +90,7 @@ public class Content extends JPanel implements ActionListener, MouseListener {
 			int y;
 			for(int i = 0; i < handCards.size(); i++) {
 				if(!(selectedHandCard == null)) {
-					if(!(selectedHandCard.getCard().equals(handCards.get(i)))) {
+					if(!(selectedHandCard.equals(handCards.get(i)))) {
 						x = i*120 + 50;
 						y = 600;
 						paintCreature(handCards.get(i), g, x, y);

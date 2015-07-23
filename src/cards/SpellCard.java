@@ -1,26 +1,24 @@
 package cards;
 
-import abilities.AbilityRunnable;
-
 public class SpellCard extends Card {
 
-	AbilityRunnable effect;
+	SpellRunnable effect;
 	String text;
 	int cost;
 	String name;
 	
-	public SpellCard(String name, int cost, String text, AbilityRunnable effect) {
+	public SpellCard(String name, int cost, String text, SpellRunnable effect) {
 		this.name = name;
 		this.cost = cost;
 		this.effect = effect;
 		this.text = text;
 	}
 
-	public AbilityRunnable getEffect() {
+	public SpellRunnable getEffect() {
 		return effect;
 	}
 
-	public void setEffect(AbilityRunnable effect) {
+	public void setEffect(SpellRunnable effect) {
 		this.effect = effect;
 	}
 

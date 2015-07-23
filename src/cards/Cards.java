@@ -47,14 +47,14 @@ public class Cards {
 	}
 
 	public static void Init() {
-		
+
 		Ability a0 = new Ability("", "", AbilityEvent.class, new AbilityRunnable() {
 			@Override
 			public void run(GameEvent event) {
-				
+
 			}
 		});
-		
+
 		cards.add(new CreatureCard("Dwarven Knight", 4, 3, 4, new ImageIcon("dwarf knight.png"), a0, "Dwarf", 0));
 		cards.add(new CreatureCard("Dwarven Footman", 2, 3, 2, new ImageIcon("DwarvenFootman.png"), a0, "Dwarf", 1));   
 		Ability a1 = new Ability("", "3: deal 1 damage to a creature", AbilityEvent.class, new AbilityRunnable() {
@@ -120,9 +120,9 @@ public class Cards {
 		crcd1.setIntoPlay(new InPlayRunnable() {
 			@Override
 			public void run(InPlayCreature c, CreaturePlayedEvent e) {
-				
+
 				Random r = new Random();
-				
+
 				e.setLane(r.nextInt(3)); 
 			}
 		});
@@ -144,11 +144,17 @@ public class Cards {
 			} 
 		});
 		cards.add(new CreatureCard("Verdant Spring", 0, 3, 1, new ImageIcon("Factory.jpg"), a6,"Plant", 10)); 
-		
+
+		cards.add(new SpellCard("War Axe", 2, "Give a creature +3 attack", new SpellRunnable() {
+			@Override
+			public void run(Content c) {
+				EventBus.callEvent(new ModifyEvent(c.selectedCard, 3, 0));
+			}
+		}));
 	}
-	
+
 	public Cards() {
 		Init();
-		
+
 	}     
 }
