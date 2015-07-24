@@ -190,7 +190,7 @@ public class Launcher extends JFrame implements ActionListener {
 			if(!(usernameText.getText().equals(""))){
 				doLogin(usernameText.getText(), passwordText.getText());
 			}
-		}
+		}	
 		else if(e.getSource().equals(createAccount)){
 			/*passwordText.setVisible(false);
 			usernameText.setVisible(false);
@@ -211,7 +211,7 @@ public class Launcher extends JFrame implements ActionListener {
 					south.add(newcreateAccount);
 					newcreateAccount.addActionListener(frame);
 
-					frame.pack();
+			 		frame.pack();
 				}
 			});
 		}
@@ -281,7 +281,6 @@ public class Launcher extends JFrame implements ActionListener {
 	}
 	public static void doLogin(String username, String password){
 		sendText("--login " + username + " " + password);
-		//menu(loginConfirmation());
 	}
 
 	public static void menu(Player player) {

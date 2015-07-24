@@ -144,7 +144,7 @@ public class Server {
 	}
 
 	static class Handler extends Thread {
-		private String name;
+		public String name;
 		private Socket socket;
 		private Player pllayer;
 		BufferedReader in;
@@ -198,8 +198,10 @@ public class Server {
 				}
 				System.out.println(line);
 				if(line == null) {
+					System.out.println(name + " disconnected.");
 					if(players.containsKey(name)) {
 						players.remove(name);
+						System.out.println("removed " + name + " from players.");
 					}
 					if(playing.size() > 0) {
 						if(playing.get(0).getName().equals(name)) {
@@ -210,7 +212,6 @@ public class Server {
 					break;
 				}
 				else if(line.startsWith("--login")){
-					System.out.println(line);
 					doLogin(line, out, this);
 
 
@@ -333,6 +334,7 @@ public class Server {
 		output.flush();
 		System.out.println("got a login");
 		players.put(b, h);
+		h.name = b;
 
 		return null;
 	}

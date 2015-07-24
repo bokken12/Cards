@@ -25,6 +25,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 
 import cards.Card;
@@ -78,7 +79,7 @@ public class Content extends JPanel implements ActionListener, MouseListener {
 	volatile SimplePlayerProfile match;
 
 	public void paintComponent(Graphics g) {
-		System.out.println("Repainting");
+		//System.out.println("Repainting");
 		super.paintComponent(g);
 		this.g = g;
 	
@@ -95,7 +96,7 @@ public class Content extends JPanel implements ActionListener, MouseListener {
 						y = 600;
 						paintCreature(handCards.get(i), g, x, y);
 					} else {
-						System.out.println("Painting selected card at: " + selecCardPoint);
+						//System.out.println("Painting selected card at: " + selecCardPoint);
 						paintCreature(handCards.get(i), g, (int) selecCardPoint.getX(), (int) selecCardPoint.getY());
 					}
 				} else {
@@ -419,9 +420,10 @@ public class Content extends JPanel implements ActionListener, MouseListener {
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		if(!(cd.isStopped())) {
-			cd.stop();
-		}
+		cd.stop();
+//		if(!(cd.isStopped()) {
+//			cd.stop();
+//		}
 		selectedHandCard = null;
 	}
 
@@ -435,7 +437,12 @@ public class Content extends JPanel implements ActionListener, MouseListener {
 			System.out.println("Starting CardDragger...");
 			stop = false;
 			while(stop == false) {
-				publish(MouseInfo.getPointerInfo().getLocation());
+				Point a = MouseInfo.getPointerInfo().getLocation();
+				SwingUtilities.convertPointFromScreen(a, game);
+				int x = a.x + 5;
+				int y = a.y - 25;
+				a.setLocation(x, y);
+				publish(a);
 			}
 			return ":{D";
 
@@ -452,6 +459,7 @@ public class Content extends JPanel implements ActionListener, MouseListener {
 		@Override
 		protected void process(List<Point> moves) {
 			selecCardPoint = moves.get(0);
+			System.out.println(moves.get(0));
 			repaint();
 		}
 
