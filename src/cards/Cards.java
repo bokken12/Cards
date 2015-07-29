@@ -69,7 +69,7 @@ public class Cards {
 		});
 		cards.add(new CreatureCard("Dwarven Wizard", 3, 2, 4, new ImageIcon("Weezard.png"), a1, "Dwarf", 2)); 
 		cards.add(new CreatureCard("Dwarven ShieldBearer", 2, 5, 4, new ImageIcon("dwarf shield.png"), a0,"Dwarf", 3));
-		cards.add(new CreatureCard("Dwarven Champion", 4, 3, 4, new ImageIcon("dwarf champ.png"), a0,"Dwarf", 4));
+		cards.add(new CreatureCard("Dwarven Champion", 4, 4, 5, new ImageIcon("dwarf champ.png"), a0,"Dwarf", 4));
 		cards.add(new CreatureCard("Skeleton", 1, 1, 0, new ImageIcon("Skeleton.png"), a0,"Undead", 5));
 		Ability a2 = new Ability("", "At the end of your turn, summon a 1/1 Skeleton", TurnEndedEvent.class, new AbilityRunnable() { 
 			@Override

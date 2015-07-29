@@ -14,6 +14,7 @@ public class Card {
 	ImageIcon image;
 	int imX;
 	int imY;
+	int num = Cards.cards.indexOf(this);
 	
 	public Card(){
 		
@@ -43,6 +44,10 @@ public class Card {
 	
 	public int getCost() {
 		return 0;
+	}
+	
+	public int getID() {
+		return num;
 	}
 
 }

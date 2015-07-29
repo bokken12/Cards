@@ -27,13 +27,10 @@ import Player.SimplerProfile;
 public class Server {
 
 	static final List<PrintWriter> writers = Collections.synchronizedList(new ArrayList<PrintWriter>());
-
-	//people in the waiting for game list
+	//players in the waiting for game list
 	static final List<SimplerProfile> playing = Collections.synchronizedList(new ArrayList<SimplerProfile>());
-
-	//all users, online or not
+	//all players, online or not
 	static final Map<String, String> users = Collections.synchronizedMap(new HashMap<String, String>());
-
 	//all online players
 	static final HashMap<String, Handler> players = new HashMap<String, Handler>();
 
@@ -79,6 +76,7 @@ public class Server {
 						frieends.add(friends[i]);
 					}
 
+					System.out.println("Userdata "  + name + ", " + password);
 					users.put(name, password);
 
 					userdata.put(name, new Player(email, name, password, caards, decks, rank, frieends, gold));
@@ -89,8 +87,7 @@ public class Server {
 			/* To be nice, close the file. */
 			br.close();
 		} catch (IOException e) {
-
-
+			
 		}
 
 		try {
@@ -116,7 +113,7 @@ public class Server {
 
 	public static int[] getArray(String ar) {
 
-		String[] digitwords = ar.substring(1, ar.length() - 1).split(", ");
+		String[] digitwords = ar.substring(1, ar.length() - 2).split(", ");
 		int[] result = new int[digitwords.length];
 		for (int i = 0; i < result.length; i++) {
 			result[i] = Integer.parseInt(digitwords[i]);
@@ -150,6 +147,7 @@ public class Server {
 		BufferedReader in;
 		PrintWriter out;
 		GameHandler gh;
+		int me = 1;
 		/**
 		 * Constructs a handler thread, squirreling away the socket.
 		 * All the interesting work is done in the run method.
@@ -287,6 +285,7 @@ public class Server {
 						System.out.println("Matching new " + profile1 + " to existing " + profile2);
 						h.send("--match " + profile1.toString() + " 1");
 						send("--match " + profile2.toString() + " 2");
+						me = 2;
 						gh = new GameHandler(this, h);
 						h.setGH(this);
 						playing.remove(0);
@@ -295,11 +294,16 @@ public class Server {
 				} else if(line.startsWith("--turn")) {
 					System.out.println("-------------");
 					gh.handleMessage(line);
-				}/* else if(line.startsWith("--remPlay")) {
+				} else if(line.startsWith("--myBoard")) {
+					gh.handleMessage(line + "~" + me);
+					
+				}
+				/* else if(line.startsWith("--remPlay")) {
 					if(playing.contains(new SimplerProfile((line.substring(9, line.indexOf("|"))), Integer.parseInt(line.substring(line.indexOf("|")))))) {
 						playing.remove(new SimplerProfile((line.substring(9, line.indexOf("|"))), Integer.parseInt(line.substring(line.indexOf("|")))));
 					}
 				}*/
+				
 
 
 			}

@@ -1,6 +1,9 @@
 package cards;
 
+import java.util.StringTokenizer;
+
 import javax.swing.ImageIcon;
+
 import abilities.Ability;
 import abilities.InPlayRunnable;
 import events.GameEvent;
@@ -12,7 +15,6 @@ public class CreatureCard extends Card implements GameListener {
 	int cost;
 	String name;
 	Ability ability;
-	boolean haste = false;
 	String type;
 	ImageIcon image;
 	InPlayRunnable intoPlay = new InPlayRunnable() {
@@ -57,14 +59,7 @@ public class CreatureCard extends Card implements GameListener {
 		// TODO Auto-generated method stub
 		
 	}
-	
-	public void giveHaste() {
-		haste = true;
-	}
-	
-	public boolean hasHaste() {
-		return haste;
-	}
+
 	
 	public String getAbilityText() {
 		return ability.getText();
@@ -88,6 +83,27 @@ public class CreatureCard extends Card implements GameListener {
 	public int getCost() {
 		return cost;
 	}
+
+	@Override
+	public String toString() {
+		return "CreatureCard [" + power + "~~" + toughness
+				+ "~~" + cost + "~~" + name + "~~" + ability
+				+ "~~" + type + "~~" + image
+				+ "~~" + intoPlay + "]";
+	}
+	
+	/*public CreatureCard(String creature) {
+		StringTokenizer s = new StringTokenizer(creature.substring(14, creature.length() - 2), "~~");
+		power = Integer.parseInt(s.nextToken());
+		toughness = Integer.parseInt(s.nextToken());
+		cost = Integer.parseInt(s.nextToken());
+		name = s.nextToken();
+		ability = s.nextToken();
+		type = s.nextToken();
+		image = new ImageIcon(s.nextToken());
+		intoPlay = s.nextToken()
+		
+	}*/
 
 	
 }

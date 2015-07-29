@@ -1,6 +1,7 @@
 package cards;
 
 import uselessSubclasses.DamageableEntity;
+import uselessSubclasses.Lane;
 
 public class InPlayCreature implements DamageableEntity{
 
@@ -8,6 +9,8 @@ public class InPlayCreature implements DamageableEntity{
 	int health;
 	String type;
 	int maxHealth;
+	Lane lane;
+	CreatureCard card;
 	
 	
 	@Override
@@ -16,8 +19,11 @@ public class InPlayCreature implements DamageableEntity{
 		
 	}
 	
-	public InPlayCreature(CreatureCard card) {
-		
+	public InPlayCreature(CreatureCard card, Lane lane) {
+		this.lane = lane;
+		power = card.getPower();
+		maxHealth = health;
+		this.card = card;
 	}
 
 	public int getPower() {
@@ -26,6 +32,10 @@ public class InPlayCreature implements DamageableEntity{
 
 	public void AddPower(int power) {
 		this.power += power;
+	}
+	
+	public void SubtractPower(int power) {
+		this.power -= power;
 	}
 
 	public int getHealth() {
@@ -43,6 +53,18 @@ public class InPlayCreature implements DamageableEntity{
 	public int getMaxHealth() {
 		return maxHealth;
 		
+	}
+
+	public Lane getLane() {
+		return lane;
+	}
+
+	public void setLane(Lane lane) {
+		this.lane = lane;
+	}
+	
+	public Card getCard() {
+		return card;
 	}
 
 }

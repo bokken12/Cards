@@ -3,7 +3,9 @@ package server;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 
+import cards.InPlayCreature;
 import server.Server.Handler;
 import events.EventBus;
 import Player.GamePlayer;
@@ -17,6 +19,10 @@ public class GameHandler extends Thread{
 	PrintWriter out2;
 	GamePlayer playerone;
 	GamePlayer playertwo;
+	int p1;
+	int p2;
+	
+	
 	int turn = 2;
 	//EventBus bus;
 	public GameHandler(Handler firstPlayer, Handler secondPlayer){
@@ -26,6 +32,8 @@ public class GameHandler extends Thread{
 		out1 = firstPlayer.out;
 		in2 = secondPlayer.in;
 		out2 = secondPlayer.out;
+		p1 = player1.me;
+		p2 = player2.me;
 							   
 		//bus = new EventBus();
 	}
@@ -43,6 +51,13 @@ public class GameHandler extends Thread{
 			else {
 				turn = 2;
 				out2.println("--turn");
+			}
+		} else if(m.startsWith("--myBoard")) {
+			
+			if(Integer.parseInt(m.substring(m.length() - 2)) == p1) {
+				player2.send(m);
+			} else {
+				player1.send(m);
 			}
 		}
 	}

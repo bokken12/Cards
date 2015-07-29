@@ -110,6 +110,8 @@ public class Launcher extends JFrame implements ActionListener {
 					frame.repaint();
 					frame.pack();
 
+				} else if(currentline.startsWith("--myBoard")) {
+					game.toContent(currentline);
 				}
 			}
 		} catch (IOException e) {

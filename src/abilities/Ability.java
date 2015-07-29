@@ -29,4 +29,12 @@ public class Ability implements GameListener{
 		// TODO Auto-generated method stub
 		return description;
 	}
+
+	@Override
+	public String toString() {
+		return "Ability [name=" + name + ", description=" + description
+				+ ", activation=" + activation + ", a=" + a + "]";
+	}
+	
+	
 }
