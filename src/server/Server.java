@@ -37,7 +37,7 @@ public class Server {
 	static HashMap<String, Player> userdata = new HashMap<String, Player>();
 	//static final Map<Integer, Handler> waitingForGames = Collections.synchronizedMap(new HashMap<Integer, Handler>());
 	public static int PORT_NUMBER = 5002;
-	static Cards c = new Cards();
+
 
 	public static final String HOSTNAME = /*"10.0.1.13"*/ "127.0.0.1";
 
@@ -239,7 +239,7 @@ public class Server {
 							atemail = true;
 						}
 					}
-					Player player = new Player(email, username, password, starterCards(), new HashMap<String, int[]>(), 0, new ArrayList<String>(), 0);
+					Player player = new Player(email, username, password, Cards.getStarterCards(), new HashMap<String, int[]>(), 0, new ArrayList<String>(), 0);
 					pllayer = player;
 					name = username;
 					HashMap<String, int[]> dacks = new HashMap<String, int[]>();
@@ -295,7 +295,7 @@ public class Server {
 					System.out.println("-------------");
 					gh.handleMessage(line);
 				} else if(line.startsWith("--myBoard")) {
-					gh.handleMessage(line + "~" + me);
+					gh.handleMessage(line + me);
 					
 				}
 				/* else if(line.startsWith("--remPlay")) {
@@ -346,8 +346,5 @@ public class Server {
 		return null;
 	}
 
-	public static ArrayList<Integer> starterCards() {
-		return c.getStarterCards();
-	}
 
 }

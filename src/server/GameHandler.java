@@ -53,8 +53,9 @@ public class GameHandler extends Thread{
 				out2.println("--turn");
 			}
 		} else if(m.startsWith("--myBoard")) {
+			System.out.println("Handling playing creatures");
 			
-			if(Integer.parseInt(m.substring(m.length() - 2)) == p1) {
+			if(Integer.parseInt(m.substring(m.length() - 1)) == p1) {
 				player2.send(m);
 			} else {
 				player1.send(m);

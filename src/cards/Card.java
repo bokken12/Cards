@@ -14,10 +14,10 @@ public class Card {
 	ImageIcon image;
 	int imX;
 	int imY;
-	int num = Cards.cards.indexOf(this);
-	
+	int num;
+
 	public Card(){
-		
+		num =  Cards.cards.indexOf(this);
 	}
 	public static Card fromName(String name){
 		return null;
@@ -28,24 +28,24 @@ public class Card {
 	public void receiveEvent(GameEvent event){
 		if(listenerMap.containsKey(event)){
 			for(Ability activatedAbility: listenerMap.get(event)){
-				
+
 			}
 		}
 	}
-	
+
 	public ImageIcon getImageIcon() {
 		return image;
-		
+
 	}
-	
+
 	public String getText() {
 		return "";
 	}
-	
+
 	public int getCost() {
 		return 0;
 	}
-	
+
 	public int getID() {
 		return num;
 	}

@@ -74,7 +74,7 @@ public class Content extends JPanel implements ActionListener, MouseListener {
 	static EventBus bus;
 	public static GamePlayer you;
 	public GamePlayer opponent;
-	Cards cardList = new Cards();
+	public Cards cardsData = new Cards();
 	public static InPlayCreature selectedCard;
 
 	static ArrayList<InPlayCreature> cardsInPlay = new ArrayList<InPlayCreature>();
@@ -119,19 +119,23 @@ public class Content extends JPanel implements ActionListener, MouseListener {
 			//paintCreature( (CreatureCard) hand.get(0), g, 120, 500);
 
 			ArrayList<InPlayCreature> k = lane1.getCreatures();
+			ArrayList<InPlayCreature> b = lane1.getEnemyCreatures();
 			for(int i = 0; i < k.size(); i++) {
 				paintCreature(k.get(i).getCard(), g, 50 + i*115, 400);
 			}
 
 			ArrayList<InPlayCreature> j = lane2.getCreatures();
+			ArrayList<InPlayCreature> u = lane1.getEnemyCreatures();
 			for(int i = 0; i < j.size(); i++) {
 				paintCreature(j.get(i).getCard(), g, 455 + i*115, 400);
 			}
 
-			ArrayList<InPlayCreature> p = lane3.getCreatures();
+			ArrayList<InPlayCreature> p = lane1.getCreatures();
+			ArrayList<InPlayCreature> l = lane3.getEnemyCreatures();
 			for(int i = 0; i < p.size(); i++) {
 				paintCreature(p.get(i).getCard(), g, 855 + i*115, 400);
 			}
+			
 
 			for(int i = 0; i < handCards.size(); i++) {
 				
@@ -169,6 +173,8 @@ public class Content extends JPanel implements ActionListener, MouseListener {
 		game = parent;
 		player = p;
 
+		cardsData.Init();
+		
 		int height = background.getIconHeight();
 		int width = background.getIconWidth();
 
@@ -261,7 +267,7 @@ public class Content extends JPanel implements ActionListener, MouseListener {
 			int x;
 			int y;
 			for(Integer i = 0; i < 5; i++) {
-				Card ca = cardList.getCardFromID(deck.get(i));
+				Card ca = cardsData.getCardFromID(deck.get(i));
 				x = i*120 + 50;
 				y = 600;
 				HandCard c = new HandCard(x, y, x + 120, y + 170,ca,i);
@@ -364,11 +370,29 @@ public class Content extends JPanel implements ActionListener, MouseListener {
 			
 		} else if(m.startsWith("--myBoard")) {
 			
-			StringTokenizer st = new StringTokenizer(m.substring(11), "||");
-			StringTokenizer s1 = new StringTokenizer(st.nextToken(), "|");
-			StringTokenizer s2 = new StringTokenizer(st.nextToken(), "|");
-			StringTokenizer s3 = new StringTokenizer(st.nextToken(), "|");
-			
+			try {
+			Card c = cardsData.getCardFromID(Integer.parseInt(m.substring(10, 11)));
+			int l = Integer.parseInt(m.substring(12));
+			if(l == Constants.LANE_1) {
+				InPlayCreature ic = new InPlayCreature( (CreatureCard) c, lane1);
+				lane1.addEnemy(ic);
+			} else if(l == Constants.LANE_2) {
+				InPlayCreature ic = new InPlayCreature( (CreatureCard) c, lane2);
+				lane2.addEnemy(ic);
+			} else if(l == Constants.LANE_3) {
+				InPlayCreature ic = new InPlayCreature( (CreatureCard) c, lane3);
+				lane3.addEnemy(ic);
+			}
+		
+			} catch(Exception e) {
+				if(e instanceof NumberFormatException) {
+					System.out.println("NumberFormatException");
+				}
+				if(e instanceof IndexOutOfBoundsException) {
+					System.out.println("IndexOutOfBoundsException");
+				}
+				System.out.println("There was an exception");
+			}
 		}
 	}
 
@@ -572,28 +596,16 @@ public class Content extends JPanel implements ActionListener, MouseListener {
 	public void addCreature(InPlayCreature n) {
 		cardsInPlay.add(n);
 		myCreatures.add(n);
+		int lane = 1;
+		if(n.getLane().equals(lane1)) lane = 1;
+		if(n.getLane().equals(lane2)) lane = 2;
+		if(n.getLane().equals(lane3)) lane = 3;
 		
-		String send = "--myBoard ";
+		String send = "--myBoard " + cardsData.getCollection().indexOf(n.getCard()) + "|" + lane;
 		
-		ArrayList<InPlayCreature> e = lane1.getCreatures();
-		for(int i = 0; i < e.size(); i++) {
-			int in = e.get(i).getCard().getID();
-			send = send + in + "|";
-		}
-		send = send + "|";
-		ArrayList<InPlayCreature> p = lane2.getCreatures();
-		for(int i = 0; i < e.size(); i++) {
-			int in = e.get(i).getCard().getID();
-			send = send + in + "|";
-		}
-		send = send + "|";
-		ArrayList<InPlayCreature> q = lane3.getCreatures();
-		for(int i = 0; i < e.size(); i++) {
-			int in = e.get(i).getCard().getID();
-			send = send + in + "|";
-		}
 		
-		//should send something like --myBoard 1 | 2 || 1 || 3 | 4     (no spaces though)
+		
+		//should send something like --myBoard 1|2
 		System.out.println("Sending " + send);
 		output.println(send);
 	}

@@ -23,11 +23,11 @@ public class Cards {
 
 	static ArrayList<Card> cards = new ArrayList<Card>();
 
-	public ArrayList<Card> getCollection() {
+	public static ArrayList<Card> getCollection() {
 		return cards;
 	}
 
-	public ArrayList<Integer> getStarterCards() {
+	public static ArrayList<Integer> getStarterCards() {
 
 		ArrayList<Integer> a = new ArrayList<Integer>();
 		a.add(0);
@@ -152,9 +152,4 @@ public class Cards {
 			}
 		}));
 	}
-
-	public Cards() {
-		Init();
-
-	}     
 }

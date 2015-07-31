@@ -12,6 +12,10 @@ public class Lane {
 	int startY;
 	int endY;
 	
+	Content content;
+	ArrayList<InPlayCreature> creatures = new ArrayList<InPlayCreature>();
+	ArrayList<InPlayCreature> enemyCreatures = new ArrayList<InPlayCreature>();
+	
 	public int getEndX() {
 		return endX;
 	}
@@ -48,9 +52,6 @@ public class Lane {
 		return creatures;
 	}
 
-	Content content;
-	ArrayList<InPlayCreature> creatures = new ArrayList<InPlayCreature>();
-
 	public Lane(Content c) {
 		content = c;
 	}
@@ -73,5 +74,17 @@ public class Lane {
 		}
 		creatures.add(creature);
 		return true;
+	}
+	
+	public boolean addEnemy(InPlayCreature creature) {
+		if(creatures.size() == 2) {
+			return false;
+		}
+		enemyCreatures.add(creature);
+		return true;
+	}
+	
+	public ArrayList<InPlayCreature> getEnemyCreatures() {
+		return enemyCreatures;
 	}
 }
