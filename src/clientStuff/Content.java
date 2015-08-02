@@ -119,23 +119,34 @@ public class Content extends JPanel implements ActionListener, MouseListener {
 			//paintCreature( (CreatureCard) hand.get(0), g, 120, 500);
 
 			ArrayList<InPlayCreature> k = lane1.getCreatures();
-			ArrayList<InPlayCreature> b = lane1.getEnemyCreatures();
 			for(int i = 0; i < k.size(); i++) {
 				paintCreature(k.get(i).getCard(), g, 50 + i*115, 400);
 			}
 
 			ArrayList<InPlayCreature> j = lane2.getCreatures();
-			ArrayList<InPlayCreature> u = lane1.getEnemyCreatures();
 			for(int i = 0; i < j.size(); i++) {
 				paintCreature(j.get(i).getCard(), g, 455 + i*115, 400);
 			}
 
-			ArrayList<InPlayCreature> p = lane1.getCreatures();
-			ArrayList<InPlayCreature> l = lane3.getEnemyCreatures();
+			ArrayList<InPlayCreature> p = lane3.getCreatures();
 			for(int i = 0; i < p.size(); i++) {
 				paintCreature(p.get(i).getCard(), g, 855 + i*115, 400);
 			}
 			
+			ArrayList<InPlayCreature> b = lane1.getEnemyCreatures();
+			for(int i = 0; i < b.size(); i++) {
+				paintCreature(b.get(i).getCard(), g, 50 + i*115, 180);
+			}
+
+			ArrayList<InPlayCreature> u = lane2.getEnemyCreatures();
+			for(int i = 0; i < u.size(); i++) {
+				paintCreature(u.get(i).getCard(), g, 455 + i*115, 180);
+			}
+
+			ArrayList<InPlayCreature> l = lane3.getEnemyCreatures();
+			for(int i = 0; i < l.size(); i++) {
+				paintCreature(l.get(i).getCard(), g, 855 + i*115, 180);
+			}
 
 			for(int i = 0; i < handCards.size(); i++) {
 				
@@ -376,13 +387,17 @@ public class Content extends JPanel implements ActionListener, MouseListener {
 			if(l == Constants.LANE_1) {
 				InPlayCreature ic = new InPlayCreature( (CreatureCard) c, lane1);
 				lane1.addEnemy(ic);
+				System.out.println("Got Lane");
 			} else if(l == Constants.LANE_2) {
 				InPlayCreature ic = new InPlayCreature( (CreatureCard) c, lane2);
 				lane2.addEnemy(ic);
+				System.out.println("Got Lane");
 			} else if(l == Constants.LANE_3) {
 				InPlayCreature ic = new InPlayCreature( (CreatureCard) c, lane3);
 				lane3.addEnemy(ic);
+				System.out.println("Got Lane");
 			}
+			repaint();
 		
 			} catch(Exception e) {
 				if(e instanceof NumberFormatException) {
@@ -608,5 +623,6 @@ public class Content extends JPanel implements ActionListener, MouseListener {
 		//should send something like --myBoard 1|2
 		System.out.println("Sending " + send);
 		output.println(send);
+		output.flush();
 	}
 }

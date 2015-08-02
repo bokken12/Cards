@@ -48,38 +48,82 @@ public class Server {
 
 		try {
 			/* Open the file for reading. */
-			BufferedReader br = 
-					new BufferedReader(new FileReader("PlayerData"));
+			BufferedReader br = new BufferedReader(new FileReader("PlayerData"));
 
 			/* Print all lines from the file. */
+			String username = null;
+			String password = null;
+			String email = null;
+			Integer rank = null;
+			Integer gold = null;
+			int[] cards = null;
+			
+			
 			while (true) {
+				System.out.println("reading file");
 				String line = br.readLine();
 				if (line == null) break;
 				if(!(line.startsWith("//"))) {
 
-					String[] a = line.split("-");
-					String name = a[0];
-					String password = a[1];
-					String email = a[7];
-					String cards = a[4];
-					int[] cardzs = getArray(cards);
-					ArrayList<Integer> caards = new ArrayList<Integer>();
-					for(int i = 0; i < cardzs.length; i++) {
-						caards.add(cardzs[i]);
+					if(line.startsWith("--")) {
+						username = null;
+						password = null;
+						rank = null;
+						gold = null;
 					}
-					int gold = Integer.parseInt(a[2]);
-					int rank = Integer.parseInt(a[3]);
-					HashMap<String, int[]> decks = getDecksFromString(a[5]);
-					String[] friends = a[6].substring(1, a[6].length() - 1).split(",");
-					ArrayList<String> frieends = new ArrayList<String>();
-					for(int i = 0; i < friends.length; i++) {
-						frieends.add(friends[i]);
+					
+					
+					if(line.startsWith("username")) {
+						username = line.substring(9);
 					}
-
-					System.out.println("Userdata "  + name + ", " + password);
-					users.put(name, password);
-
-					userdata.put(name, new Player(email, name, password, caards, decks, rank, frieends, gold));
+					
+					if(line.startsWith("password")) {
+						username = line.substring(9);
+					}
+					
+					if(line.startsWith("rank")) {
+						rank = 	Integer.parseInt(line.substring(5));
+					}
+					
+					if(line.startsWith("gold")) {
+						gold = Integer.parseInt(line.substring(5));
+					}
+					
+					if(line.startsWith("email")) {
+						email = line.substring(6);
+					}
+					
+					if(line.startsWith("cards")) {
+						cards = getArray(line.substring(line.indexOf("[")));
+					}
+					
+					if(username != null && password != null && rank != null && gold != null) {
+						//Player p = new Player(email, username, password, )
+					}
+//					String[] a = line.split("-");
+//					String name = a[1];
+//					String password = a[2];
+//					String email = a[7];
+//					String cards = a[4];
+//					int[] cardzs = getArray(cards);
+//					ArrayList<Integer> caards = new ArrayList<Integer>();
+//					for(int i = 0; i < cardzs.length; i++) {
+//						caards.add(cardzs[i]);
+//					}
+//					int gold = Integer.parseInt(a[5]);
+//					int rank = Integer.parseInt(a[0]);
+//					HashMap<String, int[]> decks = getDecksFromString(a[5]);
+//					String[] friends = a[6].substring(1, a[6].length() - 1).split(",");
+//					ArrayList<String> frieends = new ArrayList<String>();
+//					for(int i = 0; i < friends.length; i++) {
+//						frieends.add(friends[i]);
+//					}
+//
+//					System.out.println("Userdata "  + name + ", " + password);
+//					users.put(name, password);
+//
+//					userdata.put(name, new Player(email, name, password, caards, decks, rank, frieends, gold));
+					
 				}
 
 			}
@@ -87,7 +131,7 @@ public class Server {
 			/* To be nice, close the file. */
 			br.close();
 		} catch (IOException e) {
-			
+			e.printStackTrace();
 		}
 
 		try {
@@ -295,15 +339,15 @@ public class Server {
 					System.out.println("-------------");
 					gh.handleMessage(line);
 				} else if(line.startsWith("--myBoard")) {
+					System.out.println("Handling Cards");
 					gh.handleMessage(line + me);
-					
 				}
 				/* else if(line.startsWith("--remPlay")) {
 					if(playing.contains(new SimplerProfile((line.substring(9, line.indexOf("|"))), Integer.parseInt(line.substring(line.indexOf("|")))))) {
 						playing.remove(new SimplerProfile((line.substring(9, line.indexOf("|"))), Integer.parseInt(line.substring(line.indexOf("|")))));
 					}
 				}*/
-				
+
 
 
 			}
