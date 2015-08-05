@@ -9,6 +9,7 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -56,9 +57,10 @@ public class Server {
 			String email = null;
 			Integer rank = null;
 			Integer gold = null;
-			int[] cards = null;
-			
-			
+			ArrayList<Integer> cards = null;
+			HashMap<String, int[]> decks = null;
+			ArrayList<String> friends = null;
+
 			while (true) {
 				System.out.println("reading file");
 				String line = br.readLine();
@@ -70,60 +72,74 @@ public class Server {
 						password = null;
 						rank = null;
 						gold = null;
+						cards = null;
+						decks = null;
+						friends = null;
 					}
-					
-					
+
+
 					if(line.startsWith("username")) {
 						username = line.substring(9);
 					}
-					
+
 					if(line.startsWith("password")) {
-						username = line.substring(9);
+						password = line.substring(9);
 					}
-					
+
 					if(line.startsWith("rank")) {
 						rank = 	Integer.parseInt(line.substring(5));
 					}
-					
+
 					if(line.startsWith("gold")) {
 						gold = Integer.parseInt(line.substring(5));
 					}
-					
+
 					if(line.startsWith("email")) {
 						email = line.substring(6);
 					}
-					
+
 					if(line.startsWith("cards")) {
-						cards = getArray(line.substring(line.indexOf("[")));
+						cards = getArrayList(line.substring(5));
 					}
-					
-					if(username != null && password != null && rank != null && gold != null) {
-						//Player p = new Player(email, username, password, )
+
+					if(line.startsWith("decks")) {
+						decks = getDecksFromString(line.substring(5));
 					}
-//					String[] a = line.split("-");
-//					String name = a[1];
-//					String password = a[2];
-//					String email = a[7];
-//					String cards = a[4];
-//					int[] cardzs = getArray(cards);
-//					ArrayList<Integer> caards = new ArrayList<Integer>();
-//					for(int i = 0; i < cardzs.length; i++) {
-//						caards.add(cardzs[i]);
-//					}
-//					int gold = Integer.parseInt(a[5]);
-//					int rank = Integer.parseInt(a[0]);
-//					HashMap<String, int[]> decks = getDecksFromString(a[5]);
-//					String[] friends = a[6].substring(1, a[6].length() - 1).split(",");
-//					ArrayList<String> frieends = new ArrayList<String>();
-//					for(int i = 0; i < friends.length; i++) {
-//						frieends.add(friends[i]);
-//					}
-//
-//					System.out.println("Userdata "  + name + ", " + password);
-//					users.put(name, password);
-//
-//					userdata.put(name, new Player(email, name, password, caards, decks, rank, frieends, gold));
-					
+
+					if(line.startsWith("friends")) {
+						friends = new ArrayList<String>();
+					}
+
+					if(username != null && password != null && rank != null && gold != null && cards != null && decks != null && friends != null && email != null) {
+						Player p = new Player(email, username, password, cards, decks, rank, friends, gold);
+						System.out.println(p);
+						users.put(username, password);
+						userdata.put(username, p);
+					}
+					//					String[] a = line.split("-");
+					//					String name = a[1];
+					//					String password = a[2];
+					//					String email = a[7];
+					//					String cards = a[4];
+					//					int[] cardzs = getArray(cards);
+					//					ArrayList<Integer> caards = new ArrayList<Integer>();
+					//					for(int i = 0; i < cardzs.length; i++) {
+					//						caards.add(cardzs[i]);
+					//					}
+					//					int gold = Integer.parseInt(a[5]);
+					//					int rank = Integer.parseInt(a[0]);
+					//					HashMap<String, int[]> decks = getDecksFromString(a[5]);
+					//					String[] friends = a[6].substring(1, a[6].length() - 1).split(",");
+					//					ArrayList<String> frieends = new ArrayList<String>();
+					//					for(int i = 0; i < friends.length; i++) {
+					//						frieends.add(friends[i]);
+					//					}
+					//
+					//					System.out.println("Userdata "  + name + ", " + password);
+					//					users.put(name, password);
+					//
+					//					userdata.put(name, new Player(email, name, password, caards, decks, rank, frieends, gold));
+
 				}
 
 			}
@@ -157,13 +173,36 @@ public class Server {
 
 	public static int[] getArray(String ar) {
 
-		String[] digitwords = ar.substring(1, ar.length() - 2).split(", ");
+		String[] digitwords = ar.substring(2, ar.length() - 1).split(",");
 		int[] result = new int[digitwords.length];
 		for (int i = 0; i < result.length; i++) {
 			result[i] = Integer.parseInt(digitwords[i]);
 		}
 		return result;
 	}
+
+	
+	public static ArrayList<Integer> getArrayList(String ar) {
+
+		String[] digitwords = ar.substring(2, ar.length() - 1).split(",");
+		ArrayList<Integer> result = new ArrayList<Integer>();
+		for (int i = 0; i < digitwords.length; i++) {
+			result.add(Integer.parseInt(digitwords[i]));
+		}
+		return result;
+	}
+	
+	public static ArrayList<String> getFriends(String ar) {
+
+		String[] digitwords = ar.substring(2, ar.length() - 1).split(",");
+		ArrayList<String> result = new ArrayList<String>();
+		for (int i = 0; i < digitwords.length; i++) {
+			result.add(digitwords[i]);
+		}
+		return result;
+	}
+
+
 
 	public static HashMap<String, int[]> getDecksFromString(String string){
 		HashMap<String, int[]> ret = new HashMap<String, int[]>();

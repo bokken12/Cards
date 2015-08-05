@@ -69,6 +69,7 @@ public class Content extends JPanel implements ActionListener, MouseListener {
 	boolean startTurn;
 	boolean clear = false;
 	boolean turn;
+	boolean blocking;
 
 	ArrayList<Integer> deck;
 	static EventBus bus;
@@ -79,7 +80,9 @@ public class Content extends JPanel implements ActionListener, MouseListener {
 
 	static ArrayList<InPlayCreature> cardsInPlay = new ArrayList<InPlayCreature>();
 	static ArrayList<InPlayCreature> myCreatures = new ArrayList<InPlayCreature>();
+	static ArrayList<InPlayCreature> enemyCreatures = new ArrayList<InPlayCreature>();
 	
+
 	ArrayList<InPlayCreature> attacking = new ArrayList<InPlayCreature>();
 	ArrayList<HandCard> handCards = new ArrayList<HandCard>();
 	HandCard selectedHandCard;
@@ -95,19 +98,7 @@ public class Content extends JPanel implements ActionListener, MouseListener {
 	public void paintComponent(Graphics g) {
 
 
-		int x;
-		int y;
 		
-		for(int i = 0; i < handCards.size(); i++) {
-			x = i*120 + 50;
-			y = 600;
-			HandCard h = handCards.get(i);
-			h.setStartX(x);
-			h.setStartY(y);
-			h.setEndX(x + 120);
-			h.setEndY(y + 170);
-			handCards.set(i, h);
-		}
 
 		//System.out.println("Repainting");
 		super.paintComponent(g);
@@ -118,60 +109,10 @@ public class Content extends JPanel implements ActionListener, MouseListener {
 			screen.paintIcon(this, g, 0, 0);
 			//paintCreature( (CreatureCard) hand.get(0), g, 120, 500);
 
-			ArrayList<InPlayCreature> k = lane1.getCreatures();
-			for(int i = 0; i < k.size(); i++) {
-				paintCreature(k.get(i).getCard(), g, 50 + i*115, 400);
-			}
+			paintInPlayCreatures(g);
 
-			ArrayList<InPlayCreature> j = lane2.getCreatures();
-			for(int i = 0; i < j.size(); i++) {
-				paintCreature(j.get(i).getCard(), g, 455 + i*115, 400);
-			}
-
-			ArrayList<InPlayCreature> p = lane3.getCreatures();
-			for(int i = 0; i < p.size(); i++) {
-				paintCreature(p.get(i).getCard(), g, 855 + i*115, 400);
-			}
+			paintHandCards(g);
 			
-			ArrayList<InPlayCreature> b = lane1.getEnemyCreatures();
-			for(int i = 0; i < b.size(); i++) {
-				paintCreature(b.get(i).getCard(), g, 50 + i*115, 180);
-			}
-
-			ArrayList<InPlayCreature> u = lane2.getEnemyCreatures();
-			for(int i = 0; i < u.size(); i++) {
-				paintCreature(u.get(i).getCard(), g, 455 + i*115, 180);
-			}
-
-			ArrayList<InPlayCreature> l = lane3.getEnemyCreatures();
-			for(int i = 0; i < l.size(); i++) {
-				paintCreature(l.get(i).getCard(), g, 855 + i*115, 180);
-			}
-
-			for(int i = 0; i < handCards.size(); i++) {
-				
-				x = i*120 + 50;
-				y = 600;
-				if(!(selectedHandCard == null)) {
-					if(!(selectedHandCard.equals(handCards.get(i)))) {
-					
-						HandCard h = handCards.get(i);
-						h.setStartX(x);
-						h.setStartY(y);
-						h.setEndX(x + 120);
-						h.setEndY(y + 170);
-						handCards.set(i, h);
-						paintCreature(handCards.get(i).getCard(), g, x, y);
-					} else {
-						//System.out.println("Painting selected card at: " + selecCardPoint);
-						paintCreature(handCards.get(i).getCard(), g, (int) selecCardPoint.getX(), (int) selecCardPoint.getY());
-					}
-				} else {
-					x = i*120 + 50;
-					y = 600;
-					paintCreature(handCards.get(i).getCard(), g, x, y);
-				}
-			}
 		} else {
 			background.paintIcon(this, g, 0, 0);
 		}
@@ -185,7 +126,7 @@ public class Content extends JPanel implements ActionListener, MouseListener {
 		player = p;
 
 		cardsData.Init();
-		
+
 		int height = background.getIconHeight();
 		int width = background.getIconWidth();
 
@@ -359,10 +300,12 @@ public class Content extends JPanel implements ActionListener, MouseListener {
 			int turn = Integer.parseInt(m.substring(m.length() - 1));
 			if(turn == 1) {
 				startTurn = true;
+				this.turn = true;
 				you = new GamePlayer(1);
 
 			} else {
 				startTurn = false;
+				this.turn = false;
 			}
 			System.out.println("found a match!");
 			matchScreen();
@@ -378,27 +321,33 @@ public class Content extends JPanel implements ActionListener, MouseListener {
 		} else if(m.startsWith("--turn")) {
 			turn = true;
 			System.out.println("My Turn! :)");
-			
+
 		} else if(m.startsWith("--myBoard")) {
-			
+
 			try {
-			Card c = cardsData.getCardFromID(Integer.parseInt(m.substring(10, 11)));
-			int l = Integer.parseInt(m.substring(12));
-			if(l == Constants.LANE_1) {
-				InPlayCreature ic = new InPlayCreature( (CreatureCard) c, lane1);
-				lane1.addEnemy(ic);
-				System.out.println("Got Lane");
-			} else if(l == Constants.LANE_2) {
-				InPlayCreature ic = new InPlayCreature( (CreatureCard) c, lane2);
-				lane2.addEnemy(ic);
-				System.out.println("Got Lane");
-			} else if(l == Constants.LANE_3) {
-				InPlayCreature ic = new InPlayCreature( (CreatureCard) c, lane3);
-				lane3.addEnemy(ic);
-				System.out.println("Got Lane");
-			}
-			repaint();
-		
+				Card c = cardsData.getCardFromID(Integer.parseInt(m.substring(10, 11)));
+				int l = Integer.parseInt(m.substring(12));
+				if(l == Constants.LANE_1) {
+					InPlayCreature ic = new InPlayCreature( (CreatureCard) c, lane1);
+					enemyCreatures.add(ic);
+					cardsInPlay.add(ic);
+					lane1.addEnemy(ic);
+					System.out.println("Got Lane");
+				} else if(l == Constants.LANE_2) {
+					InPlayCreature ic = new InPlayCreature( (CreatureCard) c, lane2);
+					enemyCreatures.add(ic);
+					cardsInPlay.add(ic);
+					lane2.addEnemy(ic);
+					System.out.println("Got Lane");
+				} else if(l == Constants.LANE_3) {
+					InPlayCreature ic = new InPlayCreature( (CreatureCard) c, lane3);
+					enemyCreatures.add(ic);
+					cardsInPlay.add(ic);
+					lane3.addEnemy(ic);
+					System.out.println("Got Lane");
+				}
+				repaint();
+
 			} catch(Exception e) {
 				if(e instanceof NumberFormatException) {
 					System.out.println("NumberFormatException");
@@ -461,26 +410,6 @@ public class Content extends JPanel implements ActionListener, MouseListener {
 
 	public void paintCreature(Card card, Graphics g, int x, int y) {
 
-
-		//		String power = Integer.toString(card.getPower());
-		//		String health = Integer.toString(card.getToughness());
-		//		String text = card.getAbilityText();
-		//		String cost = Integer.toString(card.getCost());
-		//
-		//		ImageIcon img = card.getImageIcon();
-		//		ImageIcon template = new ImageIcon("CreatureTemplate.png");
-		//		template.setImage(template.getImage().getScaledInstance((int) 120, 170, Image.SCALE_DEFAULT));
-		//		img.setImage(img.getImage().getScaledInstance((int) 92, 83, Image.SCALE_DEFAULT));
-		//
-		//		template.paintIcon(handPanel, g, x, y);
-		//		img.paintIcon(handPanel, g, x + 12, y + 25);
-		//		//System.out.println("X = " + (x + 10) + " Y = " + (y - 75));
-		//		//System.out.println("Component size: " + this.getWidth() + ", " + this.getHeight());
-		//		g.drawString(power, x + 20, y + 163);
-		//		g.drawString(health, x + 92, y + 163);
-		//		g.drawString(text, x + 10, y - 40);
-		//		g.drawString(cost, x + 100, y + 23);
-
 		ImageIcon img = card.getImageIcon();
 		ImageIcon template = new ImageIcon("CreatureTemplate.png");
 		template.setImage(template.getImage().getScaledInstance((int) 120, 170, Image.SCALE_DEFAULT));
@@ -525,10 +454,12 @@ public class Content extends JPanel implements ActionListener, MouseListener {
 
 		for(int i = 0; i < handCards.size(); i++) {
 			if(handCards.get(i).containsPoint(a)) {
-				cd = new CardDragger();
-				System.out.println("Clicking a Hand Card! :D");
-				selectedHandCard = handCards.get(i);
-				cd.execute();
+				if(turn == true || blocking == true) {
+					cd = new CardDragger();
+					System.out.println("Clicking a Hand Card! :D");
+					selectedHandCard = handCards.get(i);
+					cd.execute();
+				}
 			}
 		}
 	}
@@ -607,7 +538,7 @@ public class Content extends JPanel implements ActionListener, MouseListener {
 
 		}
 	}
-	
+
 	public void addCreature(InPlayCreature n) {
 		cardsInPlay.add(n);
 		myCreatures.add(n);
@@ -615,14 +546,89 @@ public class Content extends JPanel implements ActionListener, MouseListener {
 		if(n.getLane().equals(lane1)) lane = 1;
 		if(n.getLane().equals(lane2)) lane = 2;
 		if(n.getLane().equals(lane3)) lane = 3;
-		
+
 		String send = "--myBoard " + cardsData.getCollection().indexOf(n.getCard()) + "|" + lane;
-		
-		
-		
+
+
+
 		//should send something like --myBoard 1|2
 		System.out.println("Sending " + send);
 		output.println(send);
 		output.flush();
+	}
+	
+	public void paintInPlayCreatures(Graphics g) {
+		
+		ArrayList<InPlayCreature> k = lane1.getCreatures();
+		for(int i = 0; i < k.size(); i++) {
+			paintCreature(k.get(i).getCard(), g, 50 + i*115, 400);
+		}
+
+		ArrayList<InPlayCreature> j = lane2.getCreatures();
+		for(int i = 0; i < j.size(); i++) {
+			paintCreature(j.get(i).getCard(), g, 455 + i*115, 400);
+		}
+
+		ArrayList<InPlayCreature> p = lane3.getCreatures();
+		for(int i = 0; i < p.size(); i++) {
+			paintCreature(p.get(i).getCard(), g, 855 + i*115, 400);
+		}
+
+		ArrayList<InPlayCreature> b = lane1.getEnemyCreatures();
+		for(int i = 0; i < b.size(); i++) {
+			paintCreature(b.get(i).getCard(), g, 50 + i*115, 180);
+		}
+
+		ArrayList<InPlayCreature> u = lane2.getEnemyCreatures();
+		for(int i = 0; i < u.size(); i++) {
+			paintCreature(u.get(i).getCard(), g, 455 + i*115, 180);
+		}
+
+		ArrayList<InPlayCreature> l = lane3.getEnemyCreatures();
+		for(int i = 0; i < l.size(); i++) {
+			paintCreature(l.get(i).getCard(), g, 855 + i*115, 180);
+		}
+	}
+	
+	public void paintHandCards(Graphics g) {
+		
+		int x;
+		int y;
+
+		for(int i = 0; i < handCards.size(); i++) {
+			x = i*120 + 50;
+			y = 600;
+			HandCard h = handCards.get(i);
+			h.setStartX(x);
+			h.setStartY(y);
+			h.setEndX(x + 120);
+			h.setEndY(y + 170);
+			handCards.set(i, h);
+		}
+		
+		for(int i = 0; i < handCards.size(); i++) {
+
+			x = i*120 + 50;
+			y = 600;
+			if(!(selectedHandCard == null)) {
+				if(!(selectedHandCard.equals(handCards.get(i)))) {
+
+					HandCard h = handCards.get(i);
+					h.setStartX(x);
+					h.setStartY(y);
+					h.setEndX(x + 120);
+					h.setEndY(y + 170);
+					handCards.set(i, h);
+					paintCreature(handCards.get(i).getCard(), g, x, y);
+				} else {
+					//System.out.println("Painting selected card at: " + selecCardPoint);
+					paintCreature(handCards.get(i).getCard(), g, (int) selecCardPoint.getX(), (int) selecCardPoint.getY());
+				}
+			} else {
+				x = i*120 + 50;
+				y = 600;
+				paintCreature(handCards.get(i).getCard(), g, x, y);
+			}
+		}
 	}
 }

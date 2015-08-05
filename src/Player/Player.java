@@ -29,11 +29,11 @@ public class Player {
 		String s = "";
 		for(int i = 0; i < a.size(); i++) {
 			if(y.hasNext()) {
-			String buh = y.next();
-			s = s + buh + "|";   
-			s = s + Arrays.toString(decks.get(buh)) + "|";
+				String buh = y.next();
+				s = s + buh + "|";   
+				s = s + Arrays.toString(decks.get(buh)) + "|";
 			}
-		
+
 		}
 
 

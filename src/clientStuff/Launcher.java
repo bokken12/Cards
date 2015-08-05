@@ -104,13 +104,14 @@ public class Launcher extends JFrame implements ActionListener {
 					game.toContent(currentline);
 				} else if(currentline.startsWith("--wait")) {
 					game.toContent(currentline);
-					//System.out.println("Waiting...");
 				} else if(currentline.startsWith("--nameTaken")) {
 					error.setText("Username already taken");
 					frame.repaint();
 					frame.pack();
 
 				} else if(currentline.startsWith("--myBoard")) {
+					game.toContent(currentline);
+				} else if(currentline.startsWith("--turn")) {
 					game.toContent(currentline);
 				}
 			}
