@@ -181,7 +181,7 @@ public class Server {
 		return result;
 	}
 
-	
+
 	public static ArrayList<Integer> getArrayList(String ar) {
 
 		String[] digitwords = ar.substring(2, ar.length() - 1).split(",");
@@ -191,7 +191,7 @@ public class Server {
 		}
 		return result;
 	}
-	
+
 	public static ArrayList<String> getFriends(String ar) {
 
 		String[] digitwords = ar.substring(2, ar.length() - 1).split(",");
@@ -212,11 +212,10 @@ public class Server {
 		while(t.hasMoreTokens()) {
 			String a = t.nextToken();
 			int[] arr = null;
-			if(t.hasMoreTokens()) {
-				arr = getArray(t.nextToken());
-			}
+			arr = getArray(a.substring(a.indexOf("[") - 1 ));
 
-			ret.put(a, arr);
+
+			ret.put(a.substring(0, a.indexOf("[")), arr);
 		}
 
 		return ret;

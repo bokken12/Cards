@@ -1,6 +1,7 @@
 package clientStuff;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.MouseInfo;
@@ -34,6 +35,7 @@ import cards.Cards;
 import cards.CreatureCard;
 import cards.HandCard;
 import cards.InPlayCreature;
+import cards.SpellCard;
 import events.EventBus;
 import events.TurnEndedEvent;
 import Player.GamePlayer;
@@ -81,7 +83,7 @@ public class Content extends JPanel implements ActionListener, MouseListener {
 	static ArrayList<InPlayCreature> cardsInPlay = new ArrayList<InPlayCreature>();
 	static ArrayList<InPlayCreature> myCreatures = new ArrayList<InPlayCreature>();
 	static ArrayList<InPlayCreature> enemyCreatures = new ArrayList<InPlayCreature>();
-	
+
 
 	ArrayList<InPlayCreature> attacking = new ArrayList<InPlayCreature>();
 	ArrayList<HandCard> handCards = new ArrayList<HandCard>();
@@ -98,7 +100,7 @@ public class Content extends JPanel implements ActionListener, MouseListener {
 	public void paintComponent(Graphics g) {
 
 
-		
+
 
 		//System.out.println("Repainting");
 		super.paintComponent(g);
@@ -113,6 +115,8 @@ public class Content extends JPanel implements ActionListener, MouseListener {
 
 			paintHandCards(g);
 			
+			g.drawString(Integer.toString(opponent.getHealth()), 25, 400);
+
 		} else {
 			background.paintIcon(this, g, 0, 0);
 		}
@@ -386,7 +390,12 @@ public class Content extends JPanel implements ActionListener, MouseListener {
 	}
 
 	public int drawCard() {
-		return deck.get(0);
+		int i = deck.get(0);
+		deck.remove(0);
+		int x = handCards.get(handCards.size() - 1).getEndX() + 50;
+		HandCard draw = new HandCard(x + 50, 600, x + 170, 770, cardsData.getCardFromID(i), handCards.size());
+		handCards.add(draw);
+		return i;
 		//call drawCardEvent
 	}
 
@@ -416,6 +425,8 @@ public class Content extends JPanel implements ActionListener, MouseListener {
 		img.setImage(img.getImage().getScaledInstance((int) 92, 83, Image.SCALE_DEFAULT));
 		String text = card.getText();
 		String cost = Integer.toString(card.getCost());
+
+
 		template.paintIcon(handPanel, g, x, y);
 		img.paintIcon(handPanel, g, x + 12, y + 25);
 		g.drawString(text, x + 10, y - 40);
@@ -423,10 +434,18 @@ public class Content extends JPanel implements ActionListener, MouseListener {
 
 		if(card.getClass().equals(CreatureCard.class)) {
 			CreatureCard cc = (CreatureCard) card;
+			String name = cc.getName();
 			String power = Integer.toString(cc.getPower());
 			String health = Integer.toString(cc.getToughness());
 			g.drawString(power, x + 20, y + 163);
 			g.drawString(health, x + 92, y + 163);
+			g.drawString(name, x + 25, y + 23);
+		}
+		if(card.getClass().equals(SpellCard.class)) {
+			SpellCard sc = (SpellCard) card;
+			String name = sc.getName();
+			g.setFont(new Font("Helvetica", Font.PLAIN, 6)); 
+			g.drawString(name, x + 25, y + 23);
 		}
 	}
 
@@ -556,9 +575,9 @@ public class Content extends JPanel implements ActionListener, MouseListener {
 		output.println(send);
 		output.flush();
 	}
-	
+
 	public void paintInPlayCreatures(Graphics g) {
-		
+
 		ArrayList<InPlayCreature> k = lane1.getCreatures();
 		for(int i = 0; i < k.size(); i++) {
 			paintCreature(k.get(i).getCard(), g, 50 + i*115, 400);
@@ -589,9 +608,9 @@ public class Content extends JPanel implements ActionListener, MouseListener {
 			paintCreature(l.get(i).getCard(), g, 855 + i*115, 180);
 		}
 	}
-	
+
 	public void paintHandCards(Graphics g) {
-		
+
 		int x;
 		int y;
 
@@ -605,7 +624,7 @@ public class Content extends JPanel implements ActionListener, MouseListener {
 			h.setEndY(y + 170);
 			handCards.set(i, h);
 		}
-		
+
 		for(int i = 0; i < handCards.size(); i++) {
 
 			x = i*120 + 50;
