@@ -6,12 +6,14 @@ public class SpellCard extends Card {
 	String text;
 	int cost;
 	String name;
+	boolean hasTarget;
 	
-	public SpellCard(String name, int cost, String text, SpellRunnable effect) {
+	public SpellCard(String name, int cost, String text, boolean hasTarget, SpellRunnable effect) {
 		this.name = name;
 		this.cost = cost;
 		this.effect = effect;
 		this.text = text;
+		this.hasTarget = hasTarget;
 	}
 
 	public SpellRunnable getEffect() {
@@ -32,5 +34,13 @@ public class SpellCard extends Card {
 
 	public String getName() {
 		return name;
+	}
+
+	public boolean hasTarget() {
+		return hasTarget;
+	}
+
+	public void setHasTarget(boolean hasTarget) {
+		this.hasTarget = hasTarget;
 	}
 }

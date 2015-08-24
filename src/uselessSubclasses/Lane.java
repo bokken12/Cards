@@ -1,5 +1,6 @@
 package uselessSubclasses;
 
+import java.awt.Dimension;
 import java.awt.Point;
 import java.util.ArrayList;
 
@@ -72,6 +73,7 @@ public class Lane {
 		if(creatures.size() == 2) {
 			return false;
 		}
+		//Dimension d = new Dimension()
 		creatures.add(creature);
 		return true;
 	}
@@ -86,5 +88,20 @@ public class Lane {
 	
 	public ArrayList<InPlayCreature> getEnemyCreatures() {
 		return enemyCreatures;
+	}
+	
+	public InPlayCreature getClick(Point click) {
+		for(int i = 0; i < creatures.size(); i++) {
+			int sX = i*115;
+			int sY = 400;
+			int eX = sX + 120;
+			int eY = sY + 170;
+			if(click.x > sX && click.x < eX) {
+				if(click.y > sY && click.y < eY) {
+					return creatures.get(i);
+				}
+			}
+		}
+		return null;
 	}
 }

@@ -1,7 +1,10 @@
 package server;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -14,6 +17,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.StringTokenizer;
 import java.util.logging.Handler;
 
@@ -62,7 +66,6 @@ public class Server {
 			ArrayList<String> friends = null;
 
 			while (true) {
-				System.out.println("reading file");
 				String line = br.readLine();
 				if (line == null) break;
 				if(!(line.startsWith("//"))) {
@@ -173,7 +176,7 @@ public class Server {
 
 	public static int[] getArray(String ar) {
 
-		String[] digitwords = ar.substring(2, ar.length() - 1).split(",");
+		String[] digitwords = ar.substring(2, ar.length() - 1).split(", ");
 		int[] result = new int[digitwords.length];
 		for (int i = 0; i < result.length; i++) {
 			result[i] = Integer.parseInt(digitwords[i]);
@@ -184,7 +187,7 @@ public class Server {
 
 	public static ArrayList<Integer> getArrayList(String ar) {
 
-		String[] digitwords = ar.substring(2, ar.length() - 1).split(",");
+		String[] digitwords = ar.substring(2, ar.length() - 1).split(", ");
 		ArrayList<Integer> result = new ArrayList<Integer>();
 		for (int i = 0; i < digitwords.length; i++) {
 			result.add(Integer.parseInt(digitwords[i]));
@@ -337,6 +340,30 @@ public class Server {
 					player.setDecks(dacks);
 					if(!(users.containsKey(username))) {
 						userdata.put(username, player);
+						String decks = "";
+						int count = 0;
+						for(Entry<String, int[]> entry : dacks.entrySet()){ 
+							 decks += entry.getKey();
+							 decks += Arrays.toString(entry.getValue()); 
+							 if(!(count < dacks.keySet().size())) {
+								 decks += "|";
+							 }
+							 count++;
+						}
+						
+						String str = "\nusername " + username + "\npassword " + password + "\nemail " + email + "\nrank " + 0 + "\nfriends []\ncards " + Cards.getStarterCards() + "\ndecks " + decks + "\ngold " + 0 + "\n--";
+						System.out.println(str);
+						File file = new File("PlayerData");
+						FileWriter fw;
+						try {
+							fw = new FileWriter(file.getAbsoluteFile(), true);
+							BufferedWriter bw = new BufferedWriter(fw);
+							bw.write(str);
+							bw.close();
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 						//players.put(username, this);
 						System.out.println("Username: " + username + " Password: " + password);
 						users.put(username, password);

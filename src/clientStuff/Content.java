@@ -9,6 +9,8 @@ import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.PrintWriter;
@@ -37,14 +39,17 @@ import cards.HandCard;
 import cards.InPlayCreature;
 import cards.SpellCard;
 import events.EventBus;
+import events.SpellPlayedEvent;
+import events.TargetedSpellPlayedEvent;
 import events.TurnEndedEvent;
+import events.UntargetedSpellPlayedEvent;
 import Player.GamePlayer;
 import Player.Player;
 import Player.SimplePlayerProfile;
 import uselessSubclasses.Lane;
 
 
-public class Content extends JPanel implements ActionListener, MouseListener {
+public class Content extends JPanel implements ActionListener, MouseListener, KeyListener {
 
 	ImageIcon background = new ImageIcon("MenuBackground.jpg");
 	ImageIcon screen = new ImageIcon("CardScreen.png");
@@ -114,8 +119,8 @@ public class Content extends JPanel implements ActionListener, MouseListener {
 			paintInPlayCreatures(g);
 
 			paintHandCards(g);
-			
-			g.drawString(Integer.toString(opponent.getHealth()), 25, 400);
+
+			g.drawString(Integer.toString(opponent.getHealth()), 500, 50);
 
 		} else {
 			background.paintIcon(this, g, 0, 0);
@@ -210,6 +215,14 @@ public class Content extends JPanel implements ActionListener, MouseListener {
 			}
 			deck = realDeck;
 			System.out.println("-------deck is: " + deck.toString());
+			if(startTurn == true) {
+				opponent = new GamePlayer(2);
+				you = new GamePlayer(1);
+			} else {
+				opponent = new GamePlayer(1);
+				you = new GamePlayer(2);
+			}
+
 			clear = true;
 			game.setSize(new Dimension(1200, 800));
 			this.removeAll();
@@ -217,6 +230,8 @@ public class Content extends JPanel implements ActionListener, MouseListener {
 			add(field);
 			buttons.add(endTurn);
 			endTurn.addActionListener(this);
+			buttons.add(attack);
+			attack.addActionListener(this);
 			add(buttons);
 			//add(handPanel);
 			bus = new EventBus();
@@ -437,21 +452,47 @@ public class Content extends JPanel implements ActionListener, MouseListener {
 			String name = cc.getName();
 			String power = Integer.toString(cc.getPower());
 			String health = Integer.toString(cc.getToughness());
+			g.setFont(new Font("Helvetica", Font.PLAIN, 12)); 
 			g.drawString(power, x + 20, y + 163);
 			g.drawString(health, x + 92, y + 163);
+			g.setFont(new Font("Helvetica", Font.PLAIN, 8)); 
 			g.drawString(name, x + 25, y + 23);
 		}
 		if(card.getClass().equals(SpellCard.class)) {
 			SpellCard sc = (SpellCard) card;
 			String name = sc.getName();
-			g.setFont(new Font("Helvetica", Font.PLAIN, 6)); 
+			//g.setFont(new Font("Helvetica", Font.PLAIN, 11)); 
+			g.setFont(g.getFont().deriveFont (64.0f));
 			g.drawString(name, x + 25, y + 23);
 		}
 	}
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-
+		Point a = MouseInfo.getPointerInfo().getLocation();
+		SwingUtilities.convertPointFromScreen(a, game);
+		Point one = new Point(a.x + 51, a.y + 67);
+		InPlayCreature c = lane1.getClick(one);
+		if(c != null) {
+			attacking.add(c);
+			System.out.println("adding");
+		} else {
+			Point two = new Point(a.x + 473, a.y + 110);
+			InPlayCreature cr = lane2.getClick(two);
+			if(cr != null) {
+				attacking.add(cr);
+				System.out.println("adding");
+			} else {
+				Point three = new Point(a.x + 855, a.y + 115);
+				InPlayCreature cre = lane3.getClick(three);
+				if(cre != null) {
+					attacking.add(cre);
+					System.out.println("adding");
+				}
+			}
+		}
+			
+		
 	}
 
 	@Override
@@ -481,6 +522,8 @@ public class Content extends JPanel implements ActionListener, MouseListener {
 				}
 			}
 		}
+		
+		
 	}
 
 
@@ -508,9 +551,16 @@ public class Content extends JPanel implements ActionListener, MouseListener {
 					lane3.addCard(n);
 					handCards.remove(selectedHandCard);
 					addCreature(n);
-
 				}
 				repaint();
+			} else if(selectedHandCard.getCard() instanceof SpellCard) {
+				SpellCard sc = (SpellCard) selectedHandCard.getCard();
+				if(sc.hasTarget()) {
+					EventBus.callEvent(new TargetedSpellPlayedEvent(sc, this, selectedCard));
+				} else {
+					EventBus.callEvent(new UntargetedSpellPlayedEvent(sc, this));
+				}
+				handCards.remove(selectedHandCard);
 			}
 		}
 		cd.stop();
@@ -557,6 +607,9 @@ public class Content extends JPanel implements ActionListener, MouseListener {
 
 		}
 	}
+
+
+
 
 	public void addCreature(InPlayCreature n) {
 		cardsInPlay.add(n);
@@ -649,5 +702,20 @@ public class Content extends JPanel implements ActionListener, MouseListener {
 				paintCreature(handCards.get(i).getCard(), g, x, y);
 			}
 		}
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+		
 	}
 }

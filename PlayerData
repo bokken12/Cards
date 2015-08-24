@@ -1,10 +1,36 @@
+username 2
+password 2
+email 2
+rank 0
+friends []
+cards [0, 0, 1, 1, 2, 3, 4]
+decks Starter[0, 0, 1, 1, 2, 3, 4]
+gold 0
+--
+username 5
+password 50
+email 5
+rank 0
+friends []
+cards [0, 0, 1, 1, 2, 3, 4]
+decks Starter[0, 0, 1, 1, 2, 3, 4]
+gold 0
 --
 username 0
 password 0
 email 0
-gold 0
 rank 0
-cards [1,2,3,5,4,6,8,5]
-decks Starter[1,2,3]
 friends []
+cards [0, 0, 1, 1, 2, 3, 4]
+decks Starter[0, 0, 1, 1, 2, 3, 4]
+gold 0
+--
+username Username
+password Password
+email Email
+rank 0
+friends []
+cards [0, 0, 1, 1, 2, 3, 4]
+decks Starter[0, 0, 1, 1, 2, 3, 4]
+gold 0
 --

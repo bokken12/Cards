@@ -46,6 +46,10 @@ public class CreatureCard extends Card implements GameListener {
 		return toughness;
 	}
 	
+	public String getName() {
+		return name;
+	}
+	
 	public void setToughness(int a) {
 		toughness = a;
 	}

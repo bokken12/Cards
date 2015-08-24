@@ -27,5 +27,13 @@
  *    
  *    click coordinates should be fixed now
  *	  
+ *	
+ *
+ *
+ *	  Reading from the playerdata file is broken, trying to fix it.
+ *
+ *		August 6
+ *
+ *		reading from file works now
  *    
  * */ 
