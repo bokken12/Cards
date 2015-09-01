@@ -396,7 +396,7 @@ public class Server {
 						send("--match " + profile2.toString() + " 2");
 						me = 2;
 						gh = new GameHandler(this, h);
-						h.setGH(this);
+						h.setGH(gh);
 						playing.remove(0);
 						//playing.remove(new SimplerProfile(pllayer.getUsername(), pllayer.getRank()));
 					}
@@ -406,21 +406,23 @@ public class Server {
 				} else if(line.startsWith("--myBoard")) {
 					System.out.println("Handling Cards");
 					gh.handleMessage(line + me);
-				}
+				} else if(line.startsWith("--attack")) {
+					System.out.println("server handling attack");
+					gh.handleMessage(line + me);
 				/* else if(line.startsWith("--remPlay")) {
 					if(playing.contains(new SimplerProfile((line.substring(9, line.indexOf("|"))), Integer.parseInt(line.substring(line.indexOf("|")))))) {
 						playing.remove(new SimplerProfile((line.substring(9, line.indexOf("|"))), Integer.parseInt(line.substring(line.indexOf("|")))));
 					}
 				}*/
-
+				}
 
 
 			}
 
 		}
-		public void setGH(Handler h) {
-			gh = new GameHandler(h, this);
-
+		public void setGH(GameHandler g) {
+			gh = g;
+			me = 1;
 		}
 	}
 

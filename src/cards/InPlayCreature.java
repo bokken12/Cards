@@ -21,6 +21,13 @@ public class InPlayCreature implements DamageableEntity{
 	
 	
 	@Override
+	public String toString() {
+		return "InPlayCreature [power=" + power + ", health=" + health
+				+ ", type=" + type + ", maxHealth=" + maxHealth + ", lane="
+				+ lane + ", card=" + card + "]";
+	}
+
+	@Override
 	public void dealDamage(int dmg) {
 		// TODO Auto-generated method stub
 		

@@ -29,11 +29,18 @@
  *	  
  *	
  *
- *
  *	  Reading from the playerdata file is broken, trying to fix it.
  *
  *		August 6
  *
  *		reading from file works now
+ *
+ *
+ *	Worked on getting creatures to attack, not quite finished with it yet
+ *
+ *
+ *		August 27
+ *
+ *	Added the coming into play delay, but the creature never appears
  *    
  * */ 

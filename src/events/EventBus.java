@@ -33,7 +33,8 @@ public class EventBus {
 		}
 	}
 	public static void callEvent(GameEvent e){
-		if(listening.containsKey(e.getClass())){
+		System.out.println("Event Call");
+		if(listening.containsKey(e/*.getClass()*/)){
 			for(int i = 0; i <= 20; i++){
 				if(listening.get(e).containsKey(i)){
 					for(GameListener listener: listening.get(e).get(i)){

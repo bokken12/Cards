@@ -113,6 +113,8 @@ public class Launcher extends JFrame implements ActionListener {
 					game.toContent(currentline);
 				} else if(currentline.startsWith("--turn")) {
 					game.toContent(currentline);
+				} else if(currentline.startsWith("--attack")) {
+					game.toContent(currentline);
 				}
 			}
 		} catch (IOException e) {

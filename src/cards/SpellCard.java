@@ -8,7 +8,7 @@ public class SpellCard extends Card {
 	String name;
 	boolean hasTarget;
 	
-	public SpellCard(String name, int cost, String text, boolean hasTarget, SpellRunnable effect) {
+	public SpellCard(String name, int cost, String text, boolean hasTarget, int id, SpellRunnable effect) {
 		this.name = name;
 		this.cost = cost;
 		this.effect = effect;
