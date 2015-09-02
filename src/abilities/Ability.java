@@ -1,5 +1,6 @@
 package abilities;
 
+import clientStuff.Content;
 import events.EventBus;
 import events.GameEvent;
 import events.GameListener;
@@ -22,7 +23,7 @@ public class Ability implements GameListener{
 	}
 	
 	public void RegisterListeners() {
-		EventBus.addGameListener(10, activation, this);
+		EventBus.getInstance().addGameListener(10, activation, this);
 	}
 
 	public String getText() {

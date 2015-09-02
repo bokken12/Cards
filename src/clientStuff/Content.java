@@ -88,7 +88,7 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 	JLabel manaLabel = new JLabel(mana.toString());
 
 	ArrayList<Integer> deck;
-	static EventBus bus;
+	public static EventBus bus = EventBus.getInstance();
 	public static GamePlayer you;
 	public static GamePlayer opponent;
 	public Cards cardsData = new Cards();
@@ -253,7 +253,6 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 			buttons.add(manaLabel);
 			add(buttons);
 			//add(handPanel);
-			bus = new EventBus();
 			int x;
 			int y;
 			for(Integer i = 0; i < 5; i++) {
@@ -294,7 +293,7 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 			
 			playCards.RegisterListeners();
 			
-			Ability addMana = new Ability("Play Creatures", "puts the creatures into play", TurnStartedEvent.class, new AbilityRunnable() {
+			Ability addMana = new Ability("Add Mana", "adds to your mana", TurnStartedEvent.class, new AbilityRunnable() {
 				@Override
 				
 				public void run(GameEvent event) {
@@ -485,10 +484,6 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 		//call drawCardEvent
 	}
 
-	public static EventBus getBus() {
-		return bus;
-	}
-
 	public static ArrayList<InPlayCreature> getCards() {
 		return cardsInPlay;
 	}
@@ -627,11 +622,12 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 	public void mouseReleased(MouseEvent e) {
 
 		if(!(cd.isStopped())) {
-			if(selectedHandCard.getCard() instanceof CreatureCard && mana >= selectedHandCard.getCard().getCost()) {
+			if(selectedHandCard.getCard() instanceof CreatureCard/* && mana >= selectedHandCard.getCard().getCost()*/) {
 				System.out.println("Playing Creature: " + selectedHandCard);
 				if(lane1.containsPoint(selecCardPoint)) {
 					InPlayCreature n = new InPlayCreature( (CreatureCard) selectedHandCard.getCard(), lane1);;
 					arrivals.put( (CreatureCard) selectedHandCard.getCard(), lane1);
+					arrivalCreatures.add( (CreatureCard) selectedHandCard.getCard());
 					//					lane1.addCard(n);
 					handCards.remove(selectedHandCard);
 					//					addCreature(n);
@@ -639,6 +635,7 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 				} else if(lane2.containsPoint(selecCardPoint)) {
 					InPlayCreature n = new InPlayCreature( (CreatureCard) selectedHandCard.getCard(), lane2);
 					arrivals.put( (CreatureCard) selectedHandCard.getCard(), lane1);
+					arrivalCreatures.add( (CreatureCard) selectedHandCard.getCard());
 					//					lane2.addCard(n);
 					handCards.remove(selectedHandCard);
 					//					addCreature(n);
@@ -646,6 +643,7 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 				} else if(lane3.containsPoint(selecCardPoint)) {
 					InPlayCreature n = new InPlayCreature( (CreatureCard) selectedHandCard.getCard(), lane3);
 					arrivals.put( (CreatureCard) selectedHandCard.getCard(), lane1);
+					arrivalCreatures.add( (CreatureCard) selectedHandCard.getCard());
 					//					lane3.addCard(n);
 					handCards.remove(selectedHandCard);
 					//					addCreature(n);
@@ -654,9 +652,9 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 			} else if(selectedHandCard.getCard() instanceof SpellCard) {
 				SpellCard sc = (SpellCard) selectedHandCard.getCard();
 				if(sc.hasTarget()) {
-					EventBus.callEvent(new TargetedSpellPlayedEvent(sc, this, selectedCard));
+					EventBus.getInstance().callEvent(new TargetedSpellPlayedEvent(sc, this, selectedCard));
 				} else {
-					EventBus.callEvent(new UntargetedSpellPlayedEvent(sc, this));
+					EventBus.getInstance().callEvent(new UntargetedSpellPlayedEvent(sc, this));
 				}
 				handCards.remove(selectedHandCard);
 			}

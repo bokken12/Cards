@@ -62,7 +62,7 @@ public class Cards {
 				//super.run(event);
 				AbilityEvent AE = (AbilityEvent) event;
 				if(AE.getCard() == cards.get(2)) {
-					EventBus.callEvent(new DamageEvent(1, Content.selectedCard));
+					EventBus.getInstance().callEvent(new DamageEvent(1, Content.selectedCard));
 				}
 			}
 		});
@@ -76,7 +76,7 @@ public class Cards {
 				//super.run(event);
 				TurnEndedEvent AE = (TurnEndedEvent) event;
 				if(AE.getPlayer().equals(Content.you)) {
-					EventBus.callEvent(new CreaturePlayedEvent((CreatureCard) getCardFromID(5)));
+					EventBus.getInstance().callEvent(new CreaturePlayedEvent((CreatureCard) getCardFromID(5)));
 				}
 			}
 		});
@@ -87,7 +87,7 @@ public class Cards {
 				//super.run(event);
 				AbilityEvent AE = (AbilityEvent) event;
 				if(AE.getCard() == cards.get(7)) {
-					EventBus.callEvent(new DamageEvent(5, Content.selectedCard));
+					EventBus.getInstance().callEvent(new DamageEvent(5, Content.selectedCard));
 				}
 			}
 		});
@@ -99,7 +99,7 @@ public class Cards {
 				//super.run(event);
 				AbilityEvent AE = (AbilityEvent) event;
 				if(AE.getCard() == cards.get(9)) {
-					EventBus.callEvent(new ModifyEvent(Content.selectedCard, 2, 1));
+					EventBus.getInstance().callEvent(new ModifyEvent(Content.selectedCard, 2, 1));
 				}
 			}
 		});
@@ -110,7 +110,7 @@ public class Cards {
 				//super.run(event);
 				AbilityEvent AE = (AbilityEvent) event;
 				if(AE.getCard() == cards.get(10)) {
-					EventBus.callEvent(new CreaturePlayedEvent((CreatureCard) getCardFromID(9)));
+					EventBus.getInstance().callEvent(new CreaturePlayedEvent((CreatureCard) getCardFromID(9)));
 				}
 			} 
 		});
@@ -138,7 +138,7 @@ public class Cards {
 							c.get(i).AddHealth(1);
 						}
 					}
-					EventBus.callEvent(new CreaturePlayedEvent((CreatureCard) getCardFromID(9)));
+					EventBus.getInstance().callEvent(new CreaturePlayedEvent((CreatureCard) getCardFromID(9)));
 				}
 			} 
 		});
@@ -147,7 +147,7 @@ public class Cards {
 		cards.add(new SpellCard("War Axe", 2, "Give a creature +3 attack", true, 11, new SpellRunnable() {
 			@Override
 			public void run(Content c) {
-				EventBus.callEvent(new ModifyEvent(c.selectedCard, 3, 0));
+				EventBus.getInstance().callEvent(new ModifyEvent(c.selectedCard, 3, 0));
 			}
 		}));
 	}
