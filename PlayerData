@@ -4,7 +4,7 @@ email 5
 rank 0
 friends []
 cards [0, 0, 1, 1, 2, 3, 4]
-decks Starter[0, 0, 1, 1, 2, 3, 4, 11, 11]
+decks Starter[0, 0, 1, 1, 2, 3, 4, 11, 11, 10, 10]
 gold 0
 --
 username 0
@@ -22,6 +22,6 @@ email Email
 rank 0
 friends []
 cards [0, 0, 1, 1, 2, 3, 4]
-decks Starter[0, 0, 1, 1, 2, 3, 4, 11, 11]
+decks Starter[0, 0, 1, 1, 2, 3, 4, 11, 11, 10, 10]
 gold 0
 --

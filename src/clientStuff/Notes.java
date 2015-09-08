@@ -42,5 +42,15 @@
  *		August 27
  *
  *	Added the coming into play delay, but the creature never appears
+ *	
+ *	Sept. 3
+ *	
+ *	Fixed playing creatures, working more on attacking/blocking
+ *
+ *
+ *	Having a creature with a double-digit ID breaks the system
+ *	Not anymore I think
+ *
+ *	Game does not register the block button being pressed
  *    
  * */ 

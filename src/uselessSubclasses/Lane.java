@@ -12,6 +12,11 @@ public class Lane {
 	int endX;
 	int startY;
 	int endY;
+	
+	int number;
+	
+	public static final int CARD_WIDTH = 120;
+	public static final int CARD_HEIGHT = 170;
 
 	Content content;
 	ArrayList<InPlayCreature> creatures = new ArrayList<InPlayCreature>();
@@ -53,8 +58,9 @@ public class Lane {
 		return creatures;
 	}
 
-	public Lane(Content c) {
+	public Lane(Content c, int num) {
 		content = c;
+		number = num;
 	}
 
 	public boolean containsPoint(Point p) {
@@ -91,13 +97,13 @@ public class Lane {
 	}
 
 	public InPlayCreature getClick(Point click) {
+		System.out.println("getClick at " + click);
 		for(int i = 0; i < creatures.size(); i++) {
-			int sX = i*115;
+			int sX = i*115 + startX;
 			int sY = 400;
-			int eX = sX + 120;
-			int eY = sY + 170;
-			System.out.println("X is " + sX + " to " + eX + ", Y is " + sY +  " to " + eY);
-			System.out.println("Click is " + click);
+			int eX = sX + CARD_WIDTH;
+			int eY = sY + CARD_HEIGHT;
+			System.out.println("Card: x is " + sX + " to " + eX + ", y is " + sY + " to " + eY);
 			if(click.x > sX && click.x < eX) {
 				if(click.y > sY && click.y < eY) {
 					return creatures.get(i);
@@ -106,18 +112,18 @@ public class Lane {
 		}
 		
 		for(int i = 0; i < enemyCreatures.size(); i++) {
-			int sX = i*115;
+			int sX = i*115 + startX;
 			int sY = 180;
-			int eX = sX + 120;
-			int eY = sY + 170;
-			System.out.println("X is " + sX + " to " + eX + ", Y is " + sY +  " to " + eY);
-			System.out.println("Click is " + click);
+			int eX = sX + CARD_WIDTH;
+			int eY = sY + CARD_HEIGHT;
+			System.out.println("Enemy Card: x is " + sX + " to " + eX + ", y is " + sY + " to " + eY);
 			if(click.x > sX && click.x < eX) {
 				if(click.y > sY && click.y < eY) {
 					return enemyCreatures.get(i);
 				}
 			}
 		}
+		System.out.println("Warning: getClick found no creature at " + click + "!!!");
 		return null;
 	}
 }

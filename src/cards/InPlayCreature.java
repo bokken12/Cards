@@ -26,6 +26,12 @@ public class InPlayCreature implements DamageableEntity{
 				+ ", type=" + type + ", maxHealth=" + maxHealth + ", lane="
 				+ lane + ", card=" + card + "]";
 	}
+	
+//	public InPlayCreature fromString() {
+//		return "InPlayCreature [power=" + power + ", health=" + health
+//				+ ", type=" + type + ", maxHealth=" + maxHealth + ", lane="
+//  			+ lane + ", card=" + card + "]";
+//m	}
 
 	@Override
 	public void dealDamage(int dmg) {
