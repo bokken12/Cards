@@ -412,7 +412,7 @@ public class Server {
 				/* else if(line.startsWith("--remPlay")) {
 					if(playing.contains(new SimplerProfile((line.substring(9, line.indexOf("|"))), Integer.parseInt(line.substring(line.indexOf("|")))))) {
 						playing.remove(new SimplerProfile((line.substring(9, line.indexOf("|"))), Integer.parseInt(line.substring(line.indexOf("|")))));
-					}
+					} 
 				}*/
 				}
 

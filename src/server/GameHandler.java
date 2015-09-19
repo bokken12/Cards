@@ -6,8 +6,8 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 
 import cards.InPlayCreature;
-import server.Server.Handler;
 import events.EventBus;
+import server.Server.Handler;
 import Player.GamePlayer;
 
 public class GameHandler extends Thread{

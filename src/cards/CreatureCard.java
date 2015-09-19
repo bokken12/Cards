@@ -108,6 +108,4 @@ public class CreatureCard extends Card implements GameListener {
 		intoPlay = s.nextToken()
 		
 	}*/
-
-	
 }

@@ -1,5 +1,7 @@
 package clientStuff;
 
+import server.Server;
+
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -21,7 +23,6 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
-import server.Server;
 import Player.Player;
 
 public class Launcher extends JFrame implements ActionListener {
