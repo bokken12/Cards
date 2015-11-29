@@ -48,6 +48,10 @@ public class Server extends ConsoleProgram{
 	//static final Map<Integer, Handler> waitingForGames = Collections.synchronizedMap(new HashMap<Integer, Handler>());
 	public static int PORT_NUMBER = 5002;
 
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 	public static final String HOSTNAME = "127.0.0.1";   
 	
 	public static void main(String[] args){
