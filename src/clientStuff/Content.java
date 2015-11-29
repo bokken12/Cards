@@ -175,6 +175,8 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 		int width = background.getIconWidth();
 		Dimension a = new Dimension(width, height);
 		addMouseListener(this);
+		addKeyListener(this);
+
 		lane1.setStartX(/*game.getLocation().x + */51);
 		lane1.setStartY(/*game.getLocation().y + */67);
 		lane1.setEndX(/*game.getLocation().x + */305);
@@ -1137,6 +1139,7 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 
 	@Override 
 	public void keyTyped(KeyEvent e) {
+		System.out.println("Meanie!" + e.getKeyChar());
 		if(e.getKeyCode() == KeyEvent.VK_SPACE && selectedCard != null) {
 			System.out.println("Calling AbilityEvent");
 			bus.callEvent(new AbilityEvent(selectedCard));
