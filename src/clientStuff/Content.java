@@ -189,7 +189,11 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 		addMouseListener(this);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 		addKeyListener(this);
+=======
+
+>>>>>>> parent of a0d2b5b... Merge pull request #1 from bokken12/happy
 =======
 
 >>>>>>> parent of a0d2b5b... Merge pull request #1 from bokken12/happy
