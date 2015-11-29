@@ -34,7 +34,7 @@ import Player.SimplerProfile;
 import acm.program.ConsoleProgram;
 
 
-public class Server extends ConsoleProgram{
+public class Server {
 
 	static final List<PrintWriter> writers = Collections.synchronizedList(new ArrayList<PrintWriter>());
 	//players in the waiting for game list
@@ -51,17 +51,24 @@ public class Server extends ConsoleProgram{
 	static JLabel message;
 	static JTextArea m;
 
-	public static final String HOSTNAME = "127.0.0.1";   
-	
-	public static void main(String[] args){
-	    Server server = new Server();
-	    server.start();
-	}
-	
-	public void run() {
+	public static final String HOSTNAME = /*"10.0.1.13"*/ "10.0.1.11" /*"66.249.66.31"*/ /*"66.249.79.234"*/ /*"66.249.78.1"*/ /*"66.249.66.125"*/ /*"66.249.65.56"*/ /*"24.130.146.148"*/;   
+
+	public static void main(String[] args) {
 
 		Cards.init();
 		ServerSocket listener = null;
+
+		JFrame frame = new JFrame();
+		frame.setSize(500, 300);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setResizable(false);
+		frame.setVisible(true);
+		message = new JLabel();
+		m = new JTextArea(10, 10);
+		frame.add(m);
+		frame.add(message);
+		m.append("Initializing Server");
+		m.append("Hi!");
 		
 		try {
 			/* Open the file for reading. */
@@ -127,7 +134,7 @@ public class Server extends ConsoleProgram{
 
 					if(username != null && password != null && rank != null && gold != null && cards != null && decks != null && friends != null && email != null) {
 						Player p = new Player(email, username, password, cards, decks, rank, friends, gold);
-						println(p);
+						System.out.println(p);
 						users.put(username, password);
 						userdata.put(username, p);
 					}
@@ -150,7 +157,7 @@ public class Server extends ConsoleProgram{
 					//						frieends.add(friends[i]);
 					//					}
 					//
-					//					println("Userdata "  + name + ", " + password);
+					//					System.out.println("Userdata "  + name + ", " + password);
 					//					users.put(name, password);
 					//
 					//					userdata.put(name, new Player(email, name, password, caards, decks, rank, frieends, gold));
@@ -169,7 +176,7 @@ public class Server extends ConsoleProgram{
 
 		try {
 			listener = new ServerSocket(PORT_NUMBER, 100, InetAddress.getByName(HOSTNAME));
-			println("Waiting for a connection.");
+			System.out.println("Waiting for a connection.");
 
 			while (true) {
 				new Handler(listener.accept()).start();
@@ -239,7 +246,7 @@ public class Server extends ConsoleProgram{
 
 	}
 
-	class Handler extends Thread {
+	static class Handler extends Thread {
 		public String name;
 		private Socket socket;
 		private Player pllayer;
@@ -253,7 +260,7 @@ public class Server extends ConsoleProgram{
 		 */
 		public Handler(Socket socket) {
 			this.socket = socket;
-			println(socket.getInetAddress().toString());
+			System.out.println(socket.getInetAddress().toString());
 		}
 
 
@@ -263,7 +270,7 @@ public class Server extends ConsoleProgram{
 		}
 
 		public void run() {
-			println("Got a connection");
+			System.out.println("Got a connection");
 			// Create character streams for the socket.
 			
 			
@@ -296,13 +303,13 @@ public class Server extends ConsoleProgram{
 
 					e.printStackTrace();
 				}
-				println(line);
+				System.out.println(line);
 				message.setText(line);
 				if(line == null) {
-					println(name + " disconnected.");
+					System.out.println(name + " disconnected.");
 					if(players.containsKey(name)) {
 						players.remove(name);
-						println("removed " + name + " from players.");
+						System.out.println("removed " + name + " from players.");
 					}
 					if(playing.size() > 0) {
 						if(playing.get(0).getName().equals(name)) {
@@ -370,7 +377,7 @@ public class Server extends ConsoleProgram{
 						}
 						
 						String str = "\nusername " + username + "\npassword " + password + "\nemail " + email + "\nrank " + 0 + "\nfriends []\ncards " + Cards.getStarterCards() + "\ndecks " + decks + "\ngold " + 0 + "\n--";
-						println(str);
+						System.out.println(str);
 						File file = new File("PlayerData");
 						FileWriter fw;
 						try {
@@ -382,25 +389,25 @@ public class Server extends ConsoleProgram{
 							e.printStackTrace();
 						}
 						//players.put(username, this);
-						println("Username: " + username + " Password: " + password);
+						System.out.println("Username: " + username + " Password: " + password);
 						users.put(username, password);
 						out.println("AccountConfirmed ");
-						println("Account got some confirmation");
+						System.out.println("Account got some confirmation");
 						out.flush();
 					} else {
-						println("Username " + username + " already taken, account not confirmed");
+						System.out.println("Username " + username + " already taken, account not confirmed");
 						out.println("--nameTaken");
 					}
 					//doLogin("--login " + username + " " + password, out);
 				} else if(line.startsWith("--Playing")) {
-					println(playing.toString());
+					System.out.println(playing.toString());
 					String[] items = line.split(" ");
 					int rank = Integer.parseInt(items[1]);
 					String username = items[2]; 
 					if(playing.size() == 0) {
 						SimplerProfile prof = new SimplerProfile(username, rank);
 						playing.add(prof);
-						println("Someone Joined Playing");
+						System.out.println("Someone Joined Playing");
 						out.println("--wait");
 						out.flush();
 					} else {
@@ -408,7 +415,7 @@ public class Server extends ConsoleProgram{
 						SimplePlayerProfile profile2 = new SimplePlayerProfile(playing.get(0).getName(), playing.get(0).getRank());
 
 						Handler h = players.get(playing.get(0).getName());
-						println("Matching new " + profile1 + " to existing " + profile2);
+						System.out.println("Matching new " + profile1 + " to existing " + profile2);
 						h.send("--match " + profile1.toString() + " 1");
 						send("--match " + profile2.toString() + " 2");
 						me = 2;
@@ -418,13 +425,13 @@ public class Server extends ConsoleProgram{
 						//playing.remove(new SimplerProfile(pllayer.getUsername(), pllayer.getRank()));
 					}
 				} else if(line.startsWith("--turn")) {
-					println("-------------");
+					System.out.println("-------------");
 					gh.handleMessage(line);
 				} else if(line.startsWith("--myBoard")) {
-					println("Handling Cards");
+					System.out.println("Handling Cards");
 					gh.handleMessage(line + me);
 				} else if(line.startsWith("--attack")) {
-					println("server handling attack");
+					System.out.println("server handling attack");
 					gh.handleMessage(line + me);
 				} else if(line.startsWith("--block")) {
 					gh.handleMessage(line + me);
@@ -440,8 +447,8 @@ public class Server extends ConsoleProgram{
 		}
 	}
 
-	public Player doLogin(String params, PrintWriter output, Handler h){
-		//println("--loginaccepted " + (new Player("email", "username", "password", new ArrayList<Integer>(), new HashMap<String, int[]>(), 0, new ArrayList<String>(), 0)).toString());
+	public static Player doLogin(String params, PrintWriter output, Handler h){
+		//System.out.println("--loginaccepted " + (new Player("email", "username", "password", new ArrayList<Integer>(), new HashMap<String, int[]>(), 0, new ArrayList<String>(), 0)).toString());
 		//output.println("--loginaccepted " + (new Player("email", "username", "password", new ArrayList<Integer>(), new HashMap<String, int[]>(), 0, new ArrayList<String>(), 0)).toString());
 
 		StringTokenizer a = new StringTokenizer(params, " ");
@@ -449,19 +456,19 @@ public class Server extends ConsoleProgram{
 		String b = a.nextToken();
 		String c = a.nextToken();
 		if((players.containsKey(b))) {
-			println("Denying login");
+			System.out.println("Denying login");
 			return null;
 		}
-		println("Username is " + b + " and is it in data? " + users.containsKey(b));
-		if(users.containsKey(b)) println(" is Pasword in data? " + users.get(b).equals(c));
-		println("Sending Login Acceptance to player");
+		System.out.println("Username is " + b + " and is it in data? " + users.containsKey(b));
+		if(users.containsKey(b)) System.out.println(" is Pasword in data? " + users.get(b).equals(c));
+		System.out.println("Sending Login Acceptance to player");
 		if(users.containsKey(b) && users.get(b).equals(c)) {
-			println("Actually Sending Login Acceptance to player");
+			System.out.println("Actually Sending Login Acceptance to player");
 
 			output.println("--loginaccepted " + userdata.get(b).toString());
 		}
 		output.flush();
-		println("got a login");
+		System.out.println("got a login");
 		players.put(b, h);
 		h.name = b;
 

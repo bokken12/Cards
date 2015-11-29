@@ -149,12 +149,18 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 		//System.out.println("Repainting");
 		super.paintComponent(g);
 		this.g = g;
+
 		if(clear) {
 			screen.setImage(screen.getImage().getScaledInstance((int) 1200, 800, Image.SCALE_DEFAULT));
 			screen.paintIcon(this, g, 0, 0);
+
 			paintInPlayCreatures(g);
+
 			paintHandCards(g);
+
 			paintArrivals(g);
+
+			
 			Font f = new Font("FONT", 2, 30);
 			
 			g.setFont(f);
@@ -168,23 +174,35 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 	public Content(Game parent, Player p, PrintWriter out) {
 
 		output = out;
+
 		game = parent;
 		player = p;
+
 		cardsData.init();
+
+		
+		
 		int height = background.getIconHeight();
 		int width = background.getIconWidth();
+
 		Dimension a = new Dimension(width, height);
 		addMouseListener(this);
+<<<<<<< HEAD
 		addKeyListener(this);
+=======
+
+>>>>>>> parent of a0d2b5b... Merge pull request #1 from bokken12/happy
 
 		lane1.setStartX(/*game.getLocation().x + */51);
 		lane1.setStartY(/*game.getLocation().y + */67);
 		lane1.setEndX(/*game.getLocation().x + */305);
 		lane1.setEndY(/*game.getLocation().y + */600);
+
 		lane2.setStartX(/*game.getLocation().x + */473);
 		lane2.setStartY(/*game.getLocation().y + */110);
 		lane2.setEndX(/*game.getLocation().x + */700);
 		lane2.setEndY(/*game.getLocation().y + */600);
+
 		lane3.setStartX(/*game.getLocation().x + */855);
 		lane3.setStartY(/*game.getLocation().y + */115);
 		lane3.setEndX(/*game.getLocation().x + */1113);
