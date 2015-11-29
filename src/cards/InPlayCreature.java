@@ -5,10 +5,10 @@ import java.awt.Point;
 import uselessSubclasses.DamageableEntity;
 import uselessSubclasses.Lane;
 
-public class InPlayCreature implements DamageableEntity{
+public class InPlayCreature implements DamageableEntity {
 
 	int power;
-	int health;
+	private int health;
 	String type;
 	int maxHealth;
 	Lane lane;
@@ -18,6 +18,9 @@ public class InPlayCreature implements DamageableEntity{
 	int startY;
 	int endX;
 	int endY;
+	
+	boolean green = false;
+	boolean red = false;
 	
 	
 	@Override
@@ -35,13 +38,13 @@ public class InPlayCreature implements DamageableEntity{
 
 	@Override
 	public void dealDamage(int dmg) {
-		// TODO Auto-generated method stub
-		
+		health = health - dmg;
 	}
 	
 	public InPlayCreature(CreatureCard card, Lane lane) {
 		this.lane = lane;
 		power = card.getPower();
+		health = card.getToughness();
 		maxHealth = health;
 		this.card = card;
 	}
@@ -61,9 +64,21 @@ public class InPlayCreature implements DamageableEntity{
 	public int getHealth() {
 		return health;
 	}
+	
+	public boolean isGreen() {
+		return green;
+	}
+	
+	public void setGreen(boolean g) {
+		green = g;
+	}
 
 	public void AddHealth(int health) {
 		this.health += health;
+	}
+	
+	public void setHealth(int health) {
+		this.health = health;
 	}
 	
 	public String getType() {
@@ -72,7 +87,6 @@ public class InPlayCreature implements DamageableEntity{
 	
 	public int getMaxHealth() {
 		return maxHealth;
-		
 	}
 
 	public Lane getLane() {
@@ -83,7 +97,7 @@ public class InPlayCreature implements DamageableEntity{
 		this.lane = lane;
 	}
 	
-	public Card getCard() {
+	public CreatureCard getCard() {
 		return card;
 	}
 	
@@ -129,6 +143,14 @@ public class InPlayCreature implements DamageableEntity{
 			}
 		}
 		return false;
+	}
+
+	public boolean isRed() {
+		return red;
+	}
+	
+	public void setRed(boolean red) {
+		this.red = red;
 	}
 
 }

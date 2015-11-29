@@ -1,0 +1,986 @@
+JAVA PROFILE 1.0.1, created Fri Nov 27 13:18:54 2015
+
+Copyright (c) 2003, 2005, Oracle and/or its affiliates. All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions
+are met:
+
+  - Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+
+  - Redistributions in binary form must reproduce the above copyright
+    notice, this list of conditions and the following disclaimer in the
+    documentation and/or other materials provided with the distribution.
+
+  - Neither the name of Oracle nor the names of its
+    contributors may be used to endorse or promote products derived
+    from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
+IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+
+Header for -agentlib:hprof (or -Xrunhprof) ASCII Output (JDK 5.0 JVMTI based)
+
+WARNING!  This file format is under development, and is subject to
+change without notice.
+
+This file contains the following types of records:
+
+THREAD START
+THREAD END      mark the lifetime of Java threads
+
+TRACE           represents a Java stack trace.  Each trace consists
+                of a series of stack frames.  Other records refer to
+                TRACEs to identify (1) where object allocations have
+                taken place, (2) the frames in which GC roots were
+                found, and (3) frequently executed methods.
+
+HEAP DUMP       is a complete snapshot of all live objects in the Java
+                heap.  Following distinctions are made:
+
+                ROOT    root set as determined by GC
+                CLS     classes 
+                OBJ     instances
+                ARR     arrays
+
+SITES           is a sorted list of allocation sites.  This identifies
+                the most heavily allocated object types, and the TRACE
+                at which those allocations occurred.
+
+CPU SAMPLES     is a statistical profile of program execution.  The VM
+                periodically samples all running threads, and assigns
+                a quantum to active TRACEs in those threads.  Entries
+                in this record are TRACEs ranked by the percentage of
+                total quanta they consumed; top-ranked TRACEs are
+                typically hot spots in the program.
+
+CPU TIME        is a profile of program execution obtained by measuring
+                the time spent in individual methods (excluding the time
+                spent in callees), as well as by counting the number of
+                times each method is called. Entries in this record are
+                TRACEs ranked by the percentage of total CPU time. The
+                "count" field indicates the number of times each TRACE 
+                is invoked.
+
+MONITOR TIME    is a profile of monitor contention obtained by measuring
+                the time spent by a thread waiting to enter a monitor.
+                Entries in this record are TRACEs ranked by the percentage
+                of total monitor contention time and a brief description
+                of the monitor.  The "count" field indicates the number of 
+                times the monitor was contended at that TRACE.
+
+MONITOR DUMP    is a complete snapshot of all the monitors and threads in 
+                the System.
+
+HEAP DUMP, SITES, CPU SAMPLES|TIME and MONITOR DUMP|TIME records are generated 
+at program exit.  They can also be obtained during program execution by typing 
+Ctrl-\ (on Solaris) or by typing Ctrl-Break (on Win32).
+
+--------
+
+THREAD START (obj=5000018f, id = 200001, name="main", group="main")
+THREAD START (obj=500002d7, id = 200004, name="AppKit Thread", group="system")
+THREAD START (obj=500002da, id = 200005, name="AWT-Shutdown", group="system")
+THREAD START (obj=50000384, id = 200006, name="Java2D Queue Flusher", group="system")
+THREAD START (obj=50000430, id = 200007, name="Java2D Disposer", group="system")
+THREAD END (id = 200005)
+THREAD START (obj=50000639, id = 200008, name="AWT-Shutdown", group="system")
+THREAD START (obj=5000067e, id = 200009, name="Timer-0", group="main")
+THREAD START (obj=500006f1, id = 200010, name="AWT-EventQueue-0", group="main")
+THREAD START (obj=5000078e, id = 200011, name="TimerQueue", group="system")
+THREAD START (obj=500007f9, id = 200012, name="Image Fetcher 0", group="main")
+THREAD START (obj=5000083f, id = 200013, name="Image Fetcher 1", group="main")
+THREAD END (id = 200012)
+THREAD END (id = 200013)
+THREAD START (obj=50000857, id = 200014, name="Image Fetcher 0", group="main")
+THREAD START (obj=50000858, id = 200015, name="Image Fetcher 1", group="main")
+THREAD START (obj=50000868, id = 200016, name="SwingWorker-pool-1-thread-1", group="main")
+THREAD END (id = 200014)
+THREAD END (id = 200015)
+THREAD START (obj=5000086c, id = 200017, name="Image Fetcher 0", group="main")
+THREAD START (obj=50000857, id = 200018, name="Image Fetcher 1", group="main")
+THREAD START (obj=50000858, id = 200019, name="Image Fetcher 2", group="main")
+THREAD END (id = 200018)
+THREAD END (id = 200019)
+THREAD END (id = 200017)
+THREAD START (obj=5000086e, id = 200020, name="Image Fetcher 0", group="main")
+THREAD START (obj=5000086f, id = 200021, name="Image Fetcher 1", group="main")
+THREAD END (id = 200020)
+THREAD END (id = 200021)
+THREAD END (id = 200010)
+TRACE 301133:
+	java.net.SocketInputStream.socketRead0(SocketInputStream.java:Unknown line)
+	java.net.SocketInputStream.socketRead(SocketInputStream.java:116)
+	java.net.SocketInputStream.read(SocketInputStream.java:170)
+	java.net.SocketInputStream.read(SocketInputStream.java:141)
+	sun.nio.cs.StreamDecoder.readBytes(StreamDecoder.java:284)
+	sun.nio.cs.StreamDecoder.implRead(StreamDecoder.java:326)
+	sun.nio.cs.StreamDecoder.read(StreamDecoder.java:178)
+	java.io.InputStreamReader.read(InputStreamReader.java:184)
+	java.io.BufferedReader.fill(BufferedReader.java:161)
+	java.io.BufferedReader.readLine(BufferedReader.java:324)
+TRACE 301178:
+	sun.lwawt.macosx.CPlatformWindow.nativeGetTopmostPlatformWindowUnderMouse(CPlatformWindow.java:Unknown line)
+	sun.lwawt.macosx.CPlatformWindow.getTopmostPlatformWindowUnderMouse(CPlatformWindow.java:752)
+	sun.lwawt.LWWindowPeer.notifyMouseEvent(LWWindowPeer.java:753)
+	sun.lwawt.macosx.CPlatformResponder.handleMouseEvent(CPlatformResponder.java:83)
+	sun.lwawt.macosx.CPlatformView.deliverMouseEvent(CPlatformView.java:197)
+TRACE 301183:
+	sun.lwawt.macosx.CCursorManager.nativeGetCursorPosition(CCursorManager.java:Unknown line)
+	sun.lwawt.macosx.CCursorManager.getCursorPosition(CCursorManager.java:54)
+	sun.lwawt.LWCursorManager.updateCursorImpl(LWCursorManager.java:80)
+	sun.lwawt.LWCursorManager.updateCursor(LWCursorManager.java:57)
+	sun.lwawt.LWCursorManager$1.run(LWCursorManager.java:72)
+	java.awt.event.InvocationEvent.dispatch(InvocationEvent.java:311)
+	java.awt.EventQueue.dispatchEventImpl(EventQueue.java:756)
+	java.awt.EventQueue.access$500(EventQueue.java:97)
+	java.awt.EventQueue$3.run(EventQueue.java:709)
+	java.awt.EventQueue$3.run(EventQueue.java:703)
+TRACE 301309:
+	java.util.zip.Inflater.inflateBytes(Inflater.java:Unknown line)
+	java.util.zip.Inflater.inflate(Inflater.java:259)
+	java.util.zip.InflaterInputStream.read(InflaterInputStream.java:152)
+	java.io.BufferedInputStream.fill(BufferedInputStream.java:246)
+	java.io.BufferedInputStream.read1(BufferedInputStream.java:286)
+	java.io.BufferedInputStream.read(BufferedInputStream.java:345)
+	sun.awt.image.PNGImageDecoder.produceImage(PNGImageDecoder.java:364)
+	sun.awt.image.InputStreamImageSource.doFetch(InputStreamImageSource.java:269)
+	sun.awt.image.ImageFetcher.fetchloop(ImageFetcher.java:205)
+	sun.awt.image.ImageFetcher.run(ImageFetcher.java:169)
+TRACE 301321:
+	sun.awt.image.PNGImageDecoder.produceImage(PNGImageDecoder.java:368)
+	sun.awt.image.InputStreamImageSource.doFetch(InputStreamImageSource.java:269)
+	sun.awt.image.ImageFetcher.fetchloop(ImageFetcher.java:205)
+	sun.awt.image.ImageFetcher.run(ImageFetcher.java:169)
+TRACE 301518:
+	sun.lwawt.macosx.CCursorManager.nativeGetCursorPosition(CCursorManager.java:Unknown line)
+	sun.lwawt.macosx.CCursorManager.getCursorPosition(CCursorManager.java:54)
+	sun.lwawt.LWMouseInfoPeer.fillPointWithCoords(LWMouseInfoPeer.java:41)
+	java.awt.MouseInfo.getPointerInfo(MouseInfo.java:83)
+	clientStuff.Content$HandCardDragger.doInBackground(Content.java:848)
+	clientStuff.Content$HandCardDragger.doInBackground(Content.java:1)
+	javax.swing.SwingWorker$1.call(SwingWorker.java:295)
+	java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	javax.swing.SwingWorker.run(SwingWorker.java:334)
+	java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+TRACE 301080:
+	sun.java2d.opengl.OGLRenderQueue.flushBuffer(OGLRenderQueue.java:Unknown line)
+	sun.java2d.opengl.OGLRenderQueue.flushBuffer(OGLRenderQueue.java:148)
+	sun.java2d.opengl.OGLRenderQueue.access$100(OGLRenderQueue.java:41)
+	sun.java2d.opengl.OGLRenderQueue$QueueFlusher.run(OGLRenderQueue.java:226)
+TRACE 300865:
+	sun.font.CFontManager.loadNativeFonts(CFontManager.java:Unknown line)
+	sun.font.CFontManager.access$100(CFontManager.java:46)
+	sun.font.CFontManager$3.run(CFontManager.java:300)
+	java.security.AccessController.doPrivileged(AccessController.java:Unknown line)
+	sun.font.CFontManager.loadFonts(CFontManager.java:296)
+	sun.font.SunFontManager.findFont2D(SunFontManager.java:2348)
+	java.awt.Font.getFont2D(Font.java:500)
+	java.awt.Font.access$000(Font.java:224)
+	java.awt.Font$FontAccessImpl.getFont2D(Font.java:228)
+	sun.font.FontUtilities.getFont2D(FontUtilities.java:180)
+TRACE 301239:
+	sun.lwawt.macosx.CCursorManager.nativeGetCursorPosition(CCursorManager.java:Unknown line)
+	sun.lwawt.macosx.CCursorManager.getCursorPosition(CCursorManager.java:54)
+	sun.lwawt.LWCursorManager.updateCursorImpl(LWCursorManager.java:80)
+	sun.lwawt.LWCursorManager.updateCursor(LWCursorManager.java:57)
+	sun.lwawt.LWComponentPeer.updateCursorImmediately(LWComponentPeer.java:896)
+	java.awt.Component.updateCursorImmediately(Component.java:3150)
+	java.awt.LightweightDispatcher.dispatchEvent(Container.java:4470)
+	java.awt.Container.dispatchEventImpl(Container.java:2280)
+	java.awt.Window.dispatchEventImpl(Window.java:2750)
+	java.awt.Component.dispatchEvent(Component.java:4713)
+TRACE 301324:
+	sun.awt.image.PNGImageDecoder.produceImage(PNGImageDecoder.java:462)
+	sun.awt.image.InputStreamImageSource.doFetch(InputStreamImageSource.java:269)
+	sun.awt.image.ImageFetcher.fetchloop(ImageFetcher.java:205)
+	sun.awt.image.ImageFetcher.run(ImageFetcher.java:169)
+TRACE 300867:
+	sun.font.CFont.createNativeFont(CFont.java:Unknown line)
+	sun.font.CFont.getNativeFontPtr(CFont.java:181)
+	sun.font.CFont.getWidth(CFont.java:100)
+	sun.font.FontFamily.preferredWidth(FontFamily.java:158)
+	sun.font.FontFamily.setFont(FontFamily.java:253)
+	sun.font.CFontManager.registerGenericFont(CFontManager.java:106)
+	sun.font.CFontManager.registerGenericFont(CFontManager.java:81)
+	sun.font.CFontManager.registerFont(CFontManager.java:254)
+	sun.font.CFontManager.loadNativeFonts(CFontManager.java:Unknown line)
+	sun.font.CFontManager.access$100(CFontManager.java:46)
+TRACE 300138:
+	java.lang.ClassLoader$NativeLibrary.load(ClassLoader.java:Unknown line)
+	java.lang.ClassLoader.loadLibrary0(ClassLoader.java:1938)
+	java.lang.ClassLoader.loadLibrary(ClassLoader.java:1821)
+	java.lang.Runtime.load0(Runtime.java:809)
+	java.lang.System.load(System.java:1086)
+	java.lang.ClassLoader$NativeLibrary.load(ClassLoader.java:Unknown line)
+	java.lang.ClassLoader.loadLibrary0(ClassLoader.java:1938)
+	java.lang.ClassLoader.loadLibrary(ClassLoader.java:1842)
+	java.lang.Runtime.loadLibrary0(Runtime.java:870)
+	java.lang.System.loadLibrary(System.java:1122)
+TRACE 300869:
+	sun.font.CFont.createNativeFont(CFont.java:Unknown line)
+	sun.font.CFont.getNativeFontPtr(CFont.java:181)
+	sun.font.CFont.getWidth(CFont.java:100)
+	sun.font.FontFamily.preferredWidth(FontFamily.java:158)
+	sun.font.FontFamily.setFont(FontFamily.java:259)
+	sun.font.CFontManager.registerGenericFont(CFontManager.java:108)
+	sun.font.CFontManager.registerGenericFont(CFontManager.java:81)
+	sun.font.CFontManager.registerFont(CFontManager.java:254)
+	sun.font.CFontManager.loadNativeFonts(CFontManager.java:Unknown line)
+	sun.font.CFontManager.access$100(CFontManager.java:46)
+TRACE 301318:
+	sun.awt.image.PNGImageDecoder.crc(PNGImageDecoder.java:782)
+	sun.awt.image.PNGImageDecoder.getChunk(PNGImageDecoder.java:716)
+	sun.awt.image.PNGImageDecoder.getData(PNGImageDecoder.java:725)
+	sun.awt.image.PNGFilterInputStream.read(PNGImageDecoder.java:826)
+	java.util.zip.InflaterInputStream.fill(InflaterInputStream.java:238)
+	java.util.zip.InflaterInputStream.read(InflaterInputStream.java:158)
+	java.io.BufferedInputStream.fill(BufferedInputStream.java:246)
+	java.io.BufferedInputStream.read1(BufferedInputStream.java:286)
+	java.io.BufferedInputStream.read(BufferedInputStream.java:345)
+	sun.awt.image.PNGImageDecoder.produceImage(PNGImageDecoder.java:364)
+TRACE 300888:
+	sun.font.CFont.createNativeFont(CFont.java:Unknown line)
+	sun.font.CFont.getNativeFontPtr(CFont.java:181)
+	sun.font.CFont.getWidth(CFont.java:100)
+	sun.font.FontFamily.preferredWidth(FontFamily.java:158)
+	sun.font.FontFamily.setFont(FontFamily.java:265)
+	sun.font.CFontManager.registerGenericFont(CFontManager.java:108)
+	sun.font.CFontManager.registerItalicDerived(CFontManager.java:280)
+	sun.font.CFontManager$3.run(CFontManager.java:301)
+	java.security.AccessController.doPrivileged(AccessController.java:Unknown line)
+	sun.font.CFontManager.loadFonts(CFontManager.java:296)
+TRACE 300868:
+	sun.font.CFont.createNativeFont(CFont.java:Unknown line)
+	sun.font.CFont.getNativeFontPtr(CFont.java:181)
+	sun.font.CFont.getWidth(CFont.java:100)
+	sun.font.FontFamily.preferredWidth(FontFamily.java:158)
+	sun.font.FontFamily.setFont(FontFamily.java:253)
+	sun.font.CFontManager.registerGenericFont(CFontManager.java:108)
+	sun.font.CFontManager.registerGenericFont(CFontManager.java:81)
+	sun.font.CFontManager.registerFont(CFontManager.java:254)
+	sun.font.CFontManager.loadNativeFonts(CFontManager.java:Unknown line)
+	sun.font.CFontManager.access$100(CFontManager.java:46)
+TRACE 301501:
+	sun.lwawt.macosx.CWrapper$NSWindow.isKeyWindow(CWrapper.java:Unknown line)
+	sun.lwawt.macosx.CPlatformWindow.isActive(CPlatformWindow.java:731)
+	sun.lwawt.LWComponentPeer.requestFocus(LWComponentPeer.java:952)
+	java.awt.Component.requestFocusHelper(Component.java:7704)
+	java.awt.Component.requestFocusInWindow(Component.java:7558)
+	java.awt.DefaultKeyboardFocusManager.dispatchEvent(DefaultKeyboardFocusManager.java:434)
+	java.awt.Component.dispatchEventImpl(Component.java:4762)
+	java.awt.Container.dispatchEventImpl(Container.java:2294)
+	java.awt.Window.dispatchEventImpl(Window.java:2750)
+	java.awt.Component.dispatchEvent(Component.java:4713)
+TRACE 301201:
+	sun.lwawt.macosx.CWrapper$NSWindow.isKeyWindow(CWrapper.java:Unknown line)
+	sun.lwawt.macosx.CPlatformWindow.isActive(CPlatformWindow.java:731)
+	sun.lwawt.LWComponentPeer.requestFocus(LWComponentPeer.java:952)
+	java.awt.Component.requestFocusHelper(Component.java:7704)
+	java.awt.Component.requestFocusInWindow(Component.java:7558)
+	java.awt.DefaultKeyboardFocusManager.dispatchEvent(DefaultKeyboardFocusManager.java:440)
+	java.awt.Component.dispatchEventImpl(Component.java:4762)
+	java.awt.Container.dispatchEventImpl(Container.java:2294)
+	java.awt.Window.dispatchEventImpl(Window.java:2750)
+	java.awt.Component.dispatchEvent(Component.java:4713)
+TRACE 300824:
+	sun.font.CFontManager.loadNativeDirFonts(CFontManager.java:Unknown line)
+	sun.font.CFontManager.registerFontsInDir(CFontManager.java:244)
+	sun.font.SunFontManager$2.run(SunFontManager.java:425)
+	java.security.AccessController.doPrivileged(AccessController.java:Unknown line)
+	sun.font.SunFontManager.<init>(SunFontManager.java:376)
+	sun.font.CFontManager.<init>(CFontManager.java:46)
+	sun.reflect.NativeConstructorAccessorImpl.newInstance0(NativeConstructorAccessorImpl.java:Unknown line)
+	sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
+	sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	java.lang.reflect.Constructor.newInstance(Constructor.java:422)
+TRACE 300388:
+	sun.java2d.opengl.CGLGraphicsConfig.getCGLConfigInfo(CGLGraphicsConfig.java:Unknown line)
+	sun.java2d.opengl.CGLGraphicsConfig.getConfig(CGLGraphicsConfig.java:147)
+	sun.awt.CGraphicsDevice.<init>(CGraphicsDevice.java:64)
+	sun.awt.CGraphicsEnvironment.initDevices(CGraphicsEnvironment.java:163)
+	sun.awt.CGraphicsEnvironment.<init>(CGraphicsEnvironment.java:112)
+	sun.reflect.NativeConstructorAccessorImpl.newInstance0(NativeConstructorAccessorImpl.java:Unknown line)
+	sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
+	sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	java.lang.reflect.Constructor.newInstance(Constructor.java:422)
+	java.lang.Class.newInstance(Class.java:442)
+TRACE 300870:
+	sun.font.CFont.createNativeFont(CFont.java:Unknown line)
+	sun.font.CFont.getNativeFontPtr(CFont.java:181)
+	sun.font.CFont.getWidth(CFont.java:100)
+	sun.font.FontFamily.preferredWidth(FontFamily.java:158)
+	sun.font.FontFamily.setFont(FontFamily.java:265)
+	sun.font.CFontManager.registerGenericFont(CFontManager.java:108)
+	sun.font.CFontManager.registerGenericFont(CFontManager.java:81)
+	sun.font.CFontManager.registerFont(CFontManager.java:254)
+	sun.font.CFontManager.loadNativeFonts(CFontManager.java:Unknown line)
+	sun.font.CFontManager.access$100(CFontManager.java:46)
+TRACE 301496:
+	java.awt.MediaTracker.setDone(MediaTracker.java:845)
+	java.awt.MediaEntry.setStatus(MediaTracker.java:919)
+	java.awt.ImageMediaEntry.imageUpdate(MediaTracker.java:988)
+	sun.awt.image.ImageWatched$WeakLink.newInfo(ImageWatched.java:132)
+	sun.awt.image.ImageWatched.newInfo(ImageWatched.java:170)
+	sun.awt.image.ImageRepresentation.imageComplete(ImageRepresentation.java:724)
+	java.awt.image.ImageFilter.imageComplete(ImageFilter.java:193)
+	java.awt.image.ImageFilter.imageComplete(ImageFilter.java:193)
+	java.awt.image.ImageFilter.imageComplete(ImageFilter.java:193)
+	java.awt.image.ImageFilter.imageComplete(ImageFilter.java:193)
+TRACE 301323:
+	java.io.FileInputStream.readBytes(FileInputStream.java:Unknown line)
+	java.io.FileInputStream.read(FileInputStream.java:255)
+	java.io.BufferedInputStream.read1(BufferedInputStream.java:284)
+	java.io.BufferedInputStream.read(BufferedInputStream.java:345)
+	sun.awt.image.PNGImageDecoder.fill(PNGImageDecoder.java:675)
+	sun.awt.image.PNGImageDecoder.need(PNGImageDecoder.java:683)
+	sun.awt.image.PNGImageDecoder.getChunk(PNGImageDecoder.java:713)
+	sun.awt.image.PNGImageDecoder.getData(PNGImageDecoder.java:725)
+	sun.awt.image.PNGFilterInputStream.read(PNGImageDecoder.java:826)
+	java.util.zip.InflaterInputStream.fill(InflaterInputStream.java:238)
+TRACE 301494:
+	java.awt.MediaTracker.setDone(MediaTracker.java:845)
+	java.awt.MediaEntry.setStatus(MediaTracker.java:919)
+	java.awt.ImageMediaEntry.imageUpdate(MediaTracker.java:988)
+	sun.awt.image.ImageWatched$WeakLink.newInfo(ImageWatched.java:132)
+	sun.awt.image.ImageWatched.newInfo(ImageWatched.java:170)
+	sun.awt.image.ImageRepresentation.imageComplete(ImageRepresentation.java:724)
+	java.awt.image.ImageFilter.imageComplete(ImageFilter.java:193)
+	sun.awt.image.ImageDecoder.imageComplete(ImageDecoder.java:153)
+	sun.awt.image.PNGImageDecoder.produceImage(PNGImageDecoder.java:519)
+	sun.awt.image.InputStreamImageSource.doFetch(InputStreamImageSource.java:269)
+TRACE 301362:
+	sun.awt.image.ImageRepresentation.getOpaqueRGBImage(ImageRepresentation.java:655)
+	sun.awt.image.ImageRepresentation.imageComplete(ImageRepresentation.java:717)
+	sun.awt.image.ImageDecoder.imageComplete(ImageDecoder.java:153)
+	sun.awt.image.PNGImageDecoder.produceImage(PNGImageDecoder.java:519)
+	sun.awt.image.InputStreamImageSource.doFetch(InputStreamImageSource.java:269)
+	sun.awt.image.ImageFetcher.fetchloop(ImageFetcher.java:205)
+	sun.awt.image.ImageFetcher.run(ImageFetcher.java:169)
+TRACE 300889:
+	sun.font.CFont.createNativeFont(CFont.java:Unknown line)
+	sun.font.CFont.getNativeFontPtr(CFont.java:181)
+	sun.font.CFont.getWidth(CFont.java:100)
+	sun.font.FontFamily.preferredWidth(FontFamily.java:158)
+	sun.font.FontFamily.setFont(FontFamily.java:271)
+	sun.font.CFontManager.registerGenericFont(CFontManager.java:108)
+	sun.font.CFontManager.registerItalicDerived(CFontManager.java:283)
+	sun.font.CFontManager$3.run(CFontManager.java:301)
+	java.security.AccessController.doPrivileged(AccessController.java:Unknown line)
+	sun.font.CFontManager.loadFonts(CFontManager.java:296)
+TRACE 301322:
+	sun.awt.image.IntegerInterleavedRaster.setDataElements(IntegerInterleavedRaster.java:428)
+	sun.awt.image.ImageRepresentation.setPixels(ImageRepresentation.java:578)
+	sun.awt.image.ImageDecoder.setPixels(ImageDecoder.java:138)
+	sun.awt.image.PNGImageDecoder.sendPixels(PNGImageDecoder.java:549)
+	sun.awt.image.PNGImageDecoder.produceImage(PNGImageDecoder.java:470)
+	sun.awt.image.InputStreamImageSource.doFetch(InputStreamImageSource.java:269)
+	sun.awt.image.ImageFetcher.fetchloop(ImageFetcher.java:205)
+	sun.awt.image.ImageFetcher.run(ImageFetcher.java:169)
+TRACE 301578:
+	java.awt.image.ReplicateScaleFilter.setPixels(ReplicateScaleFilter.java:250)
+	java.awt.image.ReplicateScaleFilter.setPixels(ReplicateScaleFilter.java:250)
+	java.awt.image.ReplicateScaleFilter.setPixels(ReplicateScaleFilter.java:250)
+	java.awt.image.ReplicateScaleFilter.setPixels(ReplicateScaleFilter.java:250)
+	java.awt.image.ReplicateScaleFilter.setPixels(ReplicateScaleFilter.java:250)
+	java.awt.image.ReplicateScaleFilter.setPixels(ReplicateScaleFilter.java:250)
+	java.awt.image.ReplicateScaleFilter.setPixels(ReplicateScaleFilter.java:250)
+	java.awt.image.ReplicateScaleFilter.setPixels(ReplicateScaleFilter.java:250)
+	java.awt.image.ReplicateScaleFilter.setPixels(ReplicateScaleFilter.java:250)
+	java.awt.image.ReplicateScaleFilter.setPixels(ReplicateScaleFilter.java:250)
+TRACE 301094:
+	sun.misc.Unsafe.unpark(Unsafe.java:Unknown line)
+	java.util.concurrent.locks.LockSupport.unpark(LockSupport.java:141)
+	java.util.concurrent.locks.AbstractQueuedSynchronizer.unparkSuccessor(AbstractQueuedSynchronizer.java:662)
+	java.util.concurrent.locks.AbstractQueuedSynchronizer.release(AbstractQueuedSynchronizer.java:1264)
+	java.util.concurrent.locks.ReentrantLock.unlock(ReentrantLock.java:457)
+	java.awt.EventQueue.wakeup(EventQueue.java:1341)
+	java.awt.EventQueue.access$100(EventQueue.java:97)
+	java.awt.EventQueue$2.wakeup(EventQueue.java:213)
+	sun.awt.SunToolkit.wakeupEventQueue(SunToolkit.java:309)
+	sun.awt.PostEventQueue.postEvent(SunToolkit.java:2189)
+TRACE 301041:
+	sun.lwawt.macosx.CPlatformComponent.nativeCreateComponent(CPlatformComponent.java:Unknown line)
+	sun.lwawt.macosx.CPlatformComponent.initialize(CPlatformComponent.java:54)
+	sun.lwawt.LWComponentPeer.initialize(LWComponentPeer.java:312)
+	sun.lwawt.LWToolkit.createDelegatedPeer(LWToolkit.java:212)
+	sun.lwawt.LWToolkit.createFrame(LWToolkit.java:239)
+	java.awt.Frame.addNotify(Frame.java:477)
+	java.awt.Window.pack(Window.java:807)
+	clientStuff.Launcher.<init>(Launcher.java:162)
+	clientStuff.Launcher.main(Launcher.java:68)
+TRACE 300872:
+	sun.font.CFont.createNativeFont(CFont.java:Unknown line)
+	sun.font.CFont.getNativeFontPtr(CFont.java:181)
+	sun.font.CFont.getWidth(CFont.java:100)
+	sun.font.FontFamily.preferredWidth(FontFamily.java:158)
+	sun.font.FontFamily.setFont(FontFamily.java:271)
+	sun.font.CFontManager.registerGenericFont(CFontManager.java:108)
+	sun.font.CFontManager.registerGenericFont(CFontManager.java:81)
+	sun.font.CFontManager.registerFont(CFontManager.java:254)
+	sun.font.CFontManager.loadNativeFonts(CFontManager.java:Unknown line)
+	sun.font.CFontManager.access$100(CFontManager.java:46)
+TRACE 301378:
+	sun.awt.image.ImageRepresentation.getOpaqueRGBImage(ImageRepresentation.java:654)
+	sun.awt.image.ImageRepresentation.imageComplete(ImageRepresentation.java:717)
+	sun.awt.image.ImageDecoder.imageComplete(ImageDecoder.java:153)
+	sun.awt.image.PNGImageDecoder.produceImage(PNGImageDecoder.java:519)
+	sun.awt.image.InputStreamImageSource.doFetch(InputStreamImageSource.java:269)
+	sun.awt.image.ImageFetcher.fetchloop(ImageFetcher.java:205)
+	sun.awt.image.ImageFetcher.run(ImageFetcher.java:169)
+TRACE 301312:
+	sun.awt.image.PNGImageDecoder.produceImage(PNGImageDecoder.java:378)
+	sun.awt.image.InputStreamImageSource.doFetch(InputStreamImageSource.java:269)
+	sun.awt.image.ImageFetcher.fetchloop(ImageFetcher.java:205)
+	sun.awt.image.ImageFetcher.run(ImageFetcher.java:169)
+TRACE 301556:
+	java.awt.image.ReplicateScaleFilter.setPixels(ReplicateScaleFilter.java:250)
+	java.awt.image.ReplicateScaleFilter.setPixels(ReplicateScaleFilter.java:250)
+	java.awt.image.ReplicateScaleFilter.setPixels(ReplicateScaleFilter.java:250)
+	java.awt.image.ReplicateScaleFilter.setPixels(ReplicateScaleFilter.java:250)
+	java.awt.image.ReplicateScaleFilter.setPixels(ReplicateScaleFilter.java:250)
+	java.awt.image.ReplicateScaleFilter.setPixels(ReplicateScaleFilter.java:250)
+	java.awt.image.ReplicateScaleFilter.setPixels(ReplicateScaleFilter.java:250)
+	sun.awt.image.ImageDecoder.setPixels(ImageDecoder.java:138)
+	sun.awt.image.PNGImageDecoder.sendPixels(PNGImageDecoder.java:549)
+	sun.awt.image.PNGImageDecoder.produceImage(PNGImageDecoder.java:470)
+TRACE 301363:
+	sun.awt.image.ImageRepresentation.getOpaqueRGBImage(ImageRepresentation.java:655)
+	sun.awt.image.ImageRepresentation.imageComplete(ImageRepresentation.java:717)
+	sun.awt.image.ImageDecoder.imageComplete(ImageDecoder.java:153)
+	sun.awt.image.PNGImageDecoder.produceImage(PNGImageDecoder.java:519)
+	sun.awt.image.InputStreamImageSource.doFetch(InputStreamImageSource.java:269)
+	sun.awt.image.ImageFetcher.fetchloop(ImageFetcher.java:205)
+	sun.awt.image.ImageFetcher.run(ImageFetcher.java:169)
+TRACE 301485:
+	java.security.AccessController.getStackAccessControlContext(AccessController.java:Unknown line)
+	java.security.AccessController.getContext(AccessController.java:820)
+	java.awt.AWTEvent.<init>(AWTEvent.java:107)
+	java.awt.event.ComponentEvent.<init>(ComponentEvent.java:120)
+	java.awt.event.InputEvent.<init>(InputEvent.java:341)
+	java.awt.event.MouseEvent.<init>(MouseEvent.java:736)
+	java.awt.LightweightDispatcher.retargetMouseEvent(Container.java:4870)
+	java.awt.LightweightDispatcher.processMouseEvent(Container.java:4538)
+	java.awt.LightweightDispatcher.dispatchEvent(Container.java:4466)
+	java.awt.Container.dispatchEventImpl(Container.java:2280)
+TRACE 300501:
+	sun.java2d.opengl.CGLGraphicsConfig.getCGLConfigInfo(CGLGraphicsConfig.java:Unknown line)
+	sun.java2d.opengl.CGLGraphicsConfig.getConfig(CGLGraphicsConfig.java:147)
+	sun.awt.CGraphicsDevice.<init>(CGraphicsDevice.java:64)
+	sun.awt.CGraphicsEnvironment.initDevices(CGraphicsEnvironment.java:167)
+	sun.awt.CGraphicsEnvironment.<init>(CGraphicsEnvironment.java:112)
+	sun.reflect.NativeConstructorAccessorImpl.newInstance0(NativeConstructorAccessorImpl.java:Unknown line)
+	sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
+	sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	java.lang.reflect.Constructor.newInstance(Constructor.java:422)
+	java.lang.Class.newInstance(Class.java:442)
+TRACE 301562:
+	java.awt.image.ReplicateScaleFilter.setPixels(ReplicateScaleFilter.java:250)
+	java.awt.image.ReplicateScaleFilter.setPixels(ReplicateScaleFilter.java:250)
+	java.awt.image.ReplicateScaleFilter.setPixels(ReplicateScaleFilter.java:250)
+	java.awt.image.ReplicateScaleFilter.setPixels(ReplicateScaleFilter.java:250)
+	java.awt.image.ReplicateScaleFilter.setPixels(ReplicateScaleFilter.java:250)
+	java.awt.image.ReplicateScaleFilter.setPixels(ReplicateScaleFilter.java:250)
+	java.awt.image.ReplicateScaleFilter.setPixels(ReplicateScaleFilter.java:250)
+	java.awt.image.ReplicateScaleFilter.setPixels(ReplicateScaleFilter.java:250)
+	sun.awt.image.ImageDecoder.setPixels(ImageDecoder.java:138)
+	sun.awt.image.PNGImageDecoder.sendPixels(PNGImageDecoder.java:549)
+TRACE 301438:
+	java.awt.image.ReplicateScaleFilter.setPixels(ReplicateScaleFilter.java:246)
+	sun.awt.image.ImageDecoder.setPixels(ImageDecoder.java:138)
+	sun.awt.image.PNGImageDecoder.sendPixels(PNGImageDecoder.java:549)
+	sun.awt.image.PNGImageDecoder.produceImage(PNGImageDecoder.java:470)
+	sun.awt.image.InputStreamImageSource.doFetch(InputStreamImageSource.java:269)
+	sun.awt.image.ImageFetcher.fetchloop(ImageFetcher.java:205)
+	sun.awt.image.ImageFetcher.run(ImageFetcher.java:169)
+TRACE 301039:
+	sun.lwawt.macosx.CPlatformWindow.nativeCreateNSWindow(CPlatformWindow.java:Unknown line)
+	sun.lwawt.macosx.CPlatformWindow.initialize(CPlatformWindow.java:244)
+	sun.lwawt.LWWindowPeer.<init>(LWWindowPeer.java:156)
+	sun.lwawt.LWToolkit.createDelegatedPeer(LWToolkit.java:210)
+	sun.lwawt.LWToolkit.createFrame(LWToolkit.java:239)
+	java.awt.Frame.addNotify(Frame.java:477)
+	java.awt.Window.pack(Window.java:807)
+	clientStuff.Launcher.<init>(Launcher.java:162)
+	clientStuff.Launcher.main(Launcher.java:68)
+TRACE 301225:
+	java.security.AccessController.getStackAccessControlContext(AccessController.java:Unknown line)
+	java.security.AccessController.getContext(AccessController.java:820)
+	java.awt.EventQueue.dispatchEvent(EventQueue.java:722)
+	java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:201)
+	java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:116)
+	java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:105)
+	java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:101)
+	java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:93)
+	java.awt.EventDispatchThread.run(EventDispatchThread.java:82)
+TRACE 301404:
+	java.security.AccessController.getStackAccessControlContext(AccessController.java:Unknown line)
+	java.security.AccessController.getContext(AccessController.java:820)
+	java.awt.AWTEvent.<init>(AWTEvent.java:107)
+	java.awt.event.ComponentEvent.<init>(ComponentEvent.java:120)
+	java.awt.event.InputEvent.<init>(InputEvent.java:341)
+	java.awt.event.MouseEvent.<init>(MouseEvent.java:736)
+	sun.lwawt.LWWindowPeer.notifyMouseEvent(LWWindowPeer.java:839)
+	sun.lwawt.macosx.CPlatformResponder.handleMouseEvent(CPlatformResponder.java:83)
+	sun.lwawt.macosx.CPlatformView.deliverMouseEvent(CPlatformView.java:197)
+TRACE 301360:
+	sun.awt.image.ImageRepresentation.getOpaqueRGBImage(ImageRepresentation.java:655)
+	sun.awt.image.ImageRepresentation.imageComplete(ImageRepresentation.java:717)
+	sun.awt.image.ImageDecoder.imageComplete(ImageDecoder.java:153)
+	sun.awt.image.PNGImageDecoder.produceImage(PNGImageDecoder.java:519)
+	sun.awt.image.InputStreamImageSource.doFetch(InputStreamImageSource.java:269)
+	sun.awt.image.ImageFetcher.fetchloop(ImageFetcher.java:205)
+	sun.awt.image.ImageFetcher.run(ImageFetcher.java:169)
+TRACE 301484:
+	java.security.AccessController.getStackAccessControlContext(AccessController.java:Unknown line)
+	java.security.AccessController.getContext(AccessController.java:820)
+	java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:87)
+	java.awt.EventQueue$4.run(EventQueue.java:731)
+	java.awt.EventQueue$4.run(EventQueue.java:729)
+	java.security.AccessController.doPrivileged(AccessController.java:Unknown line)
+	java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:76)
+	java.awt.EventQueue.dispatchEvent(EventQueue.java:728)
+	java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:201)
+	java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:116)
+TRACE 301546:
+	java.awt.image.ReplicateScaleFilter.setPixels(ReplicateScaleFilter.java:250)
+	java.awt.image.ReplicateScaleFilter.setPixels(ReplicateScaleFilter.java:250)
+	java.awt.image.ReplicateScaleFilter.setPixels(ReplicateScaleFilter.java:250)
+	java.awt.image.ReplicateScaleFilter.setPixels(ReplicateScaleFilter.java:250)
+	java.awt.image.ReplicateScaleFilter.setPixels(ReplicateScaleFilter.java:250)
+	java.awt.image.ReplicateScaleFilter.setPixels(ReplicateScaleFilter.java:250)
+	sun.awt.image.ImageDecoder.setPixels(ImageDecoder.java:138)
+	sun.awt.image.PNGImageDecoder.sendPixels(PNGImageDecoder.java:549)
+	sun.awt.image.PNGImageDecoder.produceImage(PNGImageDecoder.java:470)
+	sun.awt.image.InputStreamImageSource.doFetch(InputStreamImageSource.java:269)
+TRACE 301581:
+	sun.awt.image.ImageRepresentation.setPixels(ImageRepresentation.java:562)
+	java.awt.image.ReplicateScaleFilter.setPixels(ReplicateScaleFilter.java:250)
+	java.awt.image.ReplicateScaleFilter.setPixels(ReplicateScaleFilter.java:250)
+	java.awt.image.ReplicateScaleFilter.setPixels(ReplicateScaleFilter.java:250)
+	java.awt.image.ReplicateScaleFilter.setPixels(ReplicateScaleFilter.java:250)
+	java.awt.image.ReplicateScaleFilter.setPixels(ReplicateScaleFilter.java:250)
+	java.awt.image.ReplicateScaleFilter.setPixels(ReplicateScaleFilter.java:250)
+	java.awt.image.ReplicateScaleFilter.setPixels(ReplicateScaleFilter.java:250)
+	java.awt.image.ReplicateScaleFilter.setPixels(ReplicateScaleFilter.java:250)
+	java.awt.image.ReplicateScaleFilter.setPixels(ReplicateScaleFilter.java:250)
+TRACE 300890:
+	sun.font.CFont.createNativeFont(CFont.java:Unknown line)
+	sun.font.CFont.getNativeFontPtr(CFont.java:181)
+	sun.font.CFont.getWidth(CFont.java:100)
+	sun.font.FontFamily.preferredWidth(FontFamily.java:158)
+	sun.font.FontFamily.setFont(FontFamily.java:265)
+	sun.font.CFontManager.registerGenericFont(CFontManager.java:108)
+	sun.font.CFontManager.registerItalicDerived(CFontManager.java:283)
+	sun.font.CFontManager$3.run(CFontManager.java:301)
+	java.security.AccessController.doPrivileged(AccessController.java:Unknown line)
+	sun.font.CFontManager.loadFonts(CFontManager.java:296)
+TRACE 301379:
+	sun.awt.image.ImageRepresentation.getOpaqueRGBImage(ImageRepresentation.java:654)
+	sun.awt.image.ImageRepresentation.imageComplete(ImageRepresentation.java:717)
+	sun.awt.image.ImageDecoder.imageComplete(ImageDecoder.java:153)
+	sun.awt.image.PNGImageDecoder.produceImage(PNGImageDecoder.java:519)
+	sun.awt.image.InputStreamImageSource.doFetch(InputStreamImageSource.java:269)
+	sun.awt.image.ImageFetcher.fetchloop(ImageFetcher.java:205)
+	sun.awt.image.ImageFetcher.run(ImageFetcher.java:169)
+TRACE 301493:
+	java.awt.image.ReplicateScaleFilter.setPixels(ReplicateScaleFilter.java:250)
+	sun.awt.image.ImageDecoder.setPixels(ImageDecoder.java:138)
+	sun.awt.image.PNGImageDecoder.sendPixels(PNGImageDecoder.java:549)
+	sun.awt.image.PNGImageDecoder.produceImage(PNGImageDecoder.java:470)
+	sun.awt.image.InputStreamImageSource.doFetch(InputStreamImageSource.java:269)
+	sun.awt.image.ImageFetcher.fetchloop(ImageFetcher.java:205)
+	sun.awt.image.ImageFetcher.run(ImageFetcher.java:169)
+TRACE 301466:
+	java.util.zip.Inflater.inflateBytes(Inflater.java:Unknown line)
+	java.util.zip.Inflater.inflate(Inflater.java:259)
+	java.util.zip.InflaterInputStream.read(InflaterInputStream.java:152)
+	java.io.BufferedInputStream.fill(BufferedInputStream.java:246)
+	java.io.BufferedInputStream.read(BufferedInputStream.java:265)
+	sun.awt.image.PNGImageDecoder.produceImage(PNGImageDecoder.java:362)
+	sun.awt.image.InputStreamImageSource.doFetch(InputStreamImageSource.java:269)
+	sun.awt.image.ImageFetcher.fetchloop(ImageFetcher.java:205)
+	sun.awt.image.ImageFetcher.run(ImageFetcher.java:169)
+TRACE 301567:
+	java.awt.image.ReplicateScaleFilter.setPixels(ReplicateScaleFilter.java:250)
+	java.awt.image.ReplicateScaleFilter.setPixels(ReplicateScaleFilter.java:250)
+	java.awt.image.ReplicateScaleFilter.setPixels(ReplicateScaleFilter.java:250)
+	java.awt.image.ReplicateScaleFilter.setPixels(ReplicateScaleFilter.java:250)
+	java.awt.image.ReplicateScaleFilter.setPixels(ReplicateScaleFilter.java:250)
+	java.awt.image.ReplicateScaleFilter.setPixels(ReplicateScaleFilter.java:250)
+	java.awt.image.ReplicateScaleFilter.setPixels(ReplicateScaleFilter.java:250)
+	java.awt.image.ReplicateScaleFilter.setPixels(ReplicateScaleFilter.java:250)
+	java.awt.image.ReplicateScaleFilter.setPixels(ReplicateScaleFilter.java:250)
+	sun.awt.image.ImageDecoder.setPixels(ImageDecoder.java:138)
+TRACE 301488:
+	java.lang.Object.wait(Object.java:Unknown line)
+	sun.java2d.opengl.OGLRenderQueue$QueueFlusher.run(OGLRenderQueue.java:203)
+TRACE 301395:
+	sun.lwawt.macosx.CWrapper$NSWindow.isZoomed(CWrapper.java:Unknown line)
+	sun.lwawt.macosx.CPlatformWindow.isMaximized(CPlatformWindow.java:479)
+	sun.lwawt.macosx.CPlatformWindow.setVisible(CPlatformWindow.java:590)
+	sun.lwawt.LWWindowPeer.setVisibleImpl(LWWindowPeer.java:248)
+	sun.lwawt.LWComponentPeer.setVisible(LWComponentPeer.java:765)
+	java.awt.Component.show(Component.java:1640)
+	java.awt.Window.show(Window.java:1042)
+	java.awt.Component.show(Component.java:1673)
+	java.awt.Component.setVisible(Component.java:1625)
+	java.awt.Window.setVisible(Window.java:1014)
+TRACE 301110:
+	sun.lwawt.macosx.CCursorManager.nativeGetCursorPosition(CCursorManager.java:Unknown line)
+	sun.lwawt.macosx.CCursorManager.getCursorPosition(CCursorManager.java:54)
+	sun.lwawt.LWCursorManager.updateCursorImpl(LWCursorManager.java:80)
+	sun.lwawt.LWCursorManager.updateCursor(LWCursorManager.java:57)
+	sun.lwawt.LWComponentPeer.updateCursorImmediately(LWComponentPeer.java:896)
+	java.awt.Component.updateCursorImmediately(Component.java:3150)
+	java.awt.Component.show(Component.java:1648)
+	java.awt.Window.show(Window.java:1042)
+	java.awt.Component.show(Component.java:1673)
+	java.awt.Component.setVisible(Component.java:1625)
+TRACE 301179:
+	sun.lwawt.macosx.CInputMethodDescriptor.nativeGetAvailableLocales(CInputMethodDescriptor.java:Unknown line)
+	sun.lwawt.macosx.CInputMethodDescriptor.getAvailableLocalesInternal(CInputMethodDescriptor.java:60)
+	sun.lwawt.macosx.CInputMethodDescriptor.getAvailableLocales(CInputMethodDescriptor.java:53)
+	sun.awt.im.InputMethodLocator.isLocaleAvailable(InputMethodLocator.java:109)
+	sun.awt.im.ExecutableInputMethodManager.findInputMethod(ExecutableInputMethodManager.java:400)
+	sun.awt.im.InputContext.selectInputMethod(InputContext.java:160)
+	sun.awt.im.InputContext.<init>(InputContext.java:131)
+	sun.awt.im.InputMethodContext.<init>(InputMethodContext.java:88)
+	java.awt.im.InputContext.getInstance(InputContext.java:92)
+	java.awt.Window.getInputContext(Window.java:1426)
+TRACE 301588:
+	sun.java2d.opengl.OGLRenderQueue$QueueFlusher.run(OGLRenderQueue.java:212)
+TRACE 301243:
+	sun.lwawt.macosx.NSEvent.nsToJavaMouseModifiers(NSEvent.java:Unknown line)
+	sun.lwawt.macosx.CPlatformResponder.handleMouseEvent(CPlatformResponder.java:79)
+	sun.lwawt.macosx.CPlatformView.deliverMouseEvent(CPlatformView.java:197)
+TRACE 301392:
+	sun.lwawt.macosx.CWrapper$NSWindow.isZoomed(CWrapper.java:Unknown line)
+	sun.lwawt.macosx.CPlatformWindow.isMaximized(CPlatformWindow.java:479)
+	sun.lwawt.macosx.CPlatformWindow.setVisible(CPlatformWindow.java:552)
+	sun.lwawt.LWWindowPeer.setVisibleImpl(LWWindowPeer.java:248)
+	sun.lwawt.LWComponentPeer.setVisible(LWComponentPeer.java:765)
+	java.awt.Component.show(Component.java:1640)
+	java.awt.Window.show(Window.java:1042)
+	java.awt.Component.show(Component.java:1673)
+	java.awt.Component.setVisible(Component.java:1625)
+	java.awt.Window.setVisible(Window.java:1014)
+TRACE 301357:
+	java.awt.image.DataBufferInt.<init>(DataBufferInt.java:75)
+	java.awt.image.Raster.createPackedRaster(Raster.java:467)
+	java.awt.image.DirectColorModel.createCompatibleWritableRaster(DirectColorModel.java:1032)
+	sun.awt.image.ImageRepresentation.createBufferedImage(ImageRepresentation.java:253)
+	sun.awt.image.ImageRepresentation.setPixels(ImageRepresentation.java:559)
+	sun.awt.image.ImageDecoder.setPixels(ImageDecoder.java:138)
+	sun.awt.image.PNGImageDecoder.sendPixels(PNGImageDecoder.java:549)
+	sun.awt.image.PNGImageDecoder.produceImage(PNGImageDecoder.java:470)
+	sun.awt.image.InputStreamImageSource.doFetch(InputStreamImageSource.java:269)
+	sun.awt.image.ImageFetcher.fetchloop(ImageFetcher.java:205)
+TRACE 301180:
+	sun.lwawt.macosx.CInputMethodDescriptor.nativeGetAvailableLocales(CInputMethodDescriptor.java:Unknown line)
+	sun.lwawt.macosx.CInputMethodDescriptor.getAvailableLocalesInternal(CInputMethodDescriptor.java:60)
+	sun.lwawt.macosx.CInputMethod.setLocale(CInputMethod.java:130)
+	sun.lwawt.macosx.CInputMethod.setLocale(CInputMethod.java:126)
+	sun.awt.im.InputContext.getInputMethodInstance(InputContext.java:858)
+	sun.awt.im.InputContext.getInputMethod(InputContext.java:805)
+	sun.awt.im.InputContext.dispatchEvent(InputContext.java:240)
+	sun.awt.im.InputMethodContext.dispatchEvent(InputMethodContext.java:196)
+	java.awt.Component.dispatchEventImpl(Component.java:4823)
+	java.awt.Container.dispatchEventImpl(Container.java:2294)
+TRACE 301450:
+	java.io.BufferedInputStream.read(BufferedInputStream.java:355)
+	sun.awt.image.PNGImageDecoder.produceImage(PNGImageDecoder.java:364)
+	sun.awt.image.InputStreamImageSource.doFetch(InputStreamImageSource.java:269)
+	sun.awt.image.ImageFetcher.fetchloop(ImageFetcher.java:205)
+	sun.awt.image.ImageFetcher.run(ImageFetcher.java:169)
+TRACE 301107:
+	sun.lwawt.macosx.CWrapper$NSWindow.isKeyWindow(CWrapper.java:Unknown line)
+	sun.lwawt.macosx.CPlatformWindow.setVisible(CPlatformWindow.java:569)
+	sun.lwawt.LWWindowPeer.setVisibleImpl(LWWindowPeer.java:248)
+	sun.lwawt.LWComponentPeer.setVisible(LWComponentPeer.java:765)
+	java.awt.Component.show(Component.java:1640)
+	java.awt.Window.show(Window.java:1042)
+	java.awt.Component.show(Component.java:1673)
+	java.awt.Component.setVisible(Component.java:1625)
+	java.awt.Window.setVisible(Window.java:1014)
+	clientStuff.Launcher.<init>(Launcher.java:163)
+TRACE 301464:
+	sun.awt.image.ImageRepresentation.getOpaqueRGBImage(ImageRepresentation.java:654)
+	sun.awt.image.ImageRepresentation.imageComplete(ImageRepresentation.java:717)
+	java.awt.image.ImageFilter.imageComplete(ImageFilter.java:193)
+	java.awt.image.ImageFilter.imageComplete(ImageFilter.java:193)
+	sun.awt.image.ImageDecoder.imageComplete(ImageDecoder.java:153)
+	sun.awt.image.PNGImageDecoder.produceImage(PNGImageDecoder.java:519)
+	sun.awt.image.InputStreamImageSource.doFetch(InputStreamImageSource.java:269)
+	sun.awt.image.ImageFetcher.fetchloop(ImageFetcher.java:205)
+	sun.awt.image.ImageFetcher.run(ImageFetcher.java:169)
+TRACE 301495:
+	sun.awt.image.PNGImageDecoder.crc(PNGImageDecoder.java:782)
+	sun.awt.image.PNGImageDecoder.getChunk(PNGImageDecoder.java:716)
+	sun.awt.image.PNGImageDecoder.getData(PNGImageDecoder.java:725)
+	sun.awt.image.PNGImageDecoder.produceImage(PNGImageDecoder.java:252)
+	sun.awt.image.InputStreamImageSource.doFetch(InputStreamImageSource.java:269)
+	sun.awt.image.ImageFetcher.fetchloop(ImageFetcher.java:205)
+	sun.awt.image.ImageFetcher.run(ImageFetcher.java:169)
+TRACE 301548:
+	java.util.zip.InflaterInputStream.read(InflaterInputStream.java:158)
+	java.io.BufferedInputStream.fill(BufferedInputStream.java:246)
+	java.io.BufferedInputStream.read1(BufferedInputStream.java:286)
+	java.io.BufferedInputStream.read(BufferedInputStream.java:345)
+	sun.awt.image.PNGImageDecoder.produceImage(PNGImageDecoder.java:364)
+	sun.awt.image.InputStreamImageSource.doFetch(InputStreamImageSource.java:269)
+	sun.awt.image.ImageFetcher.fetchloop(ImageFetcher.java:205)
+	sun.awt.image.ImageFetcher.run(ImageFetcher.java:169)
+TRACE 301531:
+	java.awt.image.ReplicateScaleFilter.setPixels(ReplicateScaleFilter.java:250)
+	java.awt.image.ReplicateScaleFilter.setPixels(ReplicateScaleFilter.java:250)
+	java.awt.image.ReplicateScaleFilter.setPixels(ReplicateScaleFilter.java:250)
+	java.awt.image.ReplicateScaleFilter.setPixels(ReplicateScaleFilter.java:250)
+	java.awt.image.ReplicateScaleFilter.setPixels(ReplicateScaleFilter.java:250)
+	sun.awt.image.ImageDecoder.setPixels(ImageDecoder.java:138)
+	sun.awt.image.PNGImageDecoder.sendPixels(PNGImageDecoder.java:549)
+	sun.awt.image.PNGImageDecoder.produceImage(PNGImageDecoder.java:470)
+	sun.awt.image.InputStreamImageSource.doFetch(InputStreamImageSource.java:269)
+	sun.awt.image.ImageFetcher.fetchloop(ImageFetcher.java:205)
+TRACE 301535:
+	java.awt.color.ColorSpace.getInstance(ColorSpace.java:294)
+	java.awt.image.DirectColorModel.<init>(DirectColorModel.java:182)
+	java.awt.image.DirectColorModel.<init>(DirectColorModel.java:152)
+	sun.awt.image.ImageRepresentation.getOpaqueRGBImage(ImageRepresentation.java:660)
+	sun.awt.image.ImageRepresentation.imageComplete(ImageRepresentation.java:717)
+	java.awt.image.ImageFilter.imageComplete(ImageFilter.java:193)
+	java.awt.image.ImageFilter.imageComplete(ImageFilter.java:193)
+	java.awt.image.ImageFilter.imageComplete(ImageFilter.java:193)
+	java.awt.image.ImageFilter.imageComplete(ImageFilter.java:193)
+	java.awt.image.ImageFilter.imageComplete(ImageFilter.java:193)
+TRACE 301376:
+	sun.awt.image.ImageRepresentation.getOpaqueRGBImage(ImageRepresentation.java:654)
+	sun.awt.image.ImageRepresentation.imageComplete(ImageRepresentation.java:717)
+	sun.awt.image.ImageDecoder.imageComplete(ImageDecoder.java:153)
+	sun.awt.image.PNGImageDecoder.produceImage(PNGImageDecoder.java:519)
+	sun.awt.image.InputStreamImageSource.doFetch(InputStreamImageSource.java:269)
+	sun.awt.image.ImageFetcher.fetchloop(ImageFetcher.java:205)
+	sun.awt.image.ImageFetcher.run(ImageFetcher.java:169)
+TRACE 300184:
+	sun.misc.Unsafe.defineAnonymousClass(Unsafe.java:Unknown line)
+	java.lang.invoke.InvokerBytecodeGenerator.loadAndInitializeInvokerClass(InvokerBytecodeGenerator.java:284)
+	java.lang.invoke.InvokerBytecodeGenerator.loadMethod(InvokerBytecodeGenerator.java:276)
+	java.lang.invoke.InvokerBytecodeGenerator.generateCustomizedCode(InvokerBytecodeGenerator.java:618)
+	java.lang.invoke.LambdaForm.compileToBytecode(LambdaForm.java:654)
+	java.lang.invoke.DirectMethodHandle.makePreparedLambdaForm(DirectMethodHandle.java:247)
+	java.lang.invoke.DirectMethodHandle.preparedLambdaForm(DirectMethodHandle.java:187)
+	java.lang.invoke.DirectMethodHandle.preparedLambdaForm(DirectMethodHandle.java:176)
+	java.lang.invoke.DirectMethodHandle.make(DirectMethodHandle.java:83)
+	java.lang.invoke.DirectMethodHandle.make(DirectMethodHandle.java:103)
+TRACE 301364:
+	sun.awt.image.ImageRepresentation.getOpaqueRGBImage(ImageRepresentation.java:655)
+	sun.awt.image.ImageRepresentation.imageComplete(ImageRepresentation.java:717)
+	sun.awt.image.ImageDecoder.imageComplete(ImageDecoder.java:153)
+	sun.awt.image.PNGImageDecoder.produceImage(PNGImageDecoder.java:519)
+	sun.awt.image.InputStreamImageSource.doFetch(InputStreamImageSource.java:269)
+	sun.awt.image.ImageFetcher.fetchloop(ImageFetcher.java:205)
+	sun.awt.image.ImageFetcher.run(ImageFetcher.java:169)
+TRACE 301372:
+	java.util.zip.Inflater.inflateBytes(Inflater.java:Unknown line)
+	java.util.zip.Inflater.inflate(Inflater.java:259)
+	java.util.zip.InflaterInputStream.read(InflaterInputStream.java:152)
+	java.io.BufferedInputStream.read1(BufferedInputStream.java:284)
+	java.io.BufferedInputStream.read(BufferedInputStream.java:345)
+	sun.awt.image.PNGImageDecoder.produceImage(PNGImageDecoder.java:364)
+	sun.awt.image.InputStreamImageSource.doFetch(InputStreamImageSource.java:269)
+	sun.awt.image.ImageFetcher.fetchloop(ImageFetcher.java:205)
+	sun.awt.image.ImageFetcher.run(ImageFetcher.java:169)
+TRACE 301075:
+	sun.lwawt.macosx.CPlatformWindow.nativeGetNSWindowInsets(CPlatformWindow.java:Unknown line)
+	sun.lwawt.macosx.CPlatformWindow.getInsets(CPlatformWindow.java:447)
+	sun.lwawt.LWWindowPeer.initializeImpl(LWWindowPeer.java:199)
+	sun.lwawt.LWComponentPeer.initialize(LWComponentPeer.java:313)
+	sun.lwawt.LWToolkit.createDelegatedPeer(LWToolkit.java:212)
+	sun.lwawt.LWToolkit.createFrame(LWToolkit.java:239)
+	java.awt.Frame.addNotify(Frame.java:477)
+	java.awt.Window.pack(Window.java:807)
+	clientStuff.Launcher.<init>(Launcher.java:162)
+	clientStuff.Launcher.main(Launcher.java:68)
+TRACE 301298:
+	sun.awt.image.InputStreamImageSource.addConsumer(InputStreamImageSource.java:126)
+	sun.awt.image.InputStreamImageSource.startProduction(InputStreamImageSource.java:162)
+	sun.awt.image.ImageRepresentation.startProduction(ImageRepresentation.java:732)
+	sun.awt.image.ImageRepresentation.prepare(ImageRepresentation.java:769)
+	sun.awt.SunToolkit.prepareImage(SunToolkit.java:849)
+	java.awt.Component.prepareImage(Component.java:3679)
+	java.awt.ImageMediaEntry.startLoad(MediaTracker.java:965)
+	java.awt.MediaEntry.getStatus(MediaTracker.java:910)
+	java.awt.ImageMediaEntry.getStatus(MediaTracker.java:961)
+	java.awt.MediaTracker.statusID(MediaTracker.java:715)
+TRACE 301489:
+	java.awt.image.ReplicateScaleFilter.setPixels(ReplicateScaleFilter.java:246)
+	java.awt.image.ReplicateScaleFilter.setPixels(ReplicateScaleFilter.java:250)
+	java.awt.image.ReplicateScaleFilter.setPixels(ReplicateScaleFilter.java:250)
+	sun.awt.image.ImageDecoder.setPixels(ImageDecoder.java:138)
+	sun.awt.image.PNGImageDecoder.sendPixels(PNGImageDecoder.java:549)
+	sun.awt.image.PNGImageDecoder.produceImage(PNGImageDecoder.java:470)
+	sun.awt.image.InputStreamImageSource.doFetch(InputStreamImageSource.java:269)
+	sun.awt.image.ImageFetcher.fetchloop(ImageFetcher.java:205)
+	sun.awt.image.ImageFetcher.run(ImageFetcher.java:169)
+TRACE 301502:
+	java.lang.Class.isAssignableFrom(Class.java:Unknown line)
+	sun.reflect.UnsafeFieldAccessorImpl.ensureObj(UnsafeFieldAccessorImpl.java:57)
+	sun.reflect.UnsafeBooleanFieldAccessorImpl.getBoolean(UnsafeBooleanFieldAccessorImpl.java:40)
+	java.lang.reflect.Field.getBoolean(Field.java:428)
+	java.awt.AWTEvent.copyPrivateDataInto(AWTEvent.java:594)
+	java.awt.LightweightDispatcher.retargetMouseEvent(Container.java:4873)
+	java.awt.LightweightDispatcher.processMouseEvent(Container.java:4538)
+	java.awt.LightweightDispatcher.dispatchEvent(Container.java:4466)
+	java.awt.Container.dispatchEventImpl(Container.java:2280)
+	java.awt.Window.dispatchEventImpl(Window.java:2750)
+TRACE 301381:
+	sun.awt.image.ImageRepresentation.getOpaqueRGBImage(ImageRepresentation.java:654)
+	sun.awt.image.ImageRepresentation.imageComplete(ImageRepresentation.java:717)
+	sun.awt.image.ImageDecoder.imageComplete(ImageDecoder.java:153)
+	sun.awt.image.PNGImageDecoder.produceImage(PNGImageDecoder.java:519)
+	sun.awt.image.InputStreamImageSource.doFetch(InputStreamImageSource.java:269)
+	sun.awt.image.ImageFetcher.fetchloop(ImageFetcher.java:205)
+	sun.awt.image.ImageFetcher.run(ImageFetcher.java:169)
+TRACE 301425:
+	java.security.AccessController.doPrivileged(AccessController.java:Unknown line)
+	java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:76)
+	java.awt.EventQueue.dispatchEvent(EventQueue.java:728)
+	java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:201)
+	java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:116)
+	java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:105)
+	java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:101)
+	java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:93)
+	java.awt.EventDispatchThread.run(EventDispatchThread.java:82)
+TRACE 301532:
+	sun.awt.image.ImageRepresentation.setPixels(ImageRepresentation.java:562)
+	java.awt.image.ReplicateScaleFilter.setPixels(ReplicateScaleFilter.java:250)
+	java.awt.image.ReplicateScaleFilter.setPixels(ReplicateScaleFilter.java:250)
+	java.awt.image.ReplicateScaleFilter.setPixels(ReplicateScaleFilter.java:250)
+	java.awt.image.ReplicateScaleFilter.setPixels(ReplicateScaleFilter.java:250)
+	java.awt.image.ReplicateScaleFilter.setPixels(ReplicateScaleFilter.java:250)
+	sun.awt.image.ImageDecoder.setPixels(ImageDecoder.java:138)
+	sun.awt.image.PNGImageDecoder.sendPixels(PNGImageDecoder.java:549)
+	sun.awt.image.PNGImageDecoder.produceImage(PNGImageDecoder.java:470)
+	sun.awt.image.InputStreamImageSource.doFetch(InputStreamImageSource.java:269)
+TRACE 301565:
+	sun.awt.image.PNGImageDecoder.need(PNGImageDecoder.java:682)
+	sun.awt.image.PNGImageDecoder.getChunk(PNGImageDecoder.java:713)
+	sun.awt.image.PNGImageDecoder.getData(PNGImageDecoder.java:725)
+	sun.awt.image.PNGFilterInputStream.read(PNGImageDecoder.java:826)
+	java.util.zip.InflaterInputStream.fill(InflaterInputStream.java:238)
+	java.util.zip.InflaterInputStream.read(InflaterInputStream.java:158)
+	java.io.BufferedInputStream.fill(BufferedInputStream.java:246)
+	java.io.BufferedInputStream.read1(BufferedInputStream.java:286)
+	java.io.BufferedInputStream.read(BufferedInputStream.java:345)
+	sun.awt.image.PNGImageDecoder.produceImage(PNGImageDecoder.java:364)
+TRACE 301529:
+	java.awt.image.DataBufferInt.<init>(DataBufferInt.java:75)
+	java.awt.image.Raster.createPackedRaster(Raster.java:467)
+	java.awt.image.DirectColorModel.createCompatibleWritableRaster(DirectColorModel.java:1032)
+	sun.awt.image.ImageRepresentation.createBufferedImage(ImageRepresentation.java:253)
+	sun.awt.image.ImageRepresentation.setPixels(ImageRepresentation.java:559)
+	java.awt.image.ReplicateScaleFilter.setPixels(ReplicateScaleFilter.java:250)
+	java.awt.image.ReplicateScaleFilter.setPixels(ReplicateScaleFilter.java:250)
+	java.awt.image.ReplicateScaleFilter.setPixels(ReplicateScaleFilter.java:250)
+	java.awt.image.ReplicateScaleFilter.setPixels(ReplicateScaleFilter.java:250)
+	java.awt.image.ReplicateScaleFilter.setPixels(ReplicateScaleFilter.java:250)
+TRACE 301315:
+	sun.awt.image.PNGImageDecoder.produceImage(PNGImageDecoder.java:364)
+	sun.awt.image.InputStreamImageSource.doFetch(InputStreamImageSource.java:269)
+	sun.awt.image.ImageFetcher.fetchloop(ImageFetcher.java:205)
+	sun.awt.image.ImageFetcher.run(ImageFetcher.java:169)
+CPU SAMPLES BEGIN (total = 32495) Fri Nov 27 13:20:40 2015
+rank   self  accum   count trace method
+   1 78.05% 78.05%   25362 301133 java.net.SocketInputStream.socketRead0
+   2  7.72% 85.76%    2507 301178 sun.lwawt.macosx.CPlatformWindow.nativeGetTopmostPlatformWindowUnderMouse
+   3  3.49% 89.25%    1133 301183 sun.lwawt.macosx.CCursorManager.nativeGetCursorPosition
+   4  1.34% 90.59%     434 301309 java.util.zip.Inflater.inflateBytes
+   5  1.23% 91.81%     399 301321 sun.awt.image.PNGImageDecoder.produceImage
+   6  1.16% 92.97%     376 301518 sun.lwawt.macosx.CCursorManager.nativeGetCursorPosition
+   7  0.75% 93.72%     244 301080 sun.java2d.opengl.OGLRenderQueue.flushBuffer
+   8  0.49% 94.21%     160 300865 sun.font.CFontManager.loadNativeFonts
+   9  0.47% 94.69%     154 301239 sun.lwawt.macosx.CCursorManager.nativeGetCursorPosition
+  10  0.39% 95.08%     126 301324 sun.awt.image.PNGImageDecoder.produceImage
+  11  0.37% 95.45%     121 300867 sun.font.CFont.createNativeFont
+  12  0.29% 95.73%      93 300138 java.lang.ClassLoader$NativeLibrary.load
+  13  0.14% 95.88%      47 300869 sun.font.CFont.createNativeFont
+  14  0.14% 96.02%      46 301318 sun.awt.image.PNGImageDecoder.crc
+  15  0.13% 96.15%      42 300888 sun.font.CFont.createNativeFont
+  16  0.12% 96.27%      40 300868 sun.font.CFont.createNativeFont
+  17  0.11% 96.38%      36 301501 sun.lwawt.macosx.CWrapper$NSWindow.isKeyWindow
+  18  0.11% 96.49%      36 301201 sun.lwawt.macosx.CWrapper$NSWindow.isKeyWindow
+  19  0.10% 96.59%      31 300824 sun.font.CFontManager.loadNativeDirFonts
+  20  0.10% 96.69%      31 300388 sun.java2d.opengl.CGLGraphicsConfig.getCGLConfigInfo
+  21  0.09% 96.77%      29 300870 sun.font.CFont.createNativeFont
+  22  0.08% 96.86%      27 301496 java.awt.MediaTracker.setDone
+  23  0.06% 96.92%      21 301323 java.io.FileInputStream.readBytes
+  24  0.06% 96.99%      21 301494 java.awt.MediaTracker.setDone
+  25  0.05% 97.04%      17 301362 sun.awt.image.ImageRepresentation.getOpaqueRGBImage
+  26  0.05% 97.09%      16 300889 sun.font.CFont.createNativeFont
+  27  0.05% 97.13%      15 301322 sun.awt.image.IntegerInterleavedRaster.setDataElements
+  28  0.04% 97.18%      14 301578 java.awt.image.ReplicateScaleFilter.setPixels
+  29  0.04% 97.22%      13 301094 sun.misc.Unsafe.unpark
+  30  0.04% 97.26%      13 301041 sun.lwawt.macosx.CPlatformComponent.nativeCreateComponent
+  31  0.03% 97.29%      11 300872 sun.font.CFont.createNativeFont
+  32  0.03% 97.33%      11 301378 sun.awt.image.ImageRepresentation.getOpaqueRGBImage
+  33  0.03% 97.36%      11 301312 sun.awt.image.PNGImageDecoder.produceImage
+  34  0.03% 97.39%      10 301556 java.awt.image.ReplicateScaleFilter.setPixels
+  35  0.03% 97.42%      10 301363 sun.awt.image.ImageRepresentation.getOpaqueRGBImage
+  36  0.03% 97.45%      10 301485 java.security.AccessController.getStackAccessControlContext
+  37  0.03% 97.48%       9 300501 sun.java2d.opengl.CGLGraphicsConfig.getCGLConfigInfo
+  38  0.03% 97.51%       9 301562 java.awt.image.ReplicateScaleFilter.setPixels
+  39  0.03% 97.54%       9 301438 java.awt.image.ReplicateScaleFilter.setPixels
+  40  0.02% 97.56%       8 301039 sun.lwawt.macosx.CPlatformWindow.nativeCreateNSWindow
+  41  0.02% 97.58%       8 301225 java.security.AccessController.getStackAccessControlContext
+  42  0.02% 97.61%       8 301404 java.security.AccessController.getStackAccessControlContext
+  43  0.02% 97.63%       8 301360 sun.awt.image.ImageRepresentation.getOpaqueRGBImage
+  44  0.02% 97.66%       8 301484 java.security.AccessController.getStackAccessControlContext
+  45  0.02% 97.68%       7 301546 java.awt.image.ReplicateScaleFilter.setPixels
+  46  0.02% 97.70%       7 301581 sun.awt.image.ImageRepresentation.setPixels
+  47  0.02% 97.72%       7 300890 sun.font.CFont.createNativeFont
+  48  0.02% 97.74%       7 301379 sun.awt.image.ImageRepresentation.getOpaqueRGBImage
+  49  0.02% 97.77%       7 301493 java.awt.image.ReplicateScaleFilter.setPixels
+  50  0.02% 97.79%       7 301466 java.util.zip.Inflater.inflateBytes
+  51  0.02% 97.81%       7 301567 java.awt.image.ReplicateScaleFilter.setPixels
+  52  0.02% 97.83%       6 301488 java.lang.Object.wait
+  53  0.02% 97.85%       6 301395 sun.lwawt.macosx.CWrapper$NSWindow.isZoomed
+  54  0.02% 97.86%       6 301110 sun.lwawt.macosx.CCursorManager.nativeGetCursorPosition
+  55  0.02% 97.88%       6 301179 sun.lwawt.macosx.CInputMethodDescriptor.nativeGetAvailableLocales
+  56  0.02% 97.90%       6 301588 sun.java2d.opengl.OGLRenderQueue$QueueFlusher.run
+  57  0.02% 97.92%       6 301243 sun.lwawt.macosx.NSEvent.nsToJavaMouseModifiers
+  58  0.02% 97.94%       6 301392 sun.lwawt.macosx.CWrapper$NSWindow.isZoomed
+  59  0.02% 97.95%       5 301357 java.awt.image.DataBufferInt.<init>
+  60  0.02% 97.97%       5 301180 sun.lwawt.macosx.CInputMethodDescriptor.nativeGetAvailableLocales
+  61  0.02% 97.98%       5 301450 java.io.BufferedInputStream.read
+  62  0.02% 98.00%       5 301107 sun.lwawt.macosx.CWrapper$NSWindow.isKeyWindow
+  63  0.02% 98.02%       5 301464 sun.awt.image.ImageRepresentation.getOpaqueRGBImage
+  64  0.02% 98.03%       5 301495 sun.awt.image.PNGImageDecoder.crc
+  65  0.02% 98.05%       5 301548 java.util.zip.InflaterInputStream.read
+  66  0.02% 98.06%       5 301531 java.awt.image.ReplicateScaleFilter.setPixels
+  67  0.02% 98.08%       5 301535 java.awt.color.ColorSpace.getInstance
+  68  0.02% 98.09%       5 301376 sun.awt.image.ImageRepresentation.getOpaqueRGBImage
+  69  0.02% 98.11%       5 300184 sun.misc.Unsafe.defineAnonymousClass
+  70  0.02% 98.12%       5 301364 sun.awt.image.ImageRepresentation.getOpaqueRGBImage
+  71  0.01% 98.14%       4 301372 java.util.zip.Inflater.inflateBytes
+  72  0.01% 98.15%       4 301075 sun.lwawt.macosx.CPlatformWindow.nativeGetNSWindowInsets
+  73  0.01% 98.16%       4 301298 sun.awt.image.InputStreamImageSource.addConsumer
+  74  0.01% 98.17%       4 301489 java.awt.image.ReplicateScaleFilter.setPixels
+  75  0.01% 98.18%       4 301502 java.lang.Class.isAssignableFrom
+  76  0.01% 98.20%       4 301381 sun.awt.image.ImageRepresentation.getOpaqueRGBImage
+  77  0.01% 98.21%       4 301425 java.security.AccessController.doPrivileged
+  78  0.01% 98.22%       4 301532 sun.awt.image.ImageRepresentation.setPixels
+  79  0.01% 98.23%       4 301565 sun.awt.image.PNGImageDecoder.need
+  80  0.01% 98.25%       4 301529 java.awt.image.DataBufferInt.<init>
+  81  0.01% 98.26%       4 301315 sun.awt.image.PNGImageDecoder.produceImage
+CPU SAMPLES END

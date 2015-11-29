@@ -45,7 +45,7 @@ public class Cards {
 		return cards.get(id);
 	}
 
-	public static void Init() {
+	public static void init() {
 
 		Ability a0 = new Ability("", "", AbilityEvent.class, new AbilityRunnable() {
 			@Override
@@ -61,7 +61,7 @@ public class Cards {
 			public void run(GameEvent event) {
 				//super.run(event);
 				AbilityEvent AE = (AbilityEvent) event;
-				if(AE.getCard() == cards.get(2)) {
+				if(AE.getCard().getCard() == cards.get(2)) {
 					EventBus.getInstance().callEvent(new DamageEvent(1, Content.selectedCard));
 				}
 			}
@@ -86,7 +86,7 @@ public class Cards {
 			public void run(GameEvent event) {
 				//super.run(event);
 				AbilityEvent AE = (AbilityEvent) event;
-				if(AE.getCard() == cards.get(7)) {
+				if(AE.getCard().getCard() == cards.get(7)) {
 					EventBus.getInstance().callEvent(new DamageEvent(5, Content.selectedCard));
 				}
 			}
@@ -98,7 +98,7 @@ public class Cards {
 			public void run(GameEvent event) {
 				//super.run(event);
 				AbilityEvent AE = (AbilityEvent) event;
-				if(AE.getCard() == cards.get(9)) {
+				if(AE.getCard().getCard() == cards.get(9)) {
 					EventBus.getInstance().callEvent(new ModifyEvent(Content.selectedCard, 2, 1));
 				}
 			}
@@ -109,7 +109,7 @@ public class Cards {
 			public void run(GameEvent event) {
 				//super.run(event);
 				AbilityEvent AE = (AbilityEvent) event;
-				if(AE.getCard() == cards.get(10)) {
+				if(AE.getCard().getCard() == cards.get(10)) {
 					EventBus.getInstance().callEvent(new CreaturePlayedEvent((CreatureCard) getCardFromID(9)));
 				}
 			} 

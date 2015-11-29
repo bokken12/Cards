@@ -1,11 +1,12 @@
 package events;
 
 import cards.CreatureCard;
+import cards.InPlayCreature;
 
 public class AbilityEvent extends GameEvent {
 
 	
-	CreatureCard card;
+	InPlayCreature card;
 	
 	@Override
 	public void fireEvent() {
@@ -13,12 +14,12 @@ public class AbilityEvent extends GameEvent {
 		
 	}
 	
-	public AbilityEvent(CreatureCard c) {
+	public AbilityEvent(InPlayCreature c) {
 		card = c;
 	}
 
 	
-	public CreatureCard getCard() {
+	public InPlayCreature getCard() {
 		return card;
 	}
 }

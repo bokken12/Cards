@@ -21,12 +21,17 @@ import java.util.Map.Entry;
 import java.util.StringTokenizer;
 import java.util.logging.Handler;
 
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JTextArea;
+
 import cards.Card;
 import cards.Cards;
 import Player.GamePlayer;
 import Player.Player;
 import Player.SimplePlayerProfile;
 import Player.SimplerProfile;
+import acm.program.ConsoleProgram;
 
 
 public class Server {
@@ -43,14 +48,28 @@ public class Server {
 	//static final Map<Integer, Handler> waitingForGames = Collections.synchronizedMap(new HashMap<Integer, Handler>());
 	public static int PORT_NUMBER = 5002;
 
+	static JLabel message;
+	static JTextArea m;
 
-	public static final String HOSTNAME = /*"10.0.1.13"*/ "127.0.0.1";
+	public static final String HOSTNAME = /*"10.0.1.13"*/ "10.0.1.11" /*"66.249.66.31"*/ /*"66.249.79.234"*/ /*"66.249.78.1"*/ /*"66.249.66.125"*/ /*"66.249.65.56"*/ /*"24.130.146.148"*/;   
 
 	public static void main(String[] args) {
 
-		Cards.Init();
+		Cards.init();
 		ServerSocket listener = null;
 
+		JFrame frame = new JFrame();
+		frame.setSize(500, 300);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setResizable(false);
+		frame.setVisible(true);
+		message = new JLabel();
+		m = new JTextArea(10, 10);
+		frame.add(m);
+		frame.add(message);
+		m.append("Initializing Server");
+		m.append("Hi!");
+		
 		try {
 			/* Open the file for reading. */
 			BufferedReader br = new BufferedReader(new FileReader("PlayerData"));
@@ -79,16 +98,16 @@ public class Server {
 						decks = null;
 						friends = null;
 					}
-
-
+					
+					
 					if(line.startsWith("username")) {
 						username = line.substring(9);
 					}
-
+					
 					if(line.startsWith("password")) {
 						password = line.substring(9);
 					}
-
+					
 					if(line.startsWith("rank")) {
 						rank = 	Integer.parseInt(line.substring(5));
 					}
@@ -96,7 +115,7 @@ public class Server {
 					if(line.startsWith("gold")) {
 						gold = Integer.parseInt(line.substring(5));
 					}
-
+					
 					if(line.startsWith("email")) {
 						email = line.substring(6);
 					}
@@ -152,6 +171,8 @@ public class Server {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+		
 
 		try {
 			listener = new ServerSocket(PORT_NUMBER, 100, InetAddress.getByName(HOSTNAME));
@@ -251,6 +272,9 @@ public class Server {
 		public void run() {
 			System.out.println("Got a connection");
 			// Create character streams for the socket.
+			
+			
+			
 			while(true){
 				try {
 					in = new BufferedReader(new InputStreamReader(
@@ -280,6 +304,7 @@ public class Server {
 					e.printStackTrace();
 				}
 				System.out.println(line);
+				message.setText(line);
 				if(line == null) {
 					System.out.println(name + " disconnected.");
 					if(players.containsKey(name)) {
@@ -361,7 +386,6 @@ public class Server {
 							bw.write(str);
 							bw.close();
 						} catch (IOException e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 						//players.put(username, this);
@@ -409,11 +433,8 @@ public class Server {
 				} else if(line.startsWith("--attack")) {
 					System.out.println("server handling attack");
 					gh.handleMessage(line + me);
-				/* else if(line.startsWith("--remPlay")) {
-					if(playing.contains(new SimplerProfile((line.substring(9, line.indexOf("|"))), Integer.parseInt(line.substring(line.indexOf("|")))))) {
-						playing.remove(new SimplerProfile((line.substring(9, line.indexOf("|"))), Integer.parseInt(line.substring(line.indexOf("|")))));
-					} 
-				}*/
+				} else if(line.startsWith("--block")) {
+					gh.handleMessage(line + me);
 				}
 
 

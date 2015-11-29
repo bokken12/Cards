@@ -1,12 +1,8 @@
 package server;
 
 import java.io.BufferedReader;
-import java.io.InputStream;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 
-import cards.InPlayCreature;
-import events.EventBus;
 import server.Server.Handler;
 import Player.GamePlayer;
 
@@ -62,6 +58,12 @@ public class GameHandler extends Thread{
 			}
 		} else if(m.startsWith("--attack")) {
 			System.out.println("gh handling attack");
+			if(Integer.parseInt(m.substring(m.length() - 1)) == p1) {
+				player2.send(m.substring(0, m.length() - 1));
+			} else {
+				player1.send(m.substring(0, m.length() - 1));
+			}
+		} else if(m.startsWith("--block")) {
 			if(Integer.parseInt(m.substring(m.length() - 1)) == p1) {
 				player2.send(m.substring(0, m.length() - 1));
 			} else {

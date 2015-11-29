@@ -126,4 +126,9 @@ public class Lane {
 		System.out.println("Warning: getClick found no creature at " + click + "!!!");
 		return null;
 	}
+	
+	@Override
+	public String toString() {
+		return Integer.toString(number);
+	}
 }

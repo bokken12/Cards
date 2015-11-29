@@ -81,7 +81,6 @@ public class CreatureCard extends Card implements GameListener {
 	@Override
 	public ImageIcon getImageIcon() {
 		return image;
-		
 	}
 	
 	public int getCost() {
