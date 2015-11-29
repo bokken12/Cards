@@ -115,8 +115,8 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 	static ArrayList<InPlayCreature> cardsInPlay = new ArrayList<InPlayCreature>();
 	static List<InPlayCreature> myCreatures = Collections.synchronizedList(new ArrayList<InPlayCreature>());
 	static List<InPlayCreature> enemyCreatures = Collections.synchronizedList(new ArrayList<InPlayCreature>());
-	static ArrayList<Lane> arrivalLanes = new ArrayList<Lane>();
-	static ArrayList<CreatureCard> arrivalCreatures = new ArrayList<CreatureCard>();
+	public static ArrayList<Lane> arrivalLanes = new ArrayList<Lane>();
+	public static ArrayList<CreatureCard> arrivalCreatures = new ArrayList<CreatureCard>();
 	ArrayList<InPlayCreature> attacking = new ArrayList<InPlayCreature>();
 	ArrayList<InPlayCreature> attackingEnemys = new ArrayList<InPlayCreature>();
 	ArrayList<Integer> attackingEnemyNums = new ArrayList<Integer>();
@@ -140,7 +140,7 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 	Lane lane1 = new Lane(this, 1);
 	Lane lane2 = new Lane(this, 2);
 	Lane lane3 = new Lane(this, 3);
-	ArrayList<Lane> lanes = new ArrayList<Lane>();
+	public static ArrayList<Lane> lanes = new ArrayList<Lane>();
 
 	volatile SimplePlayerProfile match;
 
@@ -300,34 +300,34 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 			add(manaLabel);
 			this.revalidate();
 
-			Ability playCards = new Ability("Play Creatures", "puts the creatures into play", TurnStartedEvent.class, new AbilityRunnable() {
-				@Override
-				public void run(GameEvent event) {
-					System.out.println("Trying to put in creature");
-					TurnStartedEvent e = (TurnStartedEvent) event;
-					for(int i = 0; i < arrivalCreatures.size(); i++) {
-						if (arrivalLanes.get(i) == null) {
-							System.out.println("actionPerformed: lane is null for " + arrivalCreatures.get(i) + "!");
-							System.out.println("arrivalCreatures is " + arrivalCreatures);
-						}
-						InPlayCreature c = new InPlayCreature(arrivalCreatures.get(i), arrivalLanes.get(i));
-						addCreature(c);
-						if(c.getLane().equals(lane1)) {
-							lane1.addCard(c);
-						}
-						if(c.getLane().equals(lane2)) {
-							lane2.addCard(c);
-						}
-						if(c.getLane().equals(lane3)) {
-							lane3.addCard(c);
-						}
-						arrivalLanes.remove(i);
-						arrivalCreatures.remove(i);
-					}
-				}
-			});
-
-			playCards.RegisterListeners();
+//			Ability playCards = new Ability("Play Creatures", "puts the creatures into play", TurnStartedEvent.class, new AbilityRunnable() {
+//				@Override
+//				public void run(GameEvent event) {
+//					System.out.println("Trying to put in creature");
+//					TurnStartedEvent e = (TurnStartedEvent) event;
+//					for(int i = 0; i < arrivalCreatures.size(); i++) {
+//						if (arrivalLanes.get(i) == null) {
+//							System.out.println("actionPerformed: lane is null for " + arrivalCreatures.get(i) + "!");
+//							System.out.println("arrivalCreatures is " + arrivalCreatures);
+//						}
+//						InPlayCreature c = new InPlayCreature(arrivalCreatures.get(i), arrivalLanes.get(i));
+//						addCreature(c);
+//						if(c.getLane().equals(lane1)) {
+//							lane1.addCard(c);
+//						}
+//						if(c.getLane().equals(lane2)) {
+//							lane2.addCard(c);
+//						}
+//						if(c.getLane().equals(lane3)) {
+//							lane3.addCard(c);
+//						}
+//						arrivalLanes.remove(i);
+//						arrivalCreatures.remove(i);
+//					}
+//				}
+//			});
+//
+//			playCards.RegisterListeners();
 
 			Ability addMana = new Ability("Add Mana", "adds to your mana", TurnStartedEvent.class, new AbilityRunnable() {
 				@Override
@@ -545,6 +545,9 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 			drawCard();
 			bus.callEvent(new TurnStartedEvent(you));
 			repaint();
+			for(int i = 0; i < arrivalCreatures.size(); i=0) {
+				bus.callEvent(new CreaturePlayedEvent(arrivalCreatures.get(i), lanes.indexOf(arrivalLanes.get(i))));
+			}
 
 		} else if(m.startsWith("--myBoard")) {
 
@@ -840,7 +843,7 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 		SwingUtilities.convertPointFromScreen(a, game);
 
 		if(!(cd.isStopped())) {
-			if(selectedHandCard.getCard() instanceof CreatureCard && mana >= selectedHandCard.getCard().getCost()) {
+			if(selectedHandCard.getCard() instanceof CreatureCard/* && mana >= selectedHandCard.getCard().getCost()*/) {
 				System.out.println("Playing Creature: " + selectedHandCard);
 				if(lane1.containsPoint(selecCardPoint)) {
 					/*InPlayCreature n = new InPlayCreature( (CreatureCard) selectedHandCard.getCard(), lane1);;
@@ -999,6 +1002,8 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 	public void addCreature(InPlayCreature n) {
 		cardsInPlay.add(n);
 		myCreatures.add(n);
+		//arrivalLanes.remove(arrivalCreatures.indexOf(n));
+		//arrivalCreatures.remove(n);
 		n.getCard().registerListeners();
 		int lane = 1;
 		if (n == null) {

@@ -131,4 +131,7 @@ public class Lane {
 	public String toString() {
 		return Integer.toString(number);
 	}
+	public Content content(){
+		return content;
+	}
 }

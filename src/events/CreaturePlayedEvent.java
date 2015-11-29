@@ -1,6 +1,8 @@
 package events;
 
 import cards.CreatureCard;
+import cards.InPlayCreature;
+import clientStuff.Content;
 
 public class CreaturePlayedEvent extends CardPlayedEvent {
 
@@ -9,12 +11,16 @@ public class CreaturePlayedEvent extends CardPlayedEvent {
 	
 	@Override
 	public void fireEvent() {
-		// TODO Auto-generated method stub
-		
-	}
+		InPlayCreature c = new InPlayCreature(creature, Content.lanes.get(lane));
+		Content.lanes.get(lane).content().addCreature(c);
+		Content.lanes.get(lane).addCard(c);
+		Content.lanes.get(lane).content().arrivalLanes.remove(Content.lanes.get(lane).content().arrivalCreatures.indexOf(creature));   
+		Content.lanes.get(lane).content().arrivalCreatures.remove(creature);
+			}
 	
-	public CreaturePlayedEvent(CreatureCard creature) {
+	public CreaturePlayedEvent(CreatureCard creature, int lane) {
 		this.creature = creature;
+		this.lane = lane;
 	}
 	
 	public int getLane() {
