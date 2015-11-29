@@ -187,19 +187,8 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 
 		Dimension a = new Dimension(width, height);
 		addMouseListener(this);
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
+
 		addKeyListener(this);
-=======
-
->>>>>>> parent of a0d2b5b... Merge pull request #1 from bokken12/happy
-=======
-
->>>>>>> parent of a0d2b5b... Merge pull request #1 from bokken12/happy
-=======
-
->>>>>>> parent of a0d2b5b... Merge pull request #1 from bokken12/happy
 
 		lane1.setStartX(/*game.getLocation().x + */51);
 		lane1.setStartY(/*game.getLocation().y + */67);
