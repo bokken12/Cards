@@ -48,9 +48,6 @@ public class Server extends ConsoleProgram{
 	//static final Map<Integer, Handler> waitingForGames = Collections.synchronizedMap(new HashMap<Integer, Handler>());
 	public static int PORT_NUMBER = 5002;
 
-	static JLabel message;
-	static JTextArea m;
-
 	public static final String HOSTNAME = "127.0.0.1";   
 	
 	public static void main(String[] args){
@@ -297,7 +294,6 @@ public class Server extends ConsoleProgram{
 					e.printStackTrace();
 				}
 				println(line);
-				message.setText(line);
 				if(line == null) {
 					println(name + " disconnected.");
 					if(players.containsKey(name)) {
