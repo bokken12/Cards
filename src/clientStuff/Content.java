@@ -782,7 +782,7 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 	public void mousePressed(MouseEvent e) {
 		Point a = MouseInfo.getPointerInfo().getLocation();
 		SwingUtilities.convertPointFromScreen(a, game);
-		System.out.println("Got a click at " + a);
+		//System.out.println("Got a click at " + a);
 
 
 		for(int i = 0; i < handCards.size(); i++) {
@@ -975,7 +975,7 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 		@Override
 		protected void process(List<Point> moves) {
 			blockCardPoint = moves.get(0);
-			System.out.println(moves.get(0));
+			//System.out.println(moves.get(0));
 			repaint();
 		}
 
