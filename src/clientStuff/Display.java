@@ -3,12 +3,16 @@ package clientStuff;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
+import Player.Player;
 import uselessSubclasses.Lane;
 import cards.HandCard;
 import cards.InPlayCreature;
@@ -16,24 +20,26 @@ import cards.InPlayCreature;
 public class Display extends JPanel implements Constants
 {
     private GameState gs;
+    private JScrollPane decklist = new JScrollPane();
     private Graphics g;
+    private PrintWriter output;
     private ImageIcon background = new ImageIcon("MenuBackground.jpg");
     private ImageIcon screen = new ImageIcon("CardScreen.png");
-
     private JButton play = new JButton("Play");
     private JButton settings = new JButton("Settings");
     private JButton cards = new JButton("Cards");
     private JButton endTurn = new JButton("End Turn");
     private JButton attack = new JButton("Attack");
     private JButton block = new JButton("Block");
-
     private ArrayList<JButton> deckButtons = new ArrayList<JButton>();
-
     private JPanel foo = new JPanel();
     private JPanel buttons = new JPanel();
     private JPanel field = new JPanel();
     private JPanel handPanel = new JPanel();
     private JPanel cardDragging = new JPanel();
+    private Game game;
+    private JLabel wait = new JLabel();
+    private JLabel manaLabel = new JLabel(mana.toString());
 
     public Display(GameState gamestate)
     {
@@ -52,7 +58,7 @@ public class Display extends JPanel implements Constants
                     800, Image.SCALE_DEFAULT));
             screen.paintIcon(this, g, 0, 0);
             paintInPlayCreatures(g);
-            paintgs.getHandCards()(g);
+            paintHandCards(g);
             paintArrivals(g);
             Font f = new Font("FONT", 2, 30);
 
@@ -111,12 +117,14 @@ public class Display extends JPanel implements Constants
     public void paintInPlayCreatures(Graphics g)
     {
         Lane[] lanes = gs.getLanes();
-        for(int i = 0; i < lanes.length; i++){
+        for (int i = 0; i < lanes.length; i++)
+        {
             paintLaneCreatures(lanes[i], i);
         }
     }
-    
-    private void paintLaneCreatures(Lane lane, int x){
+
+    private void paintLaneCreatures(Lane lane, int x)
+    {
         ArrayList<InPlayCreature> p = lane.getCreatures();
         for (int i = 0; i < p.size(); i++)
         {
