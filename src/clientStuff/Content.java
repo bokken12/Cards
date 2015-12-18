@@ -90,11 +90,6 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 	int health = 20;
 	int enemyHealth = 20;
 	
-	static final int CARD_WIDTH = 115;
-	static final int MOUNTAIN_1_X = 300;
-	static final int MOUNTAIN_2_X = 700;
-	static final int ARRIVAL_CREATURE_Y = 350;
-	static final int ARRIVAL_CREATURE_Y_2 = 150;
 
 	JScrollPane decklist = new JScrollPane();
 	Graphics g;
