@@ -1,21 +1,33 @@
 package clientStuff;
 
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.MouseInfo;
+import java.awt.Point;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
+import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 
 import Player.Player;
 import uselessSubclasses.Lane;
+import cards.Card;
+import cards.CreatureCard;
 import cards.HandCard;
 import cards.InPlayCreature;
+import cards.SpellCard;
 
 public class Display extends JPanel implements Constants
 {
@@ -69,6 +81,47 @@ public class Display extends JPanel implements Constants
         else
         {
             background.paintIcon(this, g, 0, 0);
+        }
+    }
+
+    public void paintCreature(Card card, Graphics g, int x, int y)
+    {
+
+        ImageIcon img = card.getImageIcon();
+        ImageIcon template = new ImageIcon("CreatureTemplate.png");
+        template.setImage(template.getImage().getScaledInstance((int) 120, 170,
+                Image.SCALE_DEFAULT));
+        img.setImage(img.getImage().getScaledInstance((int) 92, 83,
+                Image.SCALE_DEFAULT));
+        String text = card.getText();
+        String cost = Integer.toString(card.getCost());
+
+        template.paintIcon(handPanel, g, x, y);
+        img.paintIcon(handPanel, g, x + 12, y + 25);
+        g.drawString(text, x + 10, y - 40);
+        g.drawString(cost, x + 100, y + 23);
+
+        if (card.getClass().equals(CreatureCard.class))
+        {
+            CreatureCard cc = (CreatureCard) card;
+            String name = cc.getName();
+            String power = Integer.toString(cc.getPower());
+            String health = Integer.toString(cc.getToughness());
+            g.setFont(new Font("Helvetica", Font.PLAIN, 12));
+            g.drawString(power, x + 20, y + 163);
+            g.drawString(health, x + 92, y + 163);
+            g.setFont(new Font("Helvetica", Font.PLAIN, 8));
+            g.drawString(name, x + 25, y + 23);
+            // System.out.println("Painting " + name + " with health " +
+            // health);
+        }
+        if (card.getClass().equals(SpellCard.class))
+        {
+            SpellCard sc = (SpellCard) card;
+            String name = sc.getName();
+            // g.setFont(new Font("Helvetica", Font.PLAIN, 11));
+            g.setFont(g.getFont().deriveFont(64.0f));
+            g.drawString(name, x + 25, y + 23);
         }
     }
 
@@ -196,6 +249,210 @@ public class Display extends JPanel implements Constants
                 y = 600;
                 paintCreature(gs.getHandCards().get(i).getCard(), g, x, y);
             }
+        }
+    }
+
+    public void playMenu()
+    {
+
+        System.out.println("PlayMenu");
+
+        autoMatch();
+
+        this.removeAll();
+        this.revalidate();
+        this.repaint();
+    }
+
+    public void CardsMenu()
+    {
+        this.removeAll();
+        this.revalidate();
+        this.repaint();
+        Dimension b = new Dimension(50, 50);
+
+        add(Box.createHorizontalGlue());
+
+        add(Box.createHorizontalGlue());
+        decklist.setPreferredSize(b);
+        decklist.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        decklist.createVerticalScrollBar();
+        decklist.getViewport().setPreferredSize(b);
+
+        String[] decks = player.getDecks().keySet().toArray(new String[10]);
+        for (int i = 0; i < player.getDecks().size(); i++)
+        {
+            JLabel a = new JLabel(decks[i]);
+            decklist.add(a);
+        }
+        add(decklist);
+
+        CardList cl = new CardList(player);
+        add(cl);
+
+        JCheckBox a = new JCheckBox("Show all cards");
+        add(a);
+    }
+
+    public void matchScreen()
+    {
+        this.removeAll();
+        this.revalidate();
+        this.repaint();
+        output.println("--remPlay" + player.getUsername() + "|"
+                + player.getRank());
+        HashMap<String, int[]> deecks = player.getDecks();
+        Object[] a = deecks.keySet().toArray();
+
+        add(Box.createHorizontalGlue());
+        wait.setText("Choose a deck:");
+        add(wait);
+        for (int i = 0; i < a.length; i++)
+        {
+            JButton b = new JButton(a[i].toString());
+            System.out.println(deecks);
+            b.addActionListener(this);
+            deckButtons.add(b);
+
+            add(b);
+        }
+        add(Box.createHorizontalGlue());
+        revalidate();
+    }
+
+    public void paintArrivals(Graphics g)
+    {
+        for (int i = 0; i < arrivalCreatures.size(); i++)
+        {
+            CreatureCard c = arrivalCreatures.get(i);
+            if (arrivalLanes.get(i).equals(lane1))
+            {
+                if (!isMtn1Full)
+                {
+                    paintCreature(c, g, MOUNTAIN_1_X, ARRIVAL_CREATURE_Y);
+                    isMtn1Full = true;
+                }
+                else
+                {
+                    paintCreature(c, g, MOUNTAIN_1_X, ARRIVAL_CREATURE_Y_2);
+                }
+            }
+            else if (arrivalLanes.get(i).equals(lane2))
+            {
+                if (!isMtn1Full)
+                {
+                    paintCreature(c, g, MOUNTAIN_1_X, ARRIVAL_CREATURE_Y);
+                }
+                else if (!isMtn2Full)
+                {
+                    paintCreature(c, g, MOUNTAIN_2_X, ARRIVAL_CREATURE_Y);
+                    isMtn2Full = true;
+                }
+            }
+            else if (arrivalLanes.get(i).equals(lane3))
+            {
+                if (!isMtn2Full)
+                {
+                    paintCreature(c, g, MOUNTAIN_2_X, ARRIVAL_CREATURE_Y);
+                    isMtn2Full = true;
+                }
+            }
+
+        }
+        isMtn1Full = false;
+        isMtn2Full = false;
+    }
+
+    private class HandCardDragger extends SwingWorker<String, Point>
+    {
+
+        volatile boolean stop = true;
+
+        @Override
+        protected String doInBackground()
+        {
+            System.out.println("Starting CardDragger...");
+            stop = false;
+            while (stop == false)
+            {
+                Point a = MouseInfo.getPointerInfo().getLocation();
+                SwingUtilities.convertPointFromScreen(a, game);
+                int x = a.x + 5;
+                int y = a.y - 25;
+                a.setLocation(x, y);
+
+                publish(a);
+            }
+            return ":{D";
+
+        }
+
+        public void stop()
+        {
+            stop = true;
+        }
+
+        public boolean isStopped()
+        {
+            return stop;
+        }
+
+        @Override
+        protected void process(List<Point> moves)
+        {
+            selecCardPoint = moves.get(moves.size() - 1);
+            repaint();
+        }
+
+        protected void done()
+        {
+
+        }
+    }
+
+    private class BlockCardDragger extends SwingWorker<String, Point>
+    {
+
+        volatile boolean stop = true;
+
+        @Override
+        protected String doInBackground()
+        {
+            stop = false;
+            while (stop == false)
+            {
+                Point a = MouseInfo.getPointerInfo().getLocation();
+                SwingUtilities.convertPointFromScreen(a, game);
+                int x = a.x + 5;
+                int y = a.y - 25;
+                a.setLocation(x, y);
+                publish(a);
+            }
+            return ":{D";
+
+        }
+
+        public void stop()
+        {
+            stop = true;
+        }
+
+        public boolean isStopped()
+        {
+            return stop;
+        }
+
+        @Override
+        protected void process(List<Point> moves)
+        {
+            blockCardPoint = moves.get(0);
+            System.out.println(moves.get(0));
+            repaint();
+        }
+
+        protected void done()
+        {
+
         }
     }
 }
