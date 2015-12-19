@@ -10,19 +10,27 @@ import cards.InPlayCreature;
 
 public class Lane
 {
-    int startX;
-    int endX;
-    int startY;
-    int endY;
+    private int startX;
+    private int endX;
+    private int startY;
+    private int endY;
 
-    int number;
+    private int number;
 
     public static final int CARD_WIDTH = 120;
     public static final int CARD_HEIGHT = 170;
 
-    GameState gamestate;
-    ArrayList<InPlayCreature> creatures = new ArrayList<InPlayCreature>();
-    ArrayList<InPlayCreature> enemyCreatures = new ArrayList<InPlayCreature>();
+    private GameState gamestate;
+    public int getNumber() {
+		return number;
+	}
+
+	public void setNumber(int number) {
+		this.number = number;
+	}
+
+	private ArrayList<InPlayCreature> creatures = new ArrayList<InPlayCreature>();
+    private ArrayList<InPlayCreature> enemyCreatures = new ArrayList<InPlayCreature>();
 
     public int getEndX()
     {

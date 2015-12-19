@@ -32,7 +32,7 @@ import events.TurnEndedEvent;
 import events.TurnStartedEvent;
 import events.UntargetedSpellPlayedEvent;
 
-public class Controller implements MouseListener, KeyListener, ActionListener
+public class Controller implements MouseListener, KeyListener, ActionListener, Constants
 {
     private GameState gs;
     Display display;
@@ -102,7 +102,6 @@ public class Controller implements MouseListener, KeyListener, ActionListener
             }
 
             gs.setClear(true);
-            //TODO take this controller part out, no displaying not in display
             
             display.initializeGameboard();
             
@@ -121,7 +120,7 @@ public class Controller implements MouseListener, KeyListener, ActionListener
             {
                 gs.getDeck().remove(0);
             }
-            add(manaLabel);
+            
 
             // Ability playCards = new Ability("Play Creatures",
             // "puts the creatures into play", TurnStartedEvent.class, new
@@ -352,7 +351,7 @@ public class Controller implements MouseListener, KeyListener, ActionListener
         if(!(bd.isStopped())) {
 
             System.out.println("isStopped? " + bd.isStopped() + "Blocker lane is" + gs.getBlocker().getLane() + 
-                    "Enemy2 is " + lane2.getClick(a));
+                    "Enemy2 is " + gs.getLane(LANE_3).getClick(a));
             for(Lane l: gs.getLanes()){
                 if(gs.getAttackingEnemys().contains(l.getClick(a)) && gs.getBlocker().getLane() == l) {
                     gs.getBlockers().put(gs.getBlocker(), l.getClick(a));

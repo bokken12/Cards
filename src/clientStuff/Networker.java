@@ -1,5 +1,6 @@
 package clientStuff;
 
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
@@ -16,9 +17,14 @@ import Player.SimplePlayerProfile;
 
 public class Networker
 {
+	
+	GameState gs;
+	Display d;
+	PrintWriter output;
+	
     public SimplePlayerProfile autoMatch() {
 
-        output.println("--Playing " + player.getRank() + " " + player.getUsername());
+        output.println("--Playing " + gs.getPlayer().getRank() + " " + gs.getPlayer().getUsername());
         output.flush();
 
         System.out.println("Automatching");
@@ -27,31 +33,31 @@ public class Networker
     }
     public void handleMessage(String m) {
         if(m.startsWith("--match")) {
-            match = new SimplePlayerProfile(m.substring(7, m.indexOf(",")), Integer.parseInt(m.substring(m.indexOf(",") + 1, m.length() - 2)));
+            gs.setMatch(new SimplePlayerProfile(m.substring(7, m.indexOf(",")), Integer.parseInt(m.substring(m.indexOf(",") + 1, m.length() - 2))));
             int turn = Integer.parseInt(m.substring(m.length() - 1));
             if(turn == 1) {
-                startTurn = true;
-                this.turn = true;
-                you = new GamePlayer(1);
-                turnNum++;
+                gs.setStartTurn(true);
+                gs.setTurn(true);
+                gs.setYou(new GamePlayer(1));
+                gs.setTurnNum(gs.getTurnNum() + 1);
 
             } else {
-                startTurn = false;
-                this.turn = false;
+                gs.setStartTurn(false);
+                gs.setTurn(false);
             }
             System.out.println("found a match!");
-            matchScreen();
+            d.matchScreen();
         } else if(m.startsWith("--wait")) {
             System.out.println("Waiting...");
-            wait = new JLabel("Finding a match...");
-            add(Box.createHorizontalGlue());
-            add(wait);
-            add(Box.createHorizontalGlue());
-            revalidate();
+            d.setWait(new JLabel("Finding a match..."));
+            d.add(Box.createHorizontalGlue());
+            d.add(d.getWait());
+            d.add(Box.createHorizontalGlue());
+            d.revalidate();
         } else if(m.startsWith("--block")) {
             System.out.println("Handling Blocking");
             StringTokenizer st = new StringTokenizer(m, "|");
-            ArrayList<InPlayCreature> notBlocked = (ArrayList<InPlayCreature>) attacking.clone();
+            ArrayList<InPlayCreature> notBlocked = (ArrayList<InPlayCreature>) gs.getAttacking().clone();
             while(st.hasMoreTokens()) {
                 String s = st.nextToken();
                 Integer attacker = null;
@@ -61,10 +67,10 @@ public class Networker
                     if(Character.isDigit(c)) {
                         if(attacker == null) {
                             attacker = Integer.parseInt(Character.toString(c)); 
-                            notBlocked.remove(myCreatures.get(attacker));
+                            notBlocked.remove(gs.getMyCreatures().get(attacker));
                         } else {
                             blocker = Integer.parseInt(Character.toString(c));
-                            fightCreatures(attacker, blocker);
+                            gs.fightCreatures(attacker, blocker);
                         }
                     }
                     
@@ -73,22 +79,22 @@ public class Networker
             }
             
             for(InPlayCreature c : notBlocked) {
-                enemyHealth = enemyHealth - c.getPower();
+                gs.setEnemyHealth(gs.getEnemyHealth() - c.getPower());
             }
-            System.out.println("Enemy health is " + enemyHealth);
-            attacking.clear();
-            repaint();
-            turn = true;
+            System.out.println("Enemy health is " + gs.getEnemyHealth());
+            gs.getAttacking().clear();
+            d.repaint();
+            gs.setTurn(true);
 
         } else if(m.startsWith("--turn")) {
-            turn = true;
-            turnNum++;
+            gs.setTurn(true);
+            gs.setTurnNum(gs.getTurnNum() + 1);
             System.out.println("My Turn! :)");
-            drawCard();
-            bus.callEvent(new TurnStartedEvent(you));
-            repaint();
-            for(int i = 0; i < arrivalCreatures.size(); i=0) {
-                bus.callEvent(new CreaturePlayedEvent(arrivalCreatures.get(i), lanes.indexOf(arrivalLanes.get(i))));
+            gs.drawCard();
+            gs.getBus().callEvent(new TurnStartedEvent(gs, gs.getYou()));
+            d.repaint();
+            for(int i = 0; i < gs.getArrivalCreatures().size(); i = 0) {
+                gs.getBus().callEvent(new CreaturePlayedEvent(gs, gs.getArrivalCreatures().get(i), gs.getArrivalLanes().get(i).getNumber()));
             }
 
         } else if(m.startsWith("--myBoard")) {
@@ -101,14 +107,14 @@ public class Networker
 //                  c = cardsData.getCardFromID(Integer.parseInt(m.substring(10, 12)));
 //              }
                 
-                c = cardsData.getCardFromID(Integer.parseInt(m.substring(10, m.indexOf("|"))));
+                c = gs.getCardsData().getCardFromID(Integer.parseInt(m.substring(10, m.indexOf("|"))));
                 
                 int l = Integer.parseInt(m.substring(m.indexOf("|") + 1));
                 if(l == Constants.LANE_1) {
                     InPlayCreature ic = new InPlayCreature( (CreatureCard) c, lane1);
-                    enemyCreatures.add(ic);
-                    cardsInPlay.add(ic);
-                    lane1.addEnemy(ic);
+                    gs.getEnemyCreatures().add(ic);
+                    gs.getCardsInPlay().add(ic);
+                    gs.getLane(Constants.LANE_1).addEnemy(ic);
                 } else if(l == Constants.LANE_2) {
                     InPlayCreature ic = new InPlayCreature( (CreatureCard) c, lane2);
                     enemyCreatures.add(ic);
