@@ -15,7 +15,7 @@ import events.TurnStartedEvent;
 import Player.GamePlayer;
 import Player.SimplePlayerProfile;
 
-public class Networker
+public class Networker implements Constants
 {
 	
 	GameState gs;
@@ -111,22 +111,22 @@ public class Networker
                 
                 int l = Integer.parseInt(m.substring(m.indexOf("|") + 1));
                 if(l == Constants.LANE_1) {
-                    InPlayCreature ic = new InPlayCreature( (CreatureCard) c, lane1);
+                    InPlayCreature ic = new InPlayCreature( (CreatureCard) c, gs.getLane(LANE_1));
                     gs.getEnemyCreatures().add(ic);
                     gs.getCardsInPlay().add(ic);
                     gs.getLane(Constants.LANE_1).addEnemy(ic);
                 } else if(l == Constants.LANE_2) {
-                    InPlayCreature ic = new InPlayCreature( (CreatureCard) c, lane2);
-                    enemyCreatures.add(ic);
-                    cardsInPlay.add(ic);
-                    lane2.addEnemy(ic);
+                    InPlayCreature ic = new InPlayCreature( (CreatureCard) c, gs.getLane(LANE_2));
+                    gs.getEnemyCreatures().add(ic);
+                    gs.getCardsInPlay().add(ic);
+                    gs.getLane(LANE_2).addEnemy(ic);
                 } else if(l == Constants.LANE_3) { 
-                    InPlayCreature ic = new InPlayCreature( (CreatureCard) c, lane3);
-                    enemyCreatures.add(ic);
-                    cardsInPlay.add(ic);
-                    lane3.addEnemy(ic);
+                    InPlayCreature ic = new InPlayCreature( (CreatureCard) c, gs.getLane(LANE_3));
+                    gs.getEnemyCreatures().add(ic);
+                    gs.getCardsInPlay().add(ic);
+                    gs.getLane(LANE_3).addEnemy(ic);
                 }
-                repaint();
+                d.repaint();
 
             } catch(Exception e) {
                 e.printStackTrace();
@@ -140,18 +140,18 @@ public class Networker
             }
         } else if(m.startsWith("--attack")) {
             System.out.println("Got attack");
-            blocking = true;
+            gs.setBlocking(true);
             String b = m.substring(10, m.length() - 1);
             StringTokenizer t = new StringTokenizer(b, ",");
             while(t.hasMoreTokens()) {
                 int i = Integer.parseInt(t.nextToken());
-                InPlayCreature c = enemyCreatures.get(i);
-                enemyCreatures.get(enemyCreatures.indexOf(c)).setRed(true);
-                attackingEnemys.add(c);
-                attackingEnemyNums.add(i);
+                InPlayCreature c = gs.getEnemyCreatures().get(i);
+                gs.getEnemyCreatures().get(gs.getEnemyCreatures().indexOf(c)).setRed(true);
+                gs.getAttackingEnemys().add(c);
+                gs.getAttackingEnemyNums().add(i);
             }
-            System.out.println("Attacking enemy numbers are " + attackingEnemyNums);
-            System.out.println("Attacking enemys are " + attackingEnemys);
+            System.out.println("Attacking enemy numbers are " + gs.getAttackingEnemyNums());
+            System.out.println("Attacking enemys are " + gs.getAttackingEnemys());
         }
     }
 }
