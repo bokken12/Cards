@@ -4,14 +4,18 @@ import java.awt.Dimension;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Random;
 
 import javax.swing.JButton;
 import javax.swing.SwingUtilities;
 
+import uselessSubclasses.Lane;
 import Player.GamePlayer;
 import abilities.Ability;
 import abilities.AbilityRunnable;
@@ -28,13 +32,15 @@ import events.TurnEndedEvent;
 import events.TurnStartedEvent;
 import events.UntargetedSpellPlayedEvent;
 
-public class Controller
+public class Controller implements MouseListener, KeyListener, ActionListener
 {
+    private GameState gs;
+    @Override
     public void actionPerformed(ActionEvent e)
     {
 
         System.out.println("Got an event!");
-
+        //TODO use action commands instead of source
         if (e.getSource().equals(play))
         {
             System.out.println(":()");
@@ -57,7 +63,7 @@ public class Controller
         else if (deckButtons.contains(e.getSource()))
         {
             System.out.println("Got Deck Button Click");
-            int[] theDeck = player.getDecks().get(
+            int[] theDeck = gs.getPlayer().getDecks().get(
                     ((JButton) e.getSource()).getText());
             ArrayList<Integer> realDeck = new ArrayList<Integer>();
             Random rand = new Random();
@@ -75,20 +81,21 @@ public class Controller
                     i--;
                 }
             }
-            deck = realDeck;
-            System.out.println("-------deck is: " + deck.toString());
-            if (startTurn == true)
+            gs.setDeck(realDeck);
+            System.out.println("-------deck is: " + realDeck.toString());
+            if (gs.isStartTurn() == true)
             {
-                opponent = new GamePlayer(2);
-                you = new GamePlayer(1);
+                gs.setOpponent(new GamePlayer(2));
+                gs.setYou(new GamePlayer(1));
             }
             else
             {
-                opponent = new GamePlayer(1);
-                you = new GamePlayer(2);
+                gs.setOpponent(new GamePlayer(1));
+                gs.setYou(new GamePlayer(2));
             }
 
-            clear = true;
+            gs.setClear(true);
+            //TODO take this controller part out, no displaying not in display
             game.setSize(new Dimension(1200, 800));
             this.removeAll();
 
@@ -106,18 +113,17 @@ public class Controller
             int y;
             for (Integer i = 0; i < 5; i++)
             {
-                Card ca = cardsData.getCardFromID(deck.get(i));
+                Card ca = gs.getCardsData().getCardFromID(gs.getDeck().get(i));
                 x = i * 120 + 50;
                 y = 600;
                 HandCard c = new HandCard(x, y, x + 120, y + 170, ca, i);
-                handCards.add(c);
+                gs.getHandCards().add(c);
             }
             for (int a = 0; a < 5; a++)
             {
-                deck.remove(0);
+                gs.getDeck().remove(0);
             }
             add(manaLabel);
-            this.revalidate();
 
             // Ability playCards = new Ability("Play Creatures",
             // "puts the creatures into play", TurnStartedEvent.class, new
@@ -151,7 +157,6 @@ public class Controller
             // });
             //
             // playCards.RegisterListeners();
-
             Ability addMana = new Ability("Add Mana", "adds to your mana",
                     TurnStartedEvent.class, new AbilityRunnable()
             {
@@ -161,14 +166,11 @@ public class Controller
                     System.out.println("Updating mana");
                     TurnStartedEvent e = (TurnStartedEvent) event;
 
-                    if (turnNum == 1 || turnNum == 2 || turnNum == 3
-                            || turnNum == 5 || turnNum == 8
-                            || turnNum == 13 || turnNum == 21
-                            || turnNum == 34)
+                    if (isFib(gs.getTurnNum()))
                     {
-                        maxMana++;
+                        gs.setMaxMana(gs.getMaxMana() + 1);
                     }
-                    mana = maxMana;
+                    gs.setMana(gs.getMaxMana());
                 }
             });
 
@@ -177,11 +179,12 @@ public class Controller
         }
         else if (e.getSource().equals(endTurn))
         {
-            if (turn == true)
+            if (gs.isTurn())
             {
                 System.out.println("Ending Turn?");
-                turn = false;
-                bus.callEvent(new TurnEndedEvent(you));
+                gs.setTurn(false);
+                gs.getBus().callEvent(new TurnEndedEvent(gs.getYou()));
+                //TODO eliminate networking I think
                 output.println("--turn");
                 output.flush();
             }
@@ -194,59 +197,60 @@ public class Controller
             // attacking.clear();
             // turn = false;
             String s = "[";
-            for (int i = 0; i < myCreatures.size(); i++)
+            for (int i = 0; i < gs.getMyCreatures().size(); i++)
             {
-                if (attacking.contains(myCreatures.get(i)))
+                if (gs.getAttacking().contains(gs.getMyCreatures().get(i)))
                 {
                     s = s + i;
-                    if (i < myCreatures.size() - 1)
+                    if (i < gs.getMyCreatures().size() - 1)
                     {
                         s = s + ",";
                     }
-                    myCreatures.get(i).setGreen(false);
+                    gs.getMyCreatures().get(i).setGreen(false);
                 }
             }
             s = s + "]";
             System.out.println("Attacking with " + s);
             output.println("--attack " + s);
             output.flush();
-            turn = false;
+            gs.setTurn(false);
 
         }
         else if (e.getSource().equals(block))
         {
-            System.out.println(blockers);
+            System.out.println(gs.getBlockers());
             // System.out.println(blocking);
 
             String s = "";
-            for (int i = 0; i < myCreatures.size(); i++)
+            for (int i = 0; i < gs.getMyCreatures().size(); i++)
             {
-                if (blockers.containsKey(myCreatures.get(i)))
+                if (gs.getBlockers().containsKey(gs.getMyCreatures().get(i)))
                 {
-                    s = s + i + "," + attackingEnemyNums.get(i) + "|";
-                    fightCreatures(i, attackingEnemyNums.get(i));
+                    s = s + i + "," + gs.getAttackingEnemyNums().get(i) + "|";
+                    gs.fightCreatures(i, gs.getAttackingEnemyNums().get(i));
                 }
             }
 
-            for (int i = 0; i < attackingEnemys.size(); i++)
+            for (int i = 0; i < gs.getAttackingEnemys().size(); i++)
             {
-                health = health - attackingEnemys.get(i).getPower();
+                gs.setHealth(gs.getHealth() - gs.getAttackingEnemys().get(i).getPower());
             }
-            System.out.println("Your health is " + health);
+            System.out.println("Your health is " + gs.getHealth());
 
             // s = s + "]";
+            //TODO we should discuss whether controller is allowed to network
             System.out.println("Blocking with " + s);
             output.println("--block " + s);
             output.flush();
-            turn = false;
+            gs.setTurn(false);
 
-            blockers.clear();
-            blocker = null;
-            blocking = false;
+            gs.getBlockers().clear();
+            gs.setBlocker(null);
+            gs.setBlocking(false);
 
-            for (int i = 0; i < enemyCreatures.size(); i++)
+            for (int i = 0; i < gs.getEnemyCreatures().size(); i++)
             {
-                enemyCreatures.get(i).setRed(false);
+                gs.getEnemyCreatures().get(i).setRed(false);
             }
         }
 
@@ -257,53 +261,23 @@ public class Controller
     {
         Point a = MouseInfo.getPointerInfo().getLocation();
         SwingUtilities.convertPointFromScreen(a, game);
-        repaint();
-        InPlayCreature c = lane1.getClick(a);
-        if (c != null && myCreatures.contains(c))
-        {
-            attacking.add(c);
-            selectedCard = c;
-            System.out.println("adding");
-
-            int i = myCreatures.indexOf(c);
-            int b = c.getLane().getCreatures().indexOf(c);
-            c.setGreen(true);
-            myCreatures.set(i, c);
-            c.getLane().getCreatures().set(b, c);
-
-        }
-        else
-        {
-            InPlayCreature cr = lane2.getClick(a);
-            if (cr != null && myCreatures.contains(cr))
+        //TODO its much cleaner now than it was before, but its possible it should be somewhere else like in an event
+        for(Lane l: gs.getLanes()){
+            InPlayCreature c = l.getClick(a);
+            if (c != null && gs.getMyCreatures().contains(c))
             {
-                attacking.add(cr);
+                gs.getAttacking().add(c);
+                gs.setSelectedCard(c);
                 System.out.println("adding");
-                selectedCard = cr;
-                int i = myCreatures.indexOf(cr);
-                int b = cr.getLane().getCreatures().indexOf(cr);
-                cr.setGreen(true);
-                myCreatures.set(i, cr);
-                cr.getLane().getCreatures().set(b, cr);
 
-            }
-            else
-            {
-                InPlayCreature cre = lane3.getClick(a);
-                if (cre != null && myCreatures.contains(cre))
-                {
-                    attacking.add(cre);
-                    System.out.println("adding");
-                    selectedCard = cre;
-                    int i = myCreatures.indexOf(cre);
-                    int b = cre.getLane().getCreatures().indexOf(cre);
-                    cre.setGreen(true);
-                    myCreatures.set(i, cre);
-                    cre.getLane().getCreatures().set(b, cre);
-                }
-            }
+                int i = gs.getMyCreatures().indexOf(c);
+                int b = c.getLane().getCreatures().indexOf(c);
+                c.setGreen(true);
+                gs.getMyCreatures().set(i, c);
+                c.getLane().getCreatures().set(b, c);
+                break;
+            } 
         }
-
     }
 
 
@@ -324,36 +298,25 @@ public class Controller
         System.out.println("Got a click at " + a);
 
 
-        for(int i = 0; i < handCards.size(); i++) {
-            if(handCards.get(i).containsPoint(a)) {
-                if(turn == true || blocking == true) {
+        for(int i = 0; i < gs.getHandCards().size(); i++) {
+            if(gs.getHandCards().get(i).containsPoint(a)) {
+                if(gs.isTurn() || gs.isBlocking()) {
                     cd = new HandCardDragger();
                     System.out.println("Clicking a Hand Card! :D");
-                    selectedHandCard = handCards.get(i);
+                    gs.setSelectedHandCard(gs.getHandCards().get(i));
                     cd.execute();
                 }
             }
         }
 
-        if(blocking) {
-            InPlayCreature c = lane1.getClick(a);
-            if(c != null) {
-                bd = new BlockCardDragger();
-                blocker = c;
-                bd.execute();
-            } else {
-                InPlayCreature cr = lane2.getClick(a);
-                if(cr != null) {
+        if(gs.isBlocking()) {
+            for(Lane l: gs.getLanes()){
+                InPlayCreature c = l.getClick(a);
+                if(c != null) {
                     bd = new BlockCardDragger();
-                    blocker = cr;
+                    gs.setBlocker(c);
                     bd.execute();
-                } else {
-                    InPlayCreature cre = lane3.getClick(a);
-                    if(cre != null) {
-                        bd = new BlockCardDragger();
-                        blocker = cre;
-                        bd.execute();
-                    }
+                    break;
                 }
             }
         }
@@ -368,63 +331,37 @@ public class Controller
         SwingUtilities.convertPointFromScreen(a, game);
 
         if(!(cd.isStopped())) {
-            if(selectedHandCard.getCard() instanceof CreatureCard/* && mana >= selectedHandCard.getCard().getCost()*/) {
+            if(gs.getSelectedHandCard().getCard() instanceof CreatureCard/* && mana >= selectedHandCard.getCard().getCost()*/) {
                 System.out.println("Playing Creature: " + selectedHandCard);
-                if(lane1.containsPoint(selecCardPoint)) {
-                    /*InPlayCreature n = new InPlayCreature( (CreatureCard) selectedHandCard.getCard(), lane1);;
-                    arrivals.put( (CreatureCard) selectedHandCard.getCard(), lane1);
-                    arrivalCreatures.add( (CreatureCard) selectedHandCard.getCard());
-                    handCards.remove(selectedHandCard);*/
-                    arrivalHelper(lane1);
-
-                } else if(lane2.containsPoint(selecCardPoint)) {
-                    /*InPlayCreature n = new InPlayCreature( (CreatureCard) selectedHandCard.getCard(), lane2);
-                    arrivals.put( (CreatureCard) selectedHandCard.getCard(), lane2);
-                    arrivalCreatures.add( (CreatureCard) selectedHandCard.getCard());
-                    handCards.remove(selectedHandCard);*/
-                    arrivalHelper(lane2);
-
-                } else if(lane3.containsPoint(selecCardPoint)) {
-                    /*InPlayCreature n = new InPlayCreature( (CreatureCard) selectedHandCard.getCard(), lane3);
-                    arrivals.put( (CreatureCard) selectedHandCard.getCard(), lane3);
-                    arrivalCreatures.add( (CreatureCard) selectedHandCard.getCard());
-                    handCards.remove(selectedHandCard);*/
-                    arrivalHelper(lane3);
+                for(Lane l: gs.getLanes()){
+                    if(l.containsPoint(gs.getSelectedCardPoint())) {
+                        gs.arrivalHelper(l);
+                        break;
+                    }
                 }
-                repaint();
-            } else if(selectedHandCard.getCard() instanceof SpellCard) {
-                SpellCard sc = (SpellCard) selectedHandCard.getCard();
+            } else if(gs.getSelectedHandCard().getCard() instanceof SpellCard) {
+                SpellCard sc = (SpellCard) gs.getSelectedHandCard().getCard();
                 if(sc.hasTarget()) {
-                    EventBus.getInstance().callEvent(new TargetedSpellPlayedEvent(sc, this, selectedCard));
+                    EventBus.getInstance().callEvent(new TargetedSpellPlayedEvent(sc, this, gs.getSelectedCard()));
                 } else {
                     EventBus.getInstance().callEvent(new UntargetedSpellPlayedEvent(sc, this));
                 }
-                handCards.remove(selectedHandCard);
+                gs.getHandCards().remove(gs.getSelectedHandCard());
             }
         }
         cd.stop();
-        selectedHandCard = null;
-
-
-
+        gs.setSelectedHandCard(null);
         if(!(bd.isStopped())) {
 
-            System.out.println("isStopped? " + bd.isStopped() + "Blocker lane is" + blocker.getLane() + 
+            System.out.println("isStopped? " + bd.isStopped() + "Blocker lane is" + gs.getBlocker().getLane() + 
                     "Enemy2 is " + lane2.getClick(a));
-
-            if(attackingEnemys.contains(lane1.getClick(a)) && blocker.getLane() == lane1) {
-                blockers.put(blocker, lane1.getClick(a));
-                System.out.println("Blocking with creature: " + blocker + " in lane 1");
+            for(Lane l: gs.getLanes()){
+                if(gs.getAttackingEnemys().contains(l.getClick(a)) && gs.getBlocker().getLane() == l) {
+                    gs.getBlockers().put(gs.getBlocker(), l.getClick(a));
+                    System.out.println("Blocking with creature: " + gs.getBlocker());
+                }
             }
-            if(attackingEnemys.contains(lane2.getClick(a)) && blocker.getLane() == lane2) {
-                blockers.put(blocker, lane2.getClick(a));
-                System.out.println("Blocking with creature: " + blocker + " in lane 2");
-            }
-            if(attackingEnemys.contains(lane3.getClick(a)) && blocker.getLane() == lane3) {
-                blockers.put(blocker, lane3.getClick(a));
-                System.out.println("Blocking with creature: " + blocker + " in lane 3");
-            }
-            System.out.println(blockers);
+            System.out.println(gs.getBlockers());
 
             //          for(Lane l : lanes) {
             //              if(attackingEnemys.contains(l.getClick(a)) && blocker.getLane() == l) {
@@ -436,7 +373,7 @@ public class Controller
     }
     @Override
     public void keyPressed(KeyEvent e) {
-        
+
     }
 
     @Override
@@ -447,11 +384,15 @@ public class Controller
     @Override 
     public void keyTyped(KeyEvent e) {
         System.out.println("Meanie!" + e.getKeyChar());
-        if(e.getKeyCode() == KeyEvent.VK_SPACE && selectedCard != null) {
+        if(e.getKeyCode() == KeyEvent.VK_SPACE && gs.getSelectedCard() != null) {
             System.out.println("Calling AbilityEvent");
-            bus.callEvent(new AbilityEvent(selectedCard));
-            attacking.remove(selectedCard);
-            
+            gs.getBus().callEvent(new AbilityEvent(gs.getSelectedCard()));
+            gs.getAttacking().remove(gs.getSelectedCard());
+
         }
+    }
+    public boolean isFib(int i){
+        //TODO implement me
+        return false;
     }
 }
