@@ -57,9 +57,7 @@ public class GameState
     private ArrayList<HandCard> handCards = new ArrayList<HandCard>();
     private HandCard selectedHandCard;
     private Point selectedCardPoint = new Point();
-    private HandCardDragger cd = new HandCardDragger();
     private Point blockCardPoint = new Point();
-    private BlockCardDragger bd = new BlockCardDragger();
     private InPlayCreature blocker;
     private volatile SimplePlayerProfile match;
     private Lane[] lanes;
@@ -73,19 +71,349 @@ public class GameState
         { lane1, lane2, lane3 };
     }
 
+    public boolean isStartTurn()
+    {
+        return startTurn;
+    }
+
+    public void setStartTurn(boolean startTurn)
+    {
+        this.startTurn = startTurn;
+    }
+
+    public boolean isClear()
+    {
+        return clear;
+    }
+
+    public void setClear(boolean clear)
+    {
+        this.clear = clear;
+    }
+
+    public boolean isTurn()
+    {
+        return turn;
+    }
+
+    public void setTurn(boolean turn)
+    {
+        this.turn = turn;
+    }
+
+    public boolean isBlocking()
+    {
+        return blocking;
+    }
+
+    public void setBlocking(boolean blocking)
+    {
+        this.blocking = blocking;
+    }
+
+    public boolean isMtn1Full()
+    {
+        return isMtn1Full;
+    }
+
+    public void setMtn1Full(boolean isMtn1Full)
+    {
+        this.isMtn1Full = isMtn1Full;
+    }
+
+    public boolean isMtn2Full()
+    {
+        return isMtn2Full;
+    }
+
+    public void setMtn2Full(boolean isMtn2Full)
+    {
+        this.isMtn2Full = isMtn2Full;
+    }
+
+    public boolean isMtn3Full()
+    {
+        return isMtn3Full;
+    }
+
+    public void setMtn3Full(boolean isMtn3Full)
+    {
+        this.isMtn3Full = isMtn3Full;
+    }
+
+    public Integer getMana()
+    {
+        return mana;
+    }
+
+    public void setMana(Integer mana)
+    {
+        this.mana = mana;
+    }
+
+    public Integer getMaxMana()
+    {
+        return maxMana;
+    }
+
+    public void setMaxMana(Integer maxMana)
+    {
+        this.maxMana = maxMana;
+    }
+
+    public Integer getTurnNum()
+    {
+        return turnNum;
+    }
+
+    public void setTurnNum(Integer turnNum)
+    {
+        this.turnNum = turnNum;
+    }
+
+    public int getHealth()
+    {
+        return health;
+    }
+
+    public void setHealth(int health)
+    {
+        this.health = health;
+    }
+
+    public int getEnemyHealth()
+    {
+        return enemyHealth;
+    }
+
+    public void setEnemyHealth(int enemyHealth)
+    {
+        this.enemyHealth = enemyHealth;
+    }
+
+    public EventBus getBus()
+    {
+        return bus;
+    }
+
+    public void setBus(EventBus bus)
+    {
+        this.bus = bus;
+    }
+
+    public GamePlayer getYou()
+    {
+        return you;
+    }
+
+    public void setYou(GamePlayer you)
+    {
+        this.you = you;
+    }
+
+    public GamePlayer getOpponent()
+    {
+        return opponent;
+    }
+
+    public void setOpponent(GamePlayer opponent)
+    {
+        this.opponent = opponent;
+    }
+
+    public Cards getCardsData()
+    {
+        return cardsData;
+    }
+
+    public void setCardsData(Cards cardsData)
+    {
+        this.cardsData = cardsData;
+    }
+
+    public InPlayCreature getSelectedCard()
+    {
+        return selectedCard;
+    }
+
+    public void setSelectedCard(InPlayCreature selectedCard)
+    {
+        this.selectedCard = selectedCard;
+    }
+
+    public ArrayList<InPlayCreature> getCardsInPlay()
+    {
+        return cardsInPlay;
+    }
+
+    public void setCardsInPlay(ArrayList<InPlayCreature> cardsInPlay)
+    {
+        this.cardsInPlay = cardsInPlay;
+    }
+
+    public List<InPlayCreature> getMyCreatures()
+    {
+        return myCreatures;
+    }
+
+    public void setMyCreatures(List<InPlayCreature> myCreatures)
+    {
+        this.myCreatures = myCreatures;
+    }
+
+    public List<InPlayCreature> getEnemyCreatures()
+    {
+        return enemyCreatures;
+    }
+
+    public void setEnemyCreatures(List<InPlayCreature> enemyCreatures)
+    {
+        this.enemyCreatures = enemyCreatures;
+    }
+
+    public ArrayList<Lane> getArrivalLanes()
+    {
+        return arrivalLanes;
+    }
+
+    public void setArrivalLanes(ArrayList<Lane> arrivalLanes)
+    {
+        this.arrivalLanes = arrivalLanes;
+    }
+
+    public ArrayList<CreatureCard> getArrivalCreatures()
+    {
+        return arrivalCreatures;
+    }
+
+    public void setArrivalCreatures(ArrayList<CreatureCard> arrivalCreatures)
+    {
+        this.arrivalCreatures = arrivalCreatures;
+    }
+
+    public ArrayList<InPlayCreature> getAttacking()
+    {
+        return attacking;
+    }
+
+    public void setAttacking(ArrayList<InPlayCreature> attacking)
+    {
+        this.attacking = attacking;
+    }
+
+    public ArrayList<InPlayCreature> getAttackingEnemys()
+    {
+        return attackingEnemys;
+    }
+
+    public void setAttackingEnemys(ArrayList<InPlayCreature> attackingEnemys)
+    {
+        this.attackingEnemys = attackingEnemys;
+    }
+
+    public ArrayList<Integer> getAttackingEnemyNums()
+    {
+        return attackingEnemyNums;
+    }
+
+    public void setAttackingEnemyNums(ArrayList<Integer> attackingEnemyNums)
+    {
+        this.attackingEnemyNums = attackingEnemyNums;
+    }
+
+    public ArrayList<Integer> getDeck()
+    {
+        return deck;
+    }
+
+    public void setDeck(ArrayList<Integer> deck)
+    {
+        this.deck = deck;
+    }
+
+    public HashMap<InPlayCreature, InPlayCreature> getBlockers()
+    {
+        return blockers;
+    }
+
+    public void setBlockers(HashMap<InPlayCreature, InPlayCreature> blockers)
+    {
+        this.blockers = blockers;
+    }
+
+    public ArrayList<HandCard> getHandCards()
+    {
+        return handCards;
+    }
+
+    public void setHandCards(ArrayList<HandCard> handCards)
+    {
+        this.handCards = handCards;
+    }
+
+    public HandCard getSelectedHandCard()
+    {
+        return selectedHandCard;
+    }
+
+    public void setSelectedHandCard(HandCard selectedHandCard)
+    {
+        this.selectedHandCard = selectedHandCard;
+    }
+
+    public Point getSelectedCardPoint()
+    {
+        return selectedCardPoint;
+    }
+
+    public void setSelectedCardPoint(Point selectedCardPoint)
+    {
+        this.selectedCardPoint = selectedCardPoint;
+    }
+
+    public Point getBlockCardPoint()
+    {
+        return blockCardPoint;
+    }
+
+    public void setBlockCardPoint(Point blockCardPoint)
+    {
+        this.blockCardPoint = blockCardPoint;
+    }
+
+    public InPlayCreature getBlocker()
+    {
+        return blocker;
+    }
+
+    public void setBlocker(InPlayCreature blocker)
+    {
+        this.blocker = blocker;
+    }
+
+    public SimplePlayerProfile getMatch()
+    {
+        return match;
+    }
+
+    public void setMatch(SimplePlayerProfile match)
+    {
+        this.match = match;
+    }
+
     public Lane[] getLanes()
     {
-        return null;
+        return lanes;
+    }
+
+    public void setLanes(Lane[] lanes)
+    {
+        this.lanes = lanes;
     }
 
     public Lane getLane(int i)
     {
         return getLanes()[i];
-    }
-
-    public List<HandCard> getHandCards()
-    {
-        return null;
     }
 
     public void fightCreatures(int c1, int c2)

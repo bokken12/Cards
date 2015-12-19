@@ -52,10 +52,242 @@ public class Display extends JPanel implements Constants
     private Game game;
     private JLabel wait = new JLabel();
     private JLabel manaLabel = new JLabel(mana.toString());
+    private BlockCardDragger bd = new BlockCardDragger();
+    private HandCardDragger cd = new HandCardDragger();
 
     public Display(GameState gamestate)
     {
         gs = gamestate;
+    }
+    
+    public GameState getGs()
+    {
+        return gs;
+    }
+
+    public void setGs(GameState gs)
+    {
+        this.gs = gs;
+    }
+
+    public JScrollPane getDecklist()
+    {
+        return decklist;
+    }
+
+    public void setDecklist(JScrollPane decklist)
+    {
+        this.decklist = decklist;
+    }
+
+    public Graphics getG()
+    {
+        return g;
+    }
+
+    public void setG(Graphics g)
+    {
+        this.g = g;
+    }
+
+    public PrintWriter getOutput()
+    {
+        return output;
+    }
+
+    public void setOutput(PrintWriter output)
+    {
+        this.output = output;
+    }
+
+    public ImageIcon getBackground()
+    {
+        return background;
+    }
+
+    public void setBackground(ImageIcon background)
+    {
+        this.background = background;
+    }
+
+    public ImageIcon getScreen()
+    {
+        return screen;
+    }
+
+    public void setScreen(ImageIcon screen)
+    {
+        this.screen = screen;
+    }
+
+    public JButton getPlay()
+    {
+        return play;
+    }
+
+    public void setPlay(JButton play)
+    {
+        this.play = play;
+    }
+
+    public JButton getSettings()
+    {
+        return settings;
+    }
+
+    public void setSettings(JButton settings)
+    {
+        this.settings = settings;
+    }
+
+    public JButton getCards()
+    {
+        return cards;
+    }
+
+    public void setCards(JButton cards)
+    {
+        this.cards = cards;
+    }
+
+    public JButton getEndTurn()
+    {
+        return endTurn;
+    }
+
+    public void setEndTurn(JButton endTurn)
+    {
+        this.endTurn = endTurn;
+    }
+
+    public JButton getAttack()
+    {
+        return attack;
+    }
+
+    public void setAttack(JButton attack)
+    {
+        this.attack = attack;
+    }
+
+    public JButton getBlock()
+    {
+        return block;
+    }
+
+    public void setBlock(JButton block)
+    {
+        this.block = block;
+    }
+
+    public ArrayList<JButton> getDeckButtons()
+    {
+        return deckButtons;
+    }
+
+    public void setDeckButtons(ArrayList<JButton> deckButtons)
+    {
+        this.deckButtons = deckButtons;
+    }
+
+    public JPanel getFoo()
+    {
+        return foo;
+    }
+
+    public void setFoo(JPanel foo)
+    {
+        this.foo = foo;
+    }
+
+    public JPanel getButtons()
+    {
+        return buttons;
+    }
+
+    public void setButtons(JPanel buttons)
+    {
+        this.buttons = buttons;
+    }
+
+    public JPanel getField()
+    {
+        return field;
+    }
+
+    public void setField(JPanel field)
+    {
+        this.field = field;
+    }
+
+    public JPanel getHandPanel()
+    {
+        return handPanel;
+    }
+
+    public void setHandPanel(JPanel handPanel)
+    {
+        this.handPanel = handPanel;
+    }
+
+    public JPanel getCardDragging()
+    {
+        return cardDragging;
+    }
+
+    public void setCardDragging(JPanel cardDragging)
+    {
+        this.cardDragging = cardDragging;
+    }
+
+    public Game getGame()
+    {
+        return game;
+    }
+
+    public void setGame(Game game)
+    {
+        this.game = game;
+    }
+
+    public JLabel getWait()
+    {
+        return wait;
+    }
+
+    public void setWait(JLabel wait)
+    {
+        this.wait = wait;
+    }
+
+    public JLabel getManaLabel()
+    {
+        return manaLabel;
+    }
+
+    public void setManaLabel(JLabel manaLabel)
+    {
+        this.manaLabel = manaLabel;
+    }
+
+    public BlockCardDragger getBd()
+    {
+        return bd;
+    }
+
+    public void setBd(BlockCardDragger bd)
+    {
+        this.bd = bd;
+    }
+
+    public HandCardDragger getCd()
+    {
+        return cd;
+    }
+
+    public void setCd(HandCardDragger cd)
+    {
+        this.cd = cd;
     }
 
     public void paintComponent(Graphics g)
