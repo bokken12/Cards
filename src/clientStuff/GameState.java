@@ -10,8 +10,6 @@ import java.util.List;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 
-import clientStuff.Content.BlockCardDragger;
-import clientStuff.Content.HandCardDragger;
 import Player.GamePlayer;
 import Player.SimplePlayerProfile;
 import cards.Card;
@@ -23,7 +21,7 @@ import events.DamageEvent;
 import events.EventBus;
 import uselessSubclasses.Lane;
 
-public class GameState
+public class GameState implements Constants
 {
     private boolean startTurn;
     private boolean clear = false;
@@ -427,7 +425,6 @@ public class GameState
         // myCreatures.get(c1).getHealth());
         bus.callEvent(new DamageEvent(a2, myCreatures.get(c1)));
         bus.callEvent(new DamageEvent(a1, enemyCreatures.get(c2)));
-        repaint();
         // System.out.println("My Creature's health is " +
         // myCreatures.get(c1).getHealth());
         if (myCreatures.get(c1).getHealth() <= 0)
@@ -443,7 +440,6 @@ public class GameState
                     .remove(enemyCreatures.get(c2));
             enemyCreatures.remove(c2);
         }
-        repaint();
     }
 
     public int drawCard()
@@ -465,12 +461,7 @@ public class GameState
         // call drawCardEvent
     }
 
-    public static ArrayList<InPlayCreature> getCards()
-    {
-        return cardsInPlay;
-    }
-
-    public static ArrayList<InPlayCreature> getCardsOfType(String type)
+    public ArrayList<InPlayCreature> getCardsOfType(String type)
     {
         ArrayList<InPlayCreature> ret = new ArrayList<InPlayCreature>();
         for (int i = 0; i < cardsInPlay.size(); i++)
@@ -507,11 +498,11 @@ public class GameState
         {
             System.out.println("n.getLane() is null in addCreature");
         }
-        if (n.getLane().equals(lane1))
+        if (n.getLane().equals(lanes[LANE_1]))
             lane = 1;
-        if (n.getLane().equals(lane2))
+        if (n.getLane().equals(lanes[LANE_2]))
             lane = 2;
-        if (n.getLane().equals(lane3))
+        if (n.getLane().equals(lanes[LANE_3]))
             lane = 3;
 
         String send = "--myBoard "
@@ -522,7 +513,8 @@ public class GameState
 
         // should send something like --myBoard 1|2
         System.out.println("Sending " + send);
-        output.println(send);
-        output.flush();
+        //TODO communicate with networker to send data
+        //output.println(send);
+        //output.flush();
     }
 }

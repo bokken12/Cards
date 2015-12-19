@@ -51,13 +51,14 @@ public class Display extends JPanel implements Constants
     private JPanel cardDragging = new JPanel();
     private Game game;
     private JLabel wait = new JLabel();
-    private JLabel manaLabel = new JLabel(mana.toString());
+    private JLabel manaLabel;
     private BlockCardDragger bd = new BlockCardDragger();
     private HandCardDragger cd = new HandCardDragger();
 
     public Display(GameState gamestate)
     {
         gs = gamestate;
+        manaLabel = new JLabel(gs.getMana().toString());
     }
     
     public GameState getGs()
@@ -100,12 +101,12 @@ public class Display extends JPanel implements Constants
         this.output = output;
     }
 
-    public ImageIcon getBackground()
+    public ImageIcon getBackgroundImage()
     {
         return background;
     }
 
-    public void setBackground(ImageIcon background)
+    public void setBackgroundImage(ImageIcon background)
     {
         this.background = background;
     }
@@ -296,7 +297,7 @@ public class Display extends JPanel implements Constants
         // System.out.println("Repainting");
         super.paintComponent(g);
         this.g = g;
-        if (clear)
+        if (gs.isClear()) 
         {
             screen.setImage(screen.getImage().getScaledInstance((int) 1200,
                     800, Image.SCALE_DEFAULT));
@@ -307,7 +308,7 @@ public class Display extends JPanel implements Constants
             Font f = new Font("FONT", 2, 30);
 
             g.setFont(f);
-            g.drawString(Integer.toString(enemyHealth), 500, 50);
+            g.drawString(Integer.toString(gs.getEnemyHealth()), 500, 50);
 
         }
         else
@@ -413,10 +414,10 @@ public class Display extends JPanel implements Constants
         ArrayList<InPlayCreature> p = lane.getCreatures();
         for (int i = 0; i < p.size(); i++)
         {
-            if (p.get(i).equals(blocker))
+            if (p.get(i).equals(gs.getBlocker()))
             {
-                paintInPlayCreature(p.get(i), g, (int) blockCardPoint.getX(),
-                        (int) blockCardPoint.getY());
+                paintInPlayCreature(p.get(i), g, (int) gs.getBlockCardPoint().getX(),
+                        (int) gs.getBlockCardPoint().getY());
             }
             else
             {
@@ -453,9 +454,9 @@ public class Display extends JPanel implements Constants
 
             x = i * (CARD_WIDTH + 5) + 50;
             y = 600;
-            if (!(selectedHandCard == null))
+            if (!(gs.getSelectedHandCard() == null))
             {
-                if (!(selectedHandCard.equals(gs.getHandCards().get(i))))
+                if (!(gs.getSelectedHandCard().equals(gs.getHandCards().get(i))))
                 {
 
                     HandCard h = gs.getHandCards().get(i);
@@ -471,8 +472,8 @@ public class Display extends JPanel implements Constants
                     // System.out.println("Painting selected card at: " +
                     // selecCardPoint);
                     paintCreature(gs.getHandCards().get(i).getCard(), g,
-                            (int) selecCardPoint.getX(),
-                            (int) selecCardPoint.getY());
+                            (int) gs.getSelectedCardPoint().getX(),
+                            (int) gs.getSelectedCardPoint().getY());
                 }
             }
             else
