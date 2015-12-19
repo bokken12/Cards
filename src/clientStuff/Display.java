@@ -21,7 +21,7 @@ import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 
-import Player.Player;
+import gs.getPlayer().Player;
 import uselessSubclasses.Lane;
 import cards.Card;
 import cards.CreatureCard;
@@ -489,8 +489,8 @@ public class Display extends JPanel implements Constants
     {
 
         System.out.println("PlayMenu");
-
-        autoMatch();
+        //TODO make the networker auto the match
+        //Networker.autoMatch();
 
         this.removeAll();
         this.revalidate();
@@ -512,15 +512,15 @@ public class Display extends JPanel implements Constants
         decklist.createVerticalScrollBar();
         decklist.getViewport().setPreferredSize(b);
 
-        String[] decks = player.getDecks().keySet().toArray(new String[10]);
-        for (int i = 0; i < player.getDecks().size(); i++)
+        String[] decks = gs.getPlayer().getDecks().keySet().toArray(new String[10]);
+        for (int i = 0; i < gs.getPlayer().getDecks().size(); i++)
         {
             JLabel a = new JLabel(decks[i]);
             decklist.add(a);
         }
         add(decklist);
 
-        CardList cl = new CardList(player);
+        CardList cl = new CardList(gs.getPlayer());
         add(cl);
 
         JCheckBox a = new JCheckBox("Show all cards");
@@ -532,9 +532,9 @@ public class Display extends JPanel implements Constants
         this.removeAll();
         this.revalidate();
         this.repaint();
-        output.println("--remPlay" + player.getUsername() + "|"
-                + player.getRank());
-        HashMap<String, int[]> deecks = player.getDecks();
+        output.println("--remPlay" + gs.getPlayer().getUsername() + "|"
+                + gs.getPlayer().getRank());
+        HashMap<String, int[]> deecks = gs.getPlayer().getDecks();
         Object[] a = deecks.keySet().toArray();
 
         add(Box.createHorizontalGlue());
@@ -555,45 +555,46 @@ public class Display extends JPanel implements Constants
 
     public void paintArrivals(Graphics g)
     {
-        for (int i = 0; i < arrivalCreatures.size(); i++)
+        for (int i = 0; i < gs.getArrivalCreatures().size(); i++)
         {
-            CreatureCard c = arrivalCreatures.get(i);
-            if (arrivalLanes.get(i).equals(lane1))
+            //TODO much cleaning
+            CreatureCard c = gs.getArrivalCreatures().get(i);
+            if (gs.getArrivalCreatures().get(i).equals(gs.getLane(LANE_1)))
             {
-                if (!isMtn1Full)
+                if (!gs.isMtn1Full())
                 {
                     paintCreature(c, g, MOUNTAIN_1_X, ARRIVAL_CREATURE_Y);
-                    isMtn1Full = true;
+                    gs.setMtn1Full(true);
                 }
                 else
                 {
                     paintCreature(c, g, MOUNTAIN_1_X, ARRIVAL_CREATURE_Y_2);
                 }
             }
-            else if (arrivalLanes.get(i).equals(lane2))
+            else if (gs.getArrivalLanes().get(i).equals(gs.getLane(LANE_2)))
             {
-                if (!isMtn1Full)
+                if (!gs.isMtn1Full())
                 {
                     paintCreature(c, g, MOUNTAIN_1_X, ARRIVAL_CREATURE_Y);
                 }
-                else if (!isMtn2Full)
+                else if (!gs.isMtn2Full())
                 {
                     paintCreature(c, g, MOUNTAIN_2_X, ARRIVAL_CREATURE_Y);
-                    isMtn2Full = true;
+                    gs.setMtn2Full(true);
                 }
             }
-            else if (arrivalLanes.get(i).equals(lane3))
+            else if (gs.getArrivalLanes().get(i).equals(gs.getLane(LANE_3)))
             {
-                if (!isMtn2Full)
+                if (!gs.isMtn2Full())
                 {
                     paintCreature(c, g, MOUNTAIN_2_X, ARRIVAL_CREATURE_Y);
-                    isMtn2Full = true;
+                    gs.setMtn2Full(true);
                 }
             }
 
         }
-        isMtn1Full = false;
-        isMtn2Full = false;
+        gs.setMtn1Full(false);
+        gs.setMtn2Full(false);
     }
 
     private class HandCardDragger extends SwingWorker<String, Point>
@@ -633,7 +634,7 @@ public class Display extends JPanel implements Constants
         @Override
         protected void process(List<Point> moves)
         {
-            selecCardPoint = moves.get(moves.size() - 1);
+            gs.setSelectedCardPoint(moves.get(moves.size() - 1));
             repaint();
         }
 
@@ -678,7 +679,7 @@ public class Display extends JPanel implements Constants
         @Override
         protected void process(List<Point> moves)
         {
-            blockCardPoint = moves.get(0);
+            gs.setBlockCardPoint(moves.get(0));
             System.out.println(moves.get(0));
             repaint();
         }

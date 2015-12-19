@@ -11,6 +11,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 
 import Player.GamePlayer;
+import Player.Player;
 import Player.SimplePlayerProfile;
 import cards.Card;
 import cards.Cards;
@@ -29,7 +30,6 @@ public class GameState implements Constants
     private boolean blocking;
     private boolean isMtn1Full = false;
     private boolean isMtn2Full = false;
-    private boolean isMtn3Full = false;
     private Integer mana = 0;
     private Integer maxMana = 0;
     private Integer turnNum = 0;
@@ -59,6 +59,7 @@ public class GameState implements Constants
     private InPlayCreature blocker;
     private volatile SimplePlayerProfile match;
     private Lane[] lanes;
+    private Player player;
 
     public GameState()
     {
@@ -67,6 +68,16 @@ public class GameState implements Constants
         Lane lane3 = new Lane(this, 3);
         lanes = new Lane[]
         { lane1, lane2, lane3 };
+    }
+
+    public Player getPlayer()
+    {
+        return player;
+    }
+
+    public void setPlayer(Player player)
+    {
+        this.player = player;
     }
 
     public boolean isStartTurn()
@@ -127,16 +138,6 @@ public class GameState implements Constants
     public void setMtn2Full(boolean isMtn2Full)
     {
         this.isMtn2Full = isMtn2Full;
-    }
-
-    public boolean isMtn3Full()
-    {
-        return isMtn3Full;
-    }
-
-    public void setMtn3Full(boolean isMtn3Full)
-    {
-        this.isMtn3Full = isMtn3Full;
     }
 
     public Integer getMana()
@@ -513,8 +514,8 @@ public class GameState implements Constants
 
         // should send something like --myBoard 1|2
         System.out.println("Sending " + send);
-        //TODO communicate with networker to send data
-        //output.println(send);
-        //output.flush();
+        // TODO communicate with networker to send data
+        // output.println(send);
+        // output.flush();
     }
 }
