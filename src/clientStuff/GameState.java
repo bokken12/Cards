@@ -424,8 +424,8 @@ public class GameState implements Constants
         // System.out.println("My, enemy power is " + a1 + ", " + a2);
         // System.out.println("My health was " +
         // myCreatures.get(c1).getHealth());
-        bus.callEvent(new DamageEvent(a2, myCreatures.get(c1)));
-        bus.callEvent(new DamageEvent(a1, enemyCreatures.get(c2)));
+        bus.callEvent(new DamageEvent(this, a2, myCreatures.get(c1)));
+        bus.callEvent(new DamageEvent(this, a1, enemyCreatures.get(c2)));
         // System.out.println("My Creature's health is " +
         // myCreatures.get(c1).getHealth());
         if (myCreatures.get(c1).getHealth() <= 0)

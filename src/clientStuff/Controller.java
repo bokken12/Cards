@@ -35,6 +35,13 @@ import events.UntargetedSpellPlayedEvent;
 public class Controller implements MouseListener, KeyListener, ActionListener
 {
     private GameState gs;
+    Display display;
+    
+    public Controller(GameState gs, Display d) {
+    	this.gs = gs;
+    	display = d;
+    }
+    
     @Override
     public void actionPerformed(ActionEvent e)
     {
@@ -96,18 +103,9 @@ public class Controller implements MouseListener, KeyListener, ActionListener
 
             gs.setClear(true);
             //TODO take this controller part out, no displaying not in display
-            game.setSize(new Dimension(1200, 800));
-            this.removeAll();
-
-            add(field);
-            buttons.add(endTurn);
-            endTurn.addActionListener(this);
-            buttons.add(attack);
-            attack.addActionListener(this);
-            buttons.add(block);
-            block.addActionListener(this);
-            buttons.add(manaLabel);
-            add(buttons);
+            
+            display.initializeGameboard();
+            
             // add(handPanel);
             int x;
             int y;

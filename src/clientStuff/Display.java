@@ -64,7 +64,7 @@ public class Display extends JPanel implements Constants
         int height = background.getIconHeight();
         int width = background.getIconWidth();
         Dimension a = new Dimension(width, height);
-        control = new Controller();
+        control = new Controller(gs, this);
         addMouseListener(control);
         addKeyListener(control);
 
@@ -319,6 +319,25 @@ public class Display extends JPanel implements Constants
     public void setCd(HandCardDragger cd)
     {
         this.cd = cd;
+    }
+    
+    public void initializeGameboard() {
+    	
+        game.setSize(new Dimension(1200, 800));
+        this.removeAll();
+
+        add(field);
+        buttons.add(endTurn);
+        endTurn.addActionListener(control);
+        buttons.add(attack);
+        attack.addActionListener(control);
+        buttons.add(block);
+        block.addActionListener(control);
+        buttons.add(manaLabel);
+        add(buttons);
+        
+        add(manaLabel);
+
     }
 
     public void paintComponent(Graphics g)
