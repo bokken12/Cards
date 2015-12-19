@@ -1,6 +1,7 @@
 package events;
 
 import clientStuff.Content;
+import clientStuff.GameState;
 import cards.SpellCard;
 
 public class SpellPlayedEvent extends CardPlayedEvent {
@@ -15,7 +16,8 @@ public class SpellPlayedEvent extends CardPlayedEvent {
 		
 	}
 	
-	public SpellPlayedEvent(SpellCard card, Content c) {
+	public SpellPlayedEvent(GameState gs, SpellCard card, Content c) {
+	    super(gs);
 		this.card = card;
 	}
 }

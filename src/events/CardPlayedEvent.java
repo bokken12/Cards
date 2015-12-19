@@ -1,8 +1,15 @@
 package events;
 
+import clientStuff.GameState;
+
 public class CardPlayedEvent extends GameEvent{
 
-	@Override
+	public CardPlayedEvent(GameState gs)
+    {
+        super(gs);
+    }
+
+    @Override
 	public void fireEvent() {
 		// TODO Auto-generated method stub
 		

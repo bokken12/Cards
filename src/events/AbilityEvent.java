@@ -1,5 +1,6 @@
 package events;
 
+import clientStuff.GameState;
 import cards.CreatureCard;
 import cards.InPlayCreature;
 
@@ -14,7 +15,8 @@ public class AbilityEvent extends GameEvent {
 		
 	}
 	
-	public AbilityEvent(InPlayCreature c) {
+	public AbilityEvent(GameState gs, InPlayCreature c) {
+	    super(gs);
 		card = c;
 	}
 

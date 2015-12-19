@@ -1,5 +1,6 @@
 package events;
 
+import clientStuff.GameState;
 import uselessSubclasses.DamageableEntity;
 
 public class DamageEvent extends GameEvent{
@@ -24,7 +25,8 @@ public class DamageEvent extends GameEvent{
 		this.target = target;
 	}
 	
-	public DamageEvent(int dmg, DamageableEntity target) {
+	public DamageEvent(GameState gs, int dmg, DamageableEntity target) {
+	    super(gs);
 		this.dmg = dmg;
 		this.target = target;
 	}

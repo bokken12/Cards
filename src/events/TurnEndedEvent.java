@@ -1,5 +1,6 @@
 package events;
 
+import clientStuff.GameState;
 import Player.GamePlayer;
 
 public class TurnEndedEvent extends GameEvent {
@@ -12,7 +13,8 @@ public class TurnEndedEvent extends GameEvent {
 		
 	}
 	
-	public TurnEndedEvent(GamePlayer e) {
+	public TurnEndedEvent(GameState gs, GamePlayer e) {
+	    super(gs);
 		ender = e;
 	}
 	

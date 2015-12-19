@@ -1,5 +1,6 @@
 package events;
 
+import clientStuff.GameState;
 import Player.GamePlayer;
 
 public class TurnStartedEvent extends GameEvent {
@@ -12,7 +13,8 @@ public class TurnStartedEvent extends GameEvent {
 		
 	}
 	
-	public TurnStartedEvent(GamePlayer e) {
+	public TurnStartedEvent(GameState gs, GamePlayer e) {
+	    super(gs);
 		starter = e;
 	}
 	

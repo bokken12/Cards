@@ -1,11 +1,12 @@
 package events;
 
+import clientStuff.GameState;
 import uselessSubclasses.DamageableEntity;
 
 public class DamageCreatureEvent extends DamageEvent {
 
-	public DamageCreatureEvent(int dmg, DamageableEntity target) {
-		super(dmg, target);
+	public DamageCreatureEvent(GameState gs, int dmg, DamageableEntity target) {
+		super(gs, dmg, target);
 		// TODO Auto-generated constructor stub
 	}
 

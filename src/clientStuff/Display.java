@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -21,7 +22,7 @@ import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 
-import gs.getPlayer().Player;
+import Player.Player;
 import uselessSubclasses.Lane;
 import cards.Card;
 import cards.CreatureCard;
@@ -54,11 +55,40 @@ public class Display extends JPanel implements Constants
     private JLabel manaLabel;
     private BlockCardDragger bd = new BlockCardDragger();
     private HandCardDragger cd = new HandCardDragger();
+    private Controller control;
 
     public Display(GameState gamestate)
     {
         gs = gamestate;
         manaLabel = new JLabel(gs.getMana().toString());
+        int height = background.getIconHeight();
+        int width = background.getIconWidth();
+        Dimension a = new Dimension(width, height);
+        control = new Controller();
+        addMouseListener(control);
+        addKeyListener(control);
+
+        setPreferredSize(a);
+        setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
+        add(Box.createHorizontalGlue());
+        
+        foo.setLayout(new BoxLayout(foo, BoxLayout.PAGE_AXIS));
+        field.setLayout(new BoxLayout(field, BoxLayout.Y_AXIS));
+        buttons.setLayout(new BoxLayout(buttons, BoxLayout.Y_AXIS));
+        foo.add(Box.createVerticalGlue());
+        foo.add(play);
+        play.setAlignmentX(CENTER_ALIGNMENT);
+        foo.add(cards);
+        cards.setAlignmentX(CENTER_ALIGNMENT);
+        foo.add(settings);
+        settings.setAlignmentX(CENTER_ALIGNMENT);
+        foo.setOpaque(false);
+        foo.add(Box.createVerticalGlue());
+        add(foo);
+        add(Box.createHorizontalGlue());
+        play.addActionListener(control);
+        cards.addActionListener(control);
+        settings.addActionListener(control);
     }
     
     public GameState getGs()
@@ -544,7 +574,7 @@ public class Display extends JPanel implements Constants
         {
             JButton b = new JButton(a[i].toString());
             System.out.println(deecks);
-            b.addActionListener(this);
+            b.addActionListener(control);
             deckButtons.add(b);
 
             add(b);
