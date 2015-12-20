@@ -1,12 +1,13 @@
 package events;
 
 import clientStuff.Content;
+import clientStuff.GameState;
 import cards.SpellCard;
 
 public class UntargetedSpellPlayedEvent extends SpellPlayedEvent {
 
-	public UntargetedSpellPlayedEvent(SpellCard card, Content c) {
-		super(card, c);
+	public UntargetedSpellPlayedEvent(SpellCard card, GameState gs) {
+		super(gs, card);
 		// TODO Auto-generated constructor stub
 	}
 

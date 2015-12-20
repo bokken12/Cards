@@ -16,7 +16,7 @@ public class SpellPlayedEvent extends CardPlayedEvent {
 		
 	}
 	
-	public SpellPlayedEvent(GameState gs, SpellCard card, Content c) {
+	public SpellPlayedEvent(GameState gs, SpellCard card) {
 	    super(gs);
 		this.card = card;
 	}

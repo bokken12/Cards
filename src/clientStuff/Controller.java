@@ -48,26 +48,26 @@ public class Controller implements MouseListener, KeyListener, ActionListener, C
 
         System.out.println("Got an event!");
         //TODO use action commands instead of source
-        if (e.getSource().equals(play))
+        if (e.getSource().equals(display.getPlay()))
         {
             System.out.println(":()");
-            playMenu();
+            display.playMenu();
 
         }
-        else if (e.getSource().equals(cards))
+        else if (e.getSource().equals(display.getCards()))
         {
-            CardsMenu();
+            display.CardsMenu();
 
         }
-        else if (e.getSource().equals(settings))
-        {
-
-        }
-        else if (e.getSource().equals(decklist))
+        else if (e.getSource().equals(display.getSettings()))
         {
 
         }
-        else if (deckButtons.contains(e.getSource()))
+        else if (e.getSource().equals(display.getDecklist()))
+        {
+
+        }
+        else if (display.getDeckButtons().contains(e.getSource()))
         {
             System.out.println("Got Deck Button Click");
             int[] theDeck = gs.getPlayer().getDecks().get(
@@ -174,19 +174,19 @@ public class Controller implements MouseListener, KeyListener, ActionListener, C
             addMana.RegisterListeners();
 
         }
-        else if (e.getSource().equals(endTurn))
+        else if (e.getSource().equals(display.getEndTurn()))
         {
             if (gs.isTurn())
             {
                 System.out.println("Ending Turn?");
                 gs.setTurn(false);
-                gs.getBus().callEvent(new TurnEndedEvent(gs.getYou()));
+                gs.getBus().callEvent(new TurnEndedEvent(gs, gs.getYou()));
                 //TODO eliminate networking I think
                 output.println("--turn");
                 output.flush();
             }
         }
-        else if (e.getSource().equals(attack))
+        else if (e.getSource().equals(display.getAttack()))
         {
             // System.out.println("Attacking with " + attacking.toString());
             // output.println("--attack " + attacking.toString());
@@ -213,7 +213,7 @@ public class Controller implements MouseListener, KeyListener, ActionListener, C
             gs.setTurn(false);
 
         }
-        else if (e.getSource().equals(block))
+        else if (e.getSource().equals(display.getBlock()))
         {
             System.out.println(gs.getBlockers());
             // System.out.println(blocking);
@@ -329,7 +329,7 @@ public class Controller implements MouseListener, KeyListener, ActionListener, C
 
         if(!(cd.isStopped())) {
             if(gs.getSelectedHandCard().getCard() instanceof CreatureCard/* && mana >= selectedHandCard.getCard().getCost()*/) {
-                System.out.println("Playing Creature: " + selectedHandCard);
+                System.out.println("Playing Creature: " + gs.getSelectedHandCard());
                 for(Lane l: gs.getLanes()){
                     if(l.containsPoint(gs.getSelectedCardPoint())) {
                         gs.arrivalHelper(l);
@@ -339,9 +339,9 @@ public class Controller implements MouseListener, KeyListener, ActionListener, C
             } else if(gs.getSelectedHandCard().getCard() instanceof SpellCard) {
                 SpellCard sc = (SpellCard) gs.getSelectedHandCard().getCard();
                 if(sc.hasTarget()) {
-                    EventBus.getInstance().callEvent(new TargetedSpellPlayedEvent(sc, this, gs.getSelectedCard()));
+                    EventBus.getInstance().callEvent(new TargetedSpellPlayedEvent(sc, gs, gs.getSelectedCard()));
                 } else {
-                    EventBus.getInstance().callEvent(new UntargetedSpellPlayedEvent(sc, this));
+                    EventBus.getInstance().callEvent(new UntargetedSpellPlayedEvent(sc, gs));
                 }
                 gs.getHandCards().remove(gs.getSelectedHandCard());
             }
@@ -383,7 +383,7 @@ public class Controller implements MouseListener, KeyListener, ActionListener, C
         System.out.println("Meanie!" + e.getKeyChar());
         if(e.getKeyCode() == KeyEvent.VK_SPACE && gs.getSelectedCard() != null) {
             System.out.println("Calling AbilityEvent");
-            gs.getBus().callEvent(new AbilityEvent(gs.getSelectedCard()));
+            gs.getBus().callEvent(new AbilityEvent(gs, gs.getSelectedCard()));
             gs.getAttacking().remove(gs.getSelectedCard());
 
         }
