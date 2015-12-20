@@ -24,6 +24,8 @@ import cards.CreatureCard;
 import cards.HandCard;
 import cards.InPlayCreature;
 import cards.SpellCard;
+import clientStuff.Display.BlockCardDragger;
+import clientStuff.Display.HandCardDragger;
 import events.AbilityEvent;
 import events.EventBus;
 import events.GameEvent;
@@ -47,7 +49,6 @@ public class Controller implements MouseListener, KeyListener, ActionListener, C
     {
 
         System.out.println("Got an event!");
-        //TODO use action commands instead of source
         if (e.getSource().equals(display.getPlay()))
         {
             System.out.println(":()");
@@ -298,10 +299,10 @@ public class Controller implements MouseListener, KeyListener, ActionListener, C
         for(int i = 0; i < gs.getHandCards().size(); i++) {
             if(gs.getHandCards().get(i).containsPoint(a)) {
                 if(gs.isTurn() || gs.isBlocking()) {
-                    cd = new HandCardDragger();
+                    display.setCd(new HandCardDragger());
                     System.out.println("Clicking a Hand Card! :D");
                     gs.setSelectedHandCard(gs.getHandCards().get(i));
-                    cd.execute();
+                    display.getCd().execute();
                 }
             }
         }
@@ -310,9 +311,9 @@ public class Controller implements MouseListener, KeyListener, ActionListener, C
             for(Lane l: gs.getLanes()){
                 InPlayCreature c = l.getClick(a);
                 if(c != null) {
-                    bd = new BlockCardDragger();
+                    display.setBd(new BlockCardDragger());
                     gs.setBlocker(c);
-                    bd.execute();
+                    display.getBd().execute();
                     break;
                 }
             }
@@ -346,11 +347,11 @@ public class Controller implements MouseListener, KeyListener, ActionListener, C
                 gs.getHandCards().remove(gs.getSelectedHandCard());
             }
         }
-        cd.stop();
+        display.getCd().stop();
         gs.setSelectedHandCard(null);
-        if(!(bd.isStopped())) {
+        if(!(display.getBd().isStopped())) {
 
-            System.out.println("isStopped? " + bd.isStopped() + "Blocker lane is" + gs.getBlocker().getLane() + 
+            System.out.println("isStopped? " + display.getBd().isStopped() + "Blocker lane is" + gs.getBlocker().getLane() + 
                     "Enemy2 is " + gs.getLane(LANE_3).getClick(a));
             for(Lane l: gs.getLanes()){
                 if(gs.getAttackingEnemys().contains(l.getClick(a)) && gs.getBlocker().getLane() == l) {
@@ -366,7 +367,7 @@ public class Controller implements MouseListener, KeyListener, ActionListener, C
             //              }
             //          }
         }
-        bd.stop();
+        display.getBd().stop();
     }
     @Override
     public void keyPressed(KeyEvent e) {

@@ -646,7 +646,7 @@ public class Display extends JPanel implements Constants
         gs.setMtn2Full(false);
     }
 
-    private class HandCardDragger extends SwingWorker<String, Point>
+    public class HandCardDragger extends SwingWorker<String, Point>
     {
 
         volatile boolean stop = true;
@@ -693,7 +693,7 @@ public class Display extends JPanel implements Constants
         }
     }
 
-    private class BlockCardDragger extends SwingWorker<String, Point>
+    public class BlockCardDragger extends SwingWorker<String, Point>
     {
 
         volatile boolean stop = true;
