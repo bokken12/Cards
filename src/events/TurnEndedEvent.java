@@ -1,7 +1,7 @@
 package events;
 
+import player.GamePlayer;
 import clientStuff.GameState;
-import Player.GamePlayer;
 
 public class TurnEndedEvent extends GameEvent {
 

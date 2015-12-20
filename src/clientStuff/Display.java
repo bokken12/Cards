@@ -22,7 +22,7 @@ import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 
-import Player.Player;
+import player.Player;
 import uselessSubclasses.Lane;
 import cards.Card;
 import cards.CreatureCard;

@@ -31,6 +31,9 @@ import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 
+import player.GamePlayer;
+import player.Player;
+import player.SimplePlayerProfile;
 import abilities.Ability;
 import abilities.AbilityRunnable;
 import cards.Card;
@@ -49,9 +52,6 @@ import events.TargetedSpellPlayedEvent;
 import events.TurnEndedEvent;
 import events.TurnStartedEvent;
 import events.UntargetedSpellPlayedEvent;
-import Player.GamePlayer;
-import Player.Player;
-import Player.SimplePlayerProfile;
 import uselessSubclasses.Lane;
 
 

@@ -15,8 +15,8 @@ import java.util.Random;
 import javax.swing.JButton;
 import javax.swing.SwingUtilities;
 
+import player.GamePlayer;
 import uselessSubclasses.Lane;
-import Player.GamePlayer;
 import abilities.Ability;
 import abilities.AbilityRunnable;
 import cards.Card;

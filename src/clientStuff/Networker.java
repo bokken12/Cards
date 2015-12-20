@@ -7,13 +7,13 @@ import java.util.StringTokenizer;
 import javax.swing.Box;
 import javax.swing.JLabel;
 
+import player.GamePlayer;
+import player.SimplePlayerProfile;
 import cards.Card;
 import cards.CreatureCard;
 import cards.InPlayCreature;
 import events.CreaturePlayedEvent;
 import events.TurnStartedEvent;
-import Player.GamePlayer;
-import Player.SimplePlayerProfile;
 
 public class Networker implements Constants
 {

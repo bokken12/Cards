@@ -23,7 +23,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
-import Player.Player;
+import player.Player;
 
 public class Launcher extends JFrame implements ActionListener {
 

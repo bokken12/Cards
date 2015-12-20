@@ -1,10 +1,15 @@
-package Messaging;
+package messaging;
 
 public abstract class Message
 {
-    private Stringer data;
-    public abstract Message fromString(String args);
-    public abstract String toString();
+    protected Stringer data;
+    public static Message fromString(String args){
+        Stringer newData = new Stringer(args);
+        return fromData(newData);
+    }
+    public String toString(){
+        return data.toString();
+    }
     public static Message fromData(Stringer data){
         try
         {

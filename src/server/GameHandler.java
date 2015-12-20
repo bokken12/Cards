@@ -3,8 +3,8 @@ package server;
 import java.io.BufferedReader;
 import java.io.PrintWriter;
 
+import player.GamePlayer;
 import server.Server.Handler;
-import Player.GamePlayer;
 
 public class GameHandler extends Thread{
 	Handler player1;

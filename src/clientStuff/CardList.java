@@ -3,9 +3,9 @@ import java.awt.Graphics;
 
 import javax.swing.JScrollPane;
 
+import player.Player;
 import cards.Card;
 import cards.Cards;
-import Player.Player;
 
 
 public class CardList extends JScrollPane {

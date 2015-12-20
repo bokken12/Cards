@@ -1,4 +1,4 @@
-package Messaging;
+package messaging;
 
 public abstract class Stringable
 {

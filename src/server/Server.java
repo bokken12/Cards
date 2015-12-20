@@ -25,12 +25,12 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextArea;
 
+import player.GamePlayer;
+import player.Player;
+import player.SimplePlayerProfile;
+import player.SimplerProfile;
 import cards.Card;
 import cards.Cards;
-import Player.GamePlayer;
-import Player.Player;
-import Player.SimplePlayerProfile;
-import Player.SimplerProfile;
 import acm.program.ConsoleProgram;
 
 

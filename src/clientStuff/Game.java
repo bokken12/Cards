@@ -21,8 +21,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import Player.Player;
-import Player.SimplePlayerProfile;
+import player.Player;
+import player.SimplePlayerProfile;
 
 
 

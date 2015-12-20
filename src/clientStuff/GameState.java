@@ -10,9 +10,9 @@ import java.util.List;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 
-import Player.GamePlayer;
-import Player.Player;
-import Player.SimplePlayerProfile;
+import player.GamePlayer;
+import player.Player;
+import player.SimplePlayerProfile;
 import cards.Card;
 import cards.Cards;
 import cards.CreatureCard;
