@@ -154,4 +154,19 @@ public class Networker implements Constants
             System.out.println("Attacking enemys are " + gs.getAttackingEnemys());
         }
     }
+    
+    public void sendTurnMessage() {
+    	output.println("--turn");
+        output.flush();
+    }
+    
+    public void sendAttackMessage(String s) {
+    	 output.println("--attack " + s);
+         output.flush();
+    }
+    
+    public void sendBlockMessage(String s) {
+   	 output.println("--block " + s);
+        output.flush();
+   }
 }
