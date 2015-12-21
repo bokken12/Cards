@@ -1,7 +1,6 @@
 package clientStuff;
 
 import java.util.Stack;
-
 import javax.swing.JFrame;
 
 public class StateMachine extends JFrame
