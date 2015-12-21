@@ -15,28 +15,28 @@ public class GameState extends State
     }
 
     @Override
-    public void onInitialize()
+    public void onInitialize(StateMachine stater)
     {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void onBegin()
+    public void onBegin(StateMachine stater)
     {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void onLeave()
+    public void onLeave(StateMachine stater)
     {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void onDestroy()
+    public void onDestroy(StateMachine stater)
     {
         // TODO Auto-generated method stub
 

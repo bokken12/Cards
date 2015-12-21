@@ -2,11 +2,17 @@ package clientStuff;
 
 import java.awt.event.ActionEvent;
 
+import javax.swing.ImageIcon;
+
 import messaging.Message;
 
 public class MenuState extends State
 {
 
+    private ImageIcon background;
+    public MenuState(){
+        background  = new ImageIcon("MenuBackground.jpg");
+    }
     @Override
     public void actionPerformed(ActionEvent e)
     {
@@ -15,28 +21,28 @@ public class MenuState extends State
     }
 
     @Override
-    public void onInitialize()
+    public void onInitialize(StateMachine stater)
     {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void onBegin()
+    public void onBegin(StateMachine stater)
     {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void onLeave()
+    public void onLeave(StateMachine stater)
     {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void onDestroy()
+    public void onDestroy(StateMachine stater)
     {
         // TODO Auto-generated method stub
 
