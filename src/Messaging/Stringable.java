@@ -1,9 +1,8 @@
 package messaging;
 
-public abstract class Stringable
+public interface Stringable
 {
-    public Stringable(){
-    }
     public abstract String toString();
     public abstract void fromString(String str);
+    public abstract Class forConstructor();
 }

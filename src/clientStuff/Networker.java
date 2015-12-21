@@ -18,7 +18,7 @@ import events.TurnStartedEvent;
 public class Networker implements Constants
 {
 	
-	GameState gs;
+	BoardState gs;
 	Display d;
 	PrintWriter output;
 	

@@ -4,7 +4,7 @@ import uselessSubclasses.Lane;
 import cards.CreatureCard;
 import cards.InPlayCreature;
 import clientStuff.Content;
-import clientStuff.GameState;
+import clientStuff.BoardState;
 
 public class CreaturePlayedEvent extends CardPlayedEvent
 {
@@ -24,7 +24,7 @@ public class CreaturePlayedEvent extends CardPlayedEvent
         l.content().arrivalCreatures.remove(creature);
     }
 
-    public CreaturePlayedEvent(GameState gs, CreatureCard creature, int lane)
+    public CreaturePlayedEvent(BoardState gs, CreatureCard creature, int lane)
     {
         super(gs);
         this.creature = creature;

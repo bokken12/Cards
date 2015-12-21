@@ -1,6 +1,6 @@
 package events;
 
-import clientStuff.GameState;
+import clientStuff.BoardState;
 import cards.InPlayCreature;
 
 public class CreatureKilledEvent extends GameEvent {
@@ -9,7 +9,7 @@ public class CreatureKilledEvent extends GameEvent {
 		
 	}
 	
-	public CreatureKilledEvent(GameState gs, InPlayCreature c) {
+	public CreatureKilledEvent(BoardState gs, InPlayCreature c) {
 		super(gs);
 	}
 

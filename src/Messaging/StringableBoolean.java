@@ -1,6 +1,6 @@
 package messaging;
 
-public class StringableBoolean extends Stringable
+public class StringableBoolean implements Stringable
 {
     private boolean bool;
     

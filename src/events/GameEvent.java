@@ -2,14 +2,14 @@ package events;
 
 import java.util.ArrayList;
 
-import clientStuff.GameState;
+import clientStuff.BoardState;
 
 public abstract class GameEvent {
 	//private static ArrayList<GameListener> listeners = new ArrayList<GameListener>();
 	protected boolean isCancelled = false;
-	protected GameState gs;
+	protected BoardState gs;
 	public abstract void fireEvent();
-	public GameEvent(GameState gs){
+	public GameEvent(BoardState gs){
 	    this.gs = gs;
 	}
 	public void setCancelled(boolean cancelled){

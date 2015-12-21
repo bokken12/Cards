@@ -1,10 +1,10 @@
 package events;
 
-import clientStuff.GameState;
+import clientStuff.BoardState;
 
 public class CardPlayedEvent extends GameEvent{
 
-	public CardPlayedEvent(GameState gs)
+	public CardPlayedEvent(BoardState gs)
     {
         super(gs);
     }

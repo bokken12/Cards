@@ -4,7 +4,7 @@ import java.awt.event.ActionEvent;
 
 import messaging.Message;
 
-public class GameState extends State
+public class MenuState extends State
 {
 
     @Override

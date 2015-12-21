@@ -59,6 +59,6 @@ public class Game extends JFrame{
 	}
 
 	public void toContent(String s) {
-		a.handleMessage(s);
+		//a.handleMessage(s);
 	}
 }

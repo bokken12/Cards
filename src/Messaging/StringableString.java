@@ -1,6 +1,6 @@
 package messaging;
 
-public class StringableString extends Stringable
+public class StringableString implements Stringable
 {
 
     private String str;

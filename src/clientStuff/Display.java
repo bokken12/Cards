@@ -32,7 +32,7 @@ import cards.SpellCard;
 
 public class Display extends JPanel implements Constants
 {
-    private GameState gs;
+    private BoardState gs;
     private JScrollPane decklist = new JScrollPane();
     private Graphics g;
     private PrintWriter output;
@@ -57,7 +57,7 @@ public class Display extends JPanel implements Constants
     private HandCardDragger cd = new HandCardDragger();
     private Controller control;
 
-    public Display(GameState gamestate)
+    public Display(BoardState gamestate)
     {
         gs = gamestate;
         manaLabel = new JLabel(gs.getMana().toString());
@@ -91,12 +91,12 @@ public class Display extends JPanel implements Constants
         settings.addActionListener(control);
     }
     
-    public GameState getGs()
+    public BoardState getGs()
     {
         return gs;
     }
 
-    public void setGs(GameState gs)
+    public void setGs(BoardState gs)
     {
         this.gs = gs;
     }

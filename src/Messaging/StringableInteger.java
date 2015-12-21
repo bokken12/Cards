@@ -1,6 +1,6 @@
 package messaging;
 
-public class StringableInteger extends Stringable
+public class StringableInteger implements Stringable
 {
     private int i;
 
