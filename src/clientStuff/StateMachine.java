@@ -1,20 +1,28 @@
 package clientStuff;
 
 import java.util.Stack;
+
 import javax.swing.JFrame;
+
+import messaging.Message;
+import messaging.Messager;
+import events.EventBus;
+import events.GameEvent;
 
 public class StateMachine extends JFrame
 {
-    public static final int APPLICATION_WIDTH = 500;
-    public static final int APPLICATION_HEIGHT = 600;
     private Stack<State> state;
+    private EventBus bus;
+    private Messager messager;
     private static StateMachine frame;
     public static void main(String[] args){
         frame = new StateMachine();
+        frame.setState(new LoginState());
     }
     public StateMachine(){
         state = new Stack<State>();
-        setSize(APPLICATION_WIDTH, APPLICATION_HEIGHT);
+        bus = new EventBus();
+        messager = new Messager();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
         setVisible(true);
@@ -39,5 +47,22 @@ public class StateMachine extends JFrame
         state.push(s);
         getCurrentState().onInitialize(this);
         add(getCurrentState());
+    }
+    public EventBus getBus()
+    {
+        return bus;
+    }
+    public Messager getMessager()
+    {
+        return messager;
+    }
+    public static StateMachine getFrame(){
+        return frame;
+    }
+    public static void sendMessage(Message m){
+        frame.getMessager().send(m);
+    }
+    public static void callEvent(GameEvent e){
+        frame.getBus().callEvent(e);
     }
 }

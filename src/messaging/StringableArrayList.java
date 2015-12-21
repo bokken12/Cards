@@ -23,17 +23,13 @@ public class StringableArrayList<E extends Stringable> extends ArrayList<E> impl
     @Override
     public void fromString(String str)
     {
-        E = Object.class;
+        /*E = Object.class;
         this.clear();
         String split = str.substring(6, str.indexOf(")"));
         StringTokenizer t = new StringTokenizer(str, split);
         t.nextToken();
         while(t.hasMoreTokens()){
             this.add(e)
-        }
-    }
-    
-    public <c> c hi(){
-        
-    }
+        }*/
+    }  
 }
