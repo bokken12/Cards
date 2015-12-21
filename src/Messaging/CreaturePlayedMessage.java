@@ -1,4 +1,4 @@
-package Messaging;
+package messaging;
 
 public class CreaturePlayedMessage extends Message {
 
