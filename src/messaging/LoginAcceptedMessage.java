@@ -33,7 +33,9 @@ public class LoginAcceptedMessage extends Message {
 	}
 	
 	public LoginAcceptedMessage(Player player) {
-		//TODO
+		StringablePlayer p = new StringablePlayer(player);
+		
+		data.add("player", p);
 	}
 	
 	public String getUsername() {

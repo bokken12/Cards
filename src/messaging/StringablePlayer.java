@@ -1,5 +1,7 @@
 package messaging;
 
+import player.Player;
+
 public class StringablePlayer implements Stringable
 {
 
@@ -22,6 +24,14 @@ public class StringablePlayer implements Stringable
     {
         // TODO Auto-generated method stub
         
+    }
+    
+    public StringablePlayer() {
+    	
+    }
+    
+    public StringablePlayer(Player p) {
+    	
     }
 
 }
