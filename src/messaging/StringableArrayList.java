@@ -5,7 +5,13 @@ import java.util.StringTokenizer;
 
 public class StringableArrayList<E extends Stringable> extends ArrayList<E> implements Stringable<ArrayList>
 {
+
     private Class<? extends Stringable> cls;
+
+	public StringableArrayList(){
+		super();
+	}
+
     public StringableArrayList(String str){
         super();
         fromString(str);

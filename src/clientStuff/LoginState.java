@@ -2,6 +2,8 @@ package clientStuff;
 
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -9,6 +11,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
+import messaging.AccountConfirmationMessage;
 import messaging.AccountCreationMessage;
 import messaging.LoginAcceptedMessage;
 import messaging.LoginMessage;
@@ -132,8 +135,18 @@ public class LoginState extends State
 			String email = ((LoginAcceptedMessage) message).getEmail();
 			int gold = ((LoginAcceptedMessage) message).getGold();
 			int rank = ((LoginAcceptedMessage) message).getRank();
+			ArrayList<Integer> cards = ((LoginAcceptedMessage) message).getCards();
+			ArrayList<String> friends = ((LoginAcceptedMessage) message).getFriends();
+			HashMap<String, int[]> decks = null;
 			
-			Player player = new Player()
+			Player player = new Player(email, name, password, cards, decks, rank, friends, gold);
+		
+		} else if(message instanceof AccountConfirmationMessage) {
+			if(((AccountConfirmationMessage) message).isConfirmed()) {
+				StateMachine.sendMessage(new LoginMessage(newUsernameText.getText(), newPasswordText.getText()));
+			} else {
+				error.setText("Account not Confirmed");
+			}
 		}
 
 	}

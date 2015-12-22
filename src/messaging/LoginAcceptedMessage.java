@@ -16,7 +16,9 @@ public class LoginAcceptedMessage extends Message {
 		StringableString email = new StringableString(mail);
 		StringableInteger gold = new StringableInteger(goldMoney);
 		StringableInteger rank = new StringableInteger(ranking);
+
 		StringableArrayList<StringableInteger> cards = new StringableArrayList<StringableInteger>(StringableInteger.class, cardList);
+		StringableArrayList<StringableString> friends = new StringableArrayList<StringableString>(StringableString.class, friendList);
 		//decks & friends
 		
 		data.add("username", username);
@@ -24,13 +26,13 @@ public class LoginAcceptedMessage extends Message {
 		data.add("gold", gold);
 		data.add("rank", rank);
 		data.add("email", email);
-		//data.add("card", cards);
-		//decks & friends
+		data.add("cards", cards);
+		data.add("friends", friends);
 	}
 	
 	public String getUsername() {
 		return data.get("username").toString();
-	}
+	}    
 	
 	public String getPassword() {
 		return data.get("password").toString();
@@ -46,5 +48,12 @@ public class LoginAcceptedMessage extends Message {
 	
 	public String getEmail() {
 		return data.get("email").toString();
+	}
+	public ArrayList<Integer> getCards(){
+		return (ArrayList<Integer>) data.get("cards").getMirror();
+	}
+	
+	public ArrayList<String> getFriends(){
+		return (ArrayList<String>) data.get("friends").getMirror();
 	}
 }
