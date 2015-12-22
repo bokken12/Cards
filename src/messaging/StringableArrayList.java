@@ -1,35 +1,28 @@
 package messaging;
 
-import java.util.ArrayList;
 import java.util.StringTokenizer;
 
-public class StringableArrayList<E extends Stringable> extends ArrayList<E> implements Stringable
+public class StringableArrayList<E extends Stringable> extends Stringable
 {
-    Class c;
-    @Override
-    public String toString()
-    {
-        int i = hashCode();
-        String str = "split(";
-        str += i;
-        str += ")";
-        for(E obj: this){
-            str +=i;
-            str += String.valueOf(obj);
-        }
-        return str;
-    }
 
-    @Override
-    public void fromString(String str)
-    {
-        /*E = Object.class;
-        this.clear();
-        String split = str.substring(6, str.indexOf(")"));
-        StringTokenizer t = new StringTokenizer(str, split);
-        t.nextToken();
-        while(t.hasMoreTokens()){
-            this.add(e)
-        }*/
-    }  
+	@Override
+	public String toString()
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void fromString(String str)
+	{
+		StringTokenizer st = new StringTokenizer(str.substring(1, str.length() - 1), ", ");
+
+
+		StringableBoolean sb = new StringableBoolean();
+		sb.fromString(st.nextToken());
+		if(sb != null) {
+
+		}
+	}
+
 }

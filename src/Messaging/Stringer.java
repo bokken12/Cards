@@ -13,29 +13,33 @@ public class Stringer
         data = new HashMap<String, Stringable>();
         this.type = type;
     }
+    //str = "ExampleMessage::intToSend::StringableInteger::4"
     public Stringer(String str){
         StringTokenizer st = new StringTokenizer(str, separator);
         data = new HashMap<String, Stringable>();
         try
         {
-            type = (Class<? extends Message>) Class.class.forName(st.nextToken());
+            type = (Class<? extends Message>) Class.forName(st.nextToken());
             while(st.hasMoreTokens()){
                 String name = st.nextToken();
                 String className = st.nextToken();
-                Class<? extends Stringable> ableType = (Class<? extends Stringable>) Class.class.forName(className);
+                Class<? extends Stringable> ableType = (Class<? extends Stringable>) Class.forName(className);
                 String args = st.nextToken();
                 Stringable able = ableType.newInstance();
-                able.fromString(args);
+                able.fromString(args)	;
                 data.put(name, able);
             }
         } catch (ClassNotFoundException e)
         {
+            // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (InstantiationException e)
         {
+            // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (IllegalAccessException e)
         {
+            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
