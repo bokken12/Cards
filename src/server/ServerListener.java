@@ -17,7 +17,7 @@ public class ServerListener extends ConsoleProgram
     {
         (new ServerListener()).start();
     }
-    public ServerListener(){
+    public void run(){
         try {
             listener = new ServerSocket(PORT_NUMBER, 100, InetAddress.getByName(HOSTNAME));
             println("Waiting for a connection.");

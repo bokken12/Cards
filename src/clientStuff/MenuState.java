@@ -12,6 +12,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 
+import player.Player;
 import messaging.Message;
 
 public class MenuState extends State
@@ -26,7 +27,7 @@ public class MenuState extends State
     private ArrayList<JButton> deckButtons;
     
     
-    public MenuState(){
+    public MenuState(Player p){
        
     }
     
@@ -47,14 +48,14 @@ public class MenuState extends State
     @Override
     public void onBegin(StateMachine stater)
     {
-        // TODO Auto-generated method stub
-
+        stater.setSize(500, 400);
+        stater.setVisible(true);
+        stater.setResizable(false);
     }
 
     @Override
     public void onLeave(StateMachine stater)
     {
-        // TODO Auto-generated method stub
 
     }
 
@@ -68,8 +69,6 @@ public class MenuState extends State
     @Override
     public void MessageRecieved(Message message)
     {
-        
-        
     }
     
     @Override

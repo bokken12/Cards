@@ -8,9 +8,9 @@ public class StringableArrayList<E extends Stringable> extends ArrayList<E> impl
 
     private Class<? extends Stringable> cls;
 
-	public StringableArrayList(){
-		super();
-	}
+    public StringableArrayList(){
+        super();
+    }
 
     public StringableArrayList(String str){
         super();
@@ -23,39 +23,42 @@ public class StringableArrayList<E extends Stringable> extends ArrayList<E> impl
         super();
         fromMirror(ar);
     }
-	@Override
-	public String toString()
-	{
-		String delim = "" + this.hashCode();
-		String str = "";
-		str += delim;
-		if(size() > 0){
-		    str += get(0).getClass().getName();
-		    for(E obj: this){
-		        //str +=
-		    }
-		}
-		return str;
-	}
+    @Override
+    public String toString()
+    {
+        String delim = "" + this.hashCode();
+        String str = "";
+        str += delim;
+        if(size() > 0){
+            str += get(0).getClass().getName();
+            for(E obj: this){
+                str += delim;
+                str += obj.toString();
+            }
+        }
+        return str;
+    }
 
-	@Override
-	public void fromString(String str)
-	{
-	    String delim = str.substring(0, str.indexOf("delim"));
-		StringTokenizer st = new StringTokenizer(str.substring(str.indexOf("delim" + 5), str.length()), delim);
-		try
+    @Override
+    public void fromString(String str)
+    {
+        String delim = str.substring(0, str.indexOf("delim"));
+        StringTokenizer st = new StringTokenizer(str.substring(str.indexOf("delim" + 5), str.length()), delim);
+        try
         {
-		    String className = st.nextToken();
-            cls = (Class<? extends Stringable>) Class.forName(className);
-            while(st.hasMoreTokens()){
-                add((E)(new MetaClass(className)).createInstance(st.nextToken()));
+            if(st.hasMoreTokens()){
+                String className = st.nextToken();
+                cls = (Class<? extends Stringable>) Class.forName(className);
+                while(st.hasMoreTokens()){
+                    add((E)(new MetaClass(className)).createInstance(st.nextToken()));
+                }
             }
         } catch (ClassNotFoundException e)
         {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-	}
+    }
     @Override
     public ArrayList getMirror()
     {
@@ -70,19 +73,9 @@ public class StringableArrayList<E extends Stringable> extends ArrayList<E> impl
     {
         this.clear();
         for(Object obj: e){
-            try
-            {
-                Stringable newItem = cls.newInstance();
-                newItem.fromMirror(obj);
-            } catch (InstantiationException e1)
-            {
-                // TODO Auto-generated catch block
-                e1.printStackTrace();
-            } catch (IllegalAccessException e1)
-            {
-                // TODO Auto-generated catch block
-                e1.printStackTrace();
-            }
+            add((E)(new MetaClass(cls.getName()).createInstance(obj)));
+            //Stringable newItem = cls.newInstance();
+            //newItem.fromMirror(obj);
         }
     }
 }
