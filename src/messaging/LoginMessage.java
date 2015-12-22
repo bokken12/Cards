@@ -7,7 +7,7 @@ public class LoginMessage extends Message {
 	}
 	
 	public LoginMessage(String name, String pass){
-		
+		super();
 		StringableString username = new StringableString(name);
 		StringableString password = new StringableString(pass);
 		

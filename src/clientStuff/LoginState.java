@@ -1,5 +1,6 @@
 package clientStuff;
 
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
@@ -108,8 +109,8 @@ public class LoginState extends State
 	@Override
 	public void onBegin(StateMachine stater)
 	{
-		// TODO Auto-generated method stub
-
+		stater.setSize(500, 100);
+		//stater.setPreferredSize(new Dimension(500, 300));
 	}
 
 	@Override

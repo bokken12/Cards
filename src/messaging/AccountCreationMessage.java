@@ -7,7 +7,7 @@ public class AccountCreationMessage extends Message {
 	}
 	
 	public AccountCreationMessage(String name, String pass, String mail){
-		
+		super();
 		StringableString username = new StringableString(name);
 		StringableString password = new StringableString(pass);
 		StringableString email = new StringableString(mail);

@@ -42,7 +42,7 @@ public class StateMachine extends JFrame
         }
         state.push(s);
         getCurrentState().onInitialize(this);
-        getCurrentState().onInitialize(this);
+        getCurrentState().onBegin(this);
         add(getCurrentState());
     }
     public Messager getMessager()

@@ -10,7 +10,7 @@ public class LoginAcceptedMessage extends Message {
 	}
 	
 	public LoginAcceptedMessage(String name, String pass, String mail, int goldMoney, int ranking, ArrayList<Integer> cardList, HashMap<String, ArrayList<Integer>> deckList, ArrayList<String> friendList){
-		
+		super();
 		StringableString username = new StringableString(name);
 		StringableString password = new StringableString(pass);
 		StringableString email = new StringableString(mail);

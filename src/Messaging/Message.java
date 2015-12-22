@@ -10,6 +10,11 @@ public abstract class Message
     public String toString(){
         return data.toString();
     }
+    
+    public Message() {
+    	data = new Stringer();
+    }
+    
     public static Message fromData(Stringer data){
         try
         {

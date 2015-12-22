@@ -7,7 +7,7 @@ public class AccountConfirmationMessage extends Message {
 	}
 
 	public AccountConfirmationMessage(boolean confirm) {
-		
+		super();
 		StringableBoolean confirmed = new StringableBoolean(confirm);
 		
 		data.add("confirmed", confirmed);
