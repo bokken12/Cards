@@ -16,7 +16,7 @@ public class LoginAcceptedMessage extends Message {
 		StringableString email = new StringableString(mail);
 		StringableInteger gold = new StringableInteger(goldMoney);
 		StringableInteger rank = new StringableInteger(ranking);
-		StringableArrayList<StringableInteger> cards = new StringableArrayList<StringableInteger>(/*cardList*/);
+		StringableArrayList<StringableInteger> cards = new StringableArrayList<StringableInteger>(StringableInteger.class, cardList);
 		//decks & friends
 		
 		data.add("username", username);

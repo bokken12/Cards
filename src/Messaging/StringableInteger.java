@@ -41,14 +41,12 @@ public class StringableInteger implements Stringable<Integer>
     @Override
     public Integer getMirror()
     {
-        // TODO Auto-generated method stub
-        return null;
+        return new Integer(i);
     }
 
     @Override
     public void fromMirror(Integer e)
     {
-        // TODO Auto-generated method stub
-        
+        i = e.intValue();
     }
 }

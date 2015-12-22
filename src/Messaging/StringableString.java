@@ -36,15 +36,13 @@ public class StringableString implements Stringable<String>
     @Override
     public String getMirror()
     {
-        // TODO Auto-generated method stub
-        return null;
+        return str;
     }
 
     @Override
     public void fromMirror(String e)
     {
-        // TODO Auto-generated method stub
-        
+        str = e;
     }
 
 }

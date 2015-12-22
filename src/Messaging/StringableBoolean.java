@@ -38,15 +38,13 @@ public class StringableBoolean implements Stringable<Boolean>
     @Override
     public Boolean getMirror()
     {
-        // TODO Auto-generated method stub
-        return null;
+        return new Boolean(bool);
     }
 
     @Override
     public void fromMirror(Boolean e)
     {
-        // TODO Auto-generated method stub
-        
+        bool = e.booleanValue();
     }
 
 }

@@ -5,12 +5,17 @@ import java.util.StringTokenizer;
 
 public class StringableArrayList<E extends Stringable> extends ArrayList<E> implements Stringable<ArrayList>
 {
+    private Class<? extends Stringable> cls;
     public StringableArrayList(String str){
         super();
         fromString(str);
     }
     public StringableArrayList(ArrayList<E> ar){
         super(ar);
+    }
+    public StringableArrayList(Class<? extends E> cls, ArrayList ar){
+        super();
+        fromMirror(ar);
     }
 	@Override
 	public String toString()
@@ -35,7 +40,7 @@ public class StringableArrayList<E extends Stringable> extends ArrayList<E> impl
 		try
         {
 		    String className = st.nextToken();
-            Class<? extends Stringable> cls = (Class<? extends Stringable>) Class.forName(className);
+            cls = (Class<? extends Stringable>) Class.forName(className);
             while(st.hasMoreTokens()){
                 add((E)(new MetaClass(className)).createInstance(st.nextToken()));
             }
@@ -48,13 +53,30 @@ public class StringableArrayList<E extends Stringable> extends ArrayList<E> impl
     @Override
     public ArrayList getMirror()
     {
-        // TODO Auto-generated method stub
-        return null;
+        ArrayList a = new ArrayList();
+        for(E obj: this){
+            a.add(obj.getMirror());
+        }
+        return a;
     }
     @Override
     public void fromMirror(ArrayList e)
     {
-        // TODO Auto-generated method stub
-        
+        this.clear();
+        for(Object obj: e){
+            try
+            {
+                Stringable newItem = cls.newInstance();
+                newItem.fromMirror(obj);
+            } catch (InstantiationException e1)
+            {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            } catch (IllegalAccessException e1)
+            {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
+        }
     }
 }
