@@ -10,8 +10,10 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
 import messaging.AccountCreationMessage;
+import messaging.LoginAcceptedMessage;
 import messaging.LoginMessage;
 import messaging.Message;
+import player.Player;
 
 public class LoginState extends State
 {
@@ -124,7 +126,15 @@ public class LoginState extends State
 	@Override
 	public void MessageRecieved(Message message)
 	{
-		// TODO Auto-generated method stub
+		if(message instanceof LoginAcceptedMessage) {
+			String name = ((LoginAcceptedMessage) message).getUsername();
+			String password = ((LoginAcceptedMessage) message).getPassword();
+			String email = ((LoginAcceptedMessage) message).getEmail();
+			int gold = ((LoginAcceptedMessage) message).getGold();
+			int rank = ((LoginAcceptedMessage) message).getRank();
+			
+			Player player = new Player()
+		}
 
 	}
 

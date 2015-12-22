@@ -19,7 +19,7 @@ public class LoginMessage extends Message {
 		return data.get("username").toString();
 	}
 	
-	public String gePassword() {
+	public String getPassword() {
 		return data.get("password").toString();
 	}
 }
