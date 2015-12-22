@@ -131,6 +131,7 @@ public class LoginState extends State
 	public void MessageRecieved(Message message)
 	{
 		if(message instanceof LoginAcceptedMessage) {
+			if(((LoginAcceptedMessage) message).getCards() != null) {
 			String name = ((LoginAcceptedMessage) message).getUsername();
 			String password = ((LoginAcceptedMessage) message).getPassword();
 			String email = ((LoginAcceptedMessage) message).getEmail();
@@ -141,6 +142,9 @@ public class LoginState extends State
 			HashMap<String, int[]> decks = null;
 			
 			Player player = new Player(email, name, password, cards, decks, rank, friends, gold);
+			} else {
+				Player player = ((LoginAcceptedMessage) message).getPlayer();
+			}
 		
 		} else if(message instanceof AccountConfirmationMessage) {
 			if(((AccountConfirmationMessage) message).isConfirmed()) {

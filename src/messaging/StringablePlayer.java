@@ -33,5 +33,9 @@ public class StringablePlayer implements Stringable
     public StringablePlayer(Player p) {
     	
     }
+    
+    public Player toPlayer() {
+    	return null;
+    }
 
 }

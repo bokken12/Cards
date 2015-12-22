@@ -64,4 +64,8 @@ public class LoginAcceptedMessage extends Message {
 	public ArrayList<String> getFriends(){
 		return (ArrayList<String>) data.get("friends").getMirror();
 	}
+	
+	public Player getPlayer() {
+		return ((StringablePlayer) data.get("player")).toPlayer();
+	}
 }
