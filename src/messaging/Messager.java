@@ -36,6 +36,7 @@ public class Messager extends Thread
     }
     public void send(Message m){
         output.println(m.toString());
+        output.flush();
     }
     private Socket connect() {
         while (true) {
