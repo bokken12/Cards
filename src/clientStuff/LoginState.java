@@ -132,20 +132,20 @@ public class LoginState extends State
 	{
 		if(message instanceof LoginAcceptedMessage) {
 			if(((LoginAcceptedMessage) message).getCards() != null) {
-			String name = ((LoginAcceptedMessage) message).getUsername();
-			String password = ((LoginAcceptedMessage) message).getPassword();
-			String email = ((LoginAcceptedMessage) message).getEmail();
-			int gold = ((LoginAcceptedMessage) message).getGold();
-			int rank = ((LoginAcceptedMessage) message).getRank();
-			ArrayList<Integer> cards = ((LoginAcceptedMessage) message).getCards();
-			ArrayList<String> friends = ((LoginAcceptedMessage) message).getFriends();
-			HashMap<String, int[]> decks = null;
-			
-			Player player = new Player(email, name, password, cards, decks, rank, friends, gold);
+				String name = ((LoginAcceptedMessage) message).getUsername();
+				String password = ((LoginAcceptedMessage) message).getPassword();
+				String email = ((LoginAcceptedMessage) message).getEmail();
+				int gold = ((LoginAcceptedMessage) message).getGold();
+				int rank = ((LoginAcceptedMessage) message).getRank();
+				ArrayList<Integer> cards = ((LoginAcceptedMessage) message).getCards();
+				ArrayList<String> friends = ((LoginAcceptedMessage) message).getFriends();
+				HashMap<String, int[]> decks = null;
+
+				Player player = new Player(email, name, password, cards, decks, rank, friends, gold);
 			} else {
 				Player player = ((LoginAcceptedMessage) message).getPlayer();
 			}
-		
+
 		} else if(message instanceof AccountConfirmationMessage) {
 			if(((AccountConfirmationMessage) message).isConfirmed()) {
 				StateMachine.sendMessage(new LoginMessage(newUsernameText.getText(), newPasswordText.getText()));
