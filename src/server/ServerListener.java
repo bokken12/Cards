@@ -5,17 +5,17 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 
 import acm.program.ConsoleProgram;
-import server.Server.Handler;
 
 public class ServerListener extends ConsoleProgram
 {
 
-    private static final int PORT_NUMBER = 0;
-    private static final String HOSTNAME = null;
+    public static final int PORT_NUMBER = 5002;
+    public static final String HOSTNAME = "127.0.0.1";
     private static ServerListener server;
     private ServerSocket listener;
     public static void main(String[] args)
     {
+        (new ServerListener()).start();
     }
     public ServerListener(){
         try {

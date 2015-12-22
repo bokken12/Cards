@@ -31,7 +31,10 @@ public class ClientListener extends Thread
             input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             output = new PrintWriter(socket.getOutputStream());
             while(true){
-                getCurrentState().MessageRecieved(Message.fromData(new Stringer(input.readLine())));
+                String line = input.readLine();
+                if(line != null){
+                    getCurrentState().MessageRecieved(Message.fromData(new Stringer(input.readLine())));
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();

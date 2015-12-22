@@ -7,7 +7,7 @@ import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 
-import server.Server;
+import server.ServerListener;
 
 public class Messager extends Thread
 {
@@ -22,7 +22,10 @@ public class Messager extends Thread
             input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             output = new PrintWriter(socket.getOutputStream());
             while(true){
-                l.MessageRecieved(Message.fromData(new Stringer(input.readLine())));
+                String line = input.readLine();
+                if(line != null){
+                    l.MessageRecieved(Message.fromData(new Stringer(line)));
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -34,7 +37,7 @@ public class Messager extends Thread
     private Socket connect() {
         while (true) {
             try {
-                Socket s = new Socket(InetAddress.getByName(Server.HOSTNAME), Server.PORT_NUMBER);
+                Socket s = new Socket(InetAddress.getByName(ServerListener.HOSTNAME), ServerListener.PORT_NUMBER);
                 System.out.println("Socket achieved");
                 return s;
             } catch (IOException e) {
