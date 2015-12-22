@@ -26,11 +26,6 @@ public class LoginState extends State
 	private JTextField passwordText;
 	private JButton login;
 	private JButton createAccount;
-	private JTextField emailText;
-	private JTextField newUsernameText;
-	private JTextField newPasswordText;
-	private JTextField verifyPasswordText;
-	private JButton newcreateAccount;
 	static JLabel error;
 	private JPanel south;
 	String username = "";
@@ -47,30 +42,8 @@ public class LoginState extends State
 		}	
 		else if(e.getSource().equals(createAccount)){
 
-			//If this doesn't work, use SwingUtilities.invokeLater to run it in a runnable
-			south.removeAll();
-			south.add(emailText);
-			emailText.addActionListener(this);
-			south.add(newUsernameText);
-			newUsernameText.addActionListener(this);
-			south.add(newPasswordText);
-			newPasswordText.addActionListener(this);
-			south.add(verifyPasswordText);
-			verifyPasswordText.addActionListener(this);
-			south.add(newcreateAccount);
-			newcreateAccount.addActionListener(this);
-
+		    StateMachine.getFrame().setState(new AccountCreationState());
 		}
-		else if(e.getSource().equals(emailText) || e.getSource().equals(newUsernameText) 
-				|| e.getSource().equals(newPasswordText) || e.getSource().equals(verifyPasswordText) || e.getSource().equals(newcreateAccount)){
-			if(!(emailText.getText().equals("") || newUsernameText.getText().equals("") || newPasswordText.getText().equals("") || verifyPasswordText.getText().equals(""))){
-				if(newPasswordText.getText().equals(verifyPasswordText.getText())){
-					StateMachine.sendMessage(new AccountCreationMessage(newUsernameText.getText(), newPasswordText.getText(), emailText.getText()));
-				}
-			}else {
-
-			}
-		} 
 
 
 	}
@@ -80,11 +53,6 @@ public class LoginState extends State
 	{
 		// TODO Auto-generated method stub
 		login = new JButton("Login");
-		emailText = new JTextField("Enter Email");
-		newUsernameText  = new JTextField("Enter Username");
-		newPasswordText = new JTextField("Enter Password");
-		verifyPasswordText = new JTextField("Verify Password");
-		newcreateAccount = new JButton("Create Account");
 		error = new JLabel("");
 		play = new JButton("Play");
 		cards = new JButton("Cards");
@@ -146,12 +114,6 @@ public class LoginState extends State
 				Player player = ((LoginAcceptedMessage) message).getPlayer();
 			}
 
-		} else if(message instanceof AccountConfirmationMessage) {
-			if(((AccountConfirmationMessage) message).isConfirmed()) {
-				StateMachine.sendMessage(new LoginMessage(newUsernameText.getText(), newPasswordText.getText()));
-			} else {
-				error.setText("Account not Confirmed");
-			}
 		}
 
 	}
