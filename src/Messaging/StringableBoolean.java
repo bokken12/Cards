@@ -1,6 +1,6 @@
 package messaging;
 
-public class StringableBoolean implements Stringable
+public class StringableBoolean implements Stringable<Boolean>
 {
     private boolean bool;
     
@@ -33,6 +33,20 @@ public class StringableBoolean implements Stringable
     
     public void setBoolean(boolean bool){
         this.bool = bool;
+    }
+
+    @Override
+    public Boolean getMirror()
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void fromMirror(Boolean e)
+    {
+        // TODO Auto-generated method stub
+        
     }
 
 }

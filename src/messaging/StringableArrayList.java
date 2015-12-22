@@ -3,7 +3,7 @@ package messaging;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
-public class StringableArrayList<E extends Stringable> extends ArrayList<E> implements Stringable
+public class StringableArrayList<E extends Stringable> extends ArrayList<E> implements Stringable<ArrayList>
 {
     public StringableArrayList(String str){
         super();
@@ -45,4 +45,16 @@ public class StringableArrayList<E extends Stringable> extends ArrayList<E> impl
             e.printStackTrace();
         }
 	}
+    @Override
+    public ArrayList getMirror()
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+    @Override
+    public void fromMirror(ArrayList e)
+    {
+        // TODO Auto-generated method stub
+        
+    }
 }

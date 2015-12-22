@@ -1,6 +1,6 @@
 package messaging;
 
-public class StringableString implements Stringable
+public class StringableString implements Stringable<String>
 {
 
     private String str;
@@ -31,6 +31,20 @@ public class StringableString implements Stringable
     
     public void setString(String str){
         this.str = str;
+    }
+
+    @Override
+    public String getMirror()
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void fromMirror(String e)
+    {
+        // TODO Auto-generated method stub
+        
     }
 
 }

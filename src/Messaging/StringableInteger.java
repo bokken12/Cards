@@ -1,6 +1,6 @@
 package messaging;
 
-public class StringableInteger implements Stringable
+public class StringableInteger implements Stringable<Integer>
 {
     private int i;
 
@@ -11,6 +11,11 @@ public class StringableInteger implements Stringable
     public StringableInteger(int i)
     {
         this.i = i;
+    }
+    
+    public StringableInteger(Integer i)
+    {
+        this(i.intValue());
     }
 
     @Override
@@ -31,5 +36,19 @@ public class StringableInteger implements Stringable
     
     public void setInt(int i){
         this.i = i;
+    }
+
+    @Override
+    public Integer getMirror()
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void fromMirror(Integer e)
+    {
+        // TODO Auto-generated method stub
+        
     }
 }
