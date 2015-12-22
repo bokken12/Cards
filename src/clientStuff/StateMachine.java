@@ -6,13 +6,10 @@ import javax.swing.JFrame;
 
 import messaging.Message;
 import messaging.Messager;
-import events.EventBus;
-import events.GameEvent;
 
 public class StateMachine extends JFrame
 {
     private Stack<State> state;
-    private EventBus bus;
     private Messager messager;
     private static StateMachine frame;
     public static void main(String[] args){
@@ -21,7 +18,6 @@ public class StateMachine extends JFrame
     }
     public StateMachine(){
         state = new Stack<State>();
-        bus = new EventBus();
         messager = new Messager();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
@@ -46,11 +42,8 @@ public class StateMachine extends JFrame
         }
         state.push(s);
         getCurrentState().onInitialize(this);
+        getCurrentState().onInitialize(this);
         add(getCurrentState());
-    }
-    public EventBus getBus()
-    {
-        return bus;
     }
     public Messager getMessager()
     {
@@ -61,8 +54,5 @@ public class StateMachine extends JFrame
     }
     public static void sendMessage(Message m){
         frame.getMessager().send(m);
-    }
-    public static void callEvent(GameEvent e){
-        frame.getBus().callEvent(e);
     }
 }

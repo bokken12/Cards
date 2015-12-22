@@ -43,6 +43,7 @@ public class ExampleMessage extends Message
         // now we have to do something very important
 
         data.add("myBool", sendBool);
+        data.add("String", new StringableString());
 
         // we must add them to data
         // not how I never actually changed sendBool, that was intentional
