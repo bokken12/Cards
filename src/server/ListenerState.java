@@ -6,7 +6,7 @@ import messaging.MessageListener;
 
 public abstract class ListenerState implements MessageListener
 {
-    private ClientListener listener;
+    protected ClientListener listener;
     public void onInitialize(ClientListener stater){
         listener = stater;
     }

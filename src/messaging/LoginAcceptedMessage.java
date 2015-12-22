@@ -3,6 +3,8 @@ package messaging;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import player.Player;
+
 public class LoginAcceptedMessage extends Message {
 
 	public LoginAcceptedMessage() {
@@ -28,6 +30,10 @@ public class LoginAcceptedMessage extends Message {
 		data.add("email", email);
 		data.add("cards", cards);
 		data.add("friends", friends);
+	}
+	
+	public LoginAcceptedMessage(Player player) {
+		//TODO
 	}
 	
 	public String getUsername() {
