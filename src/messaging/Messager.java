@@ -17,6 +17,9 @@ public class Messager extends Thread
     private PrintWriter output;
     public Messager(MessageListener l){
         listener = l;
+    }
+    @Override
+    public void run(){
         socket = connect();
         try {
             input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -24,7 +27,7 @@ public class Messager extends Thread
             while(true){
                 String line = input.readLine();
                 if(line != null){
-                    l.MessageRecieved(Message.fromData(new Stringer(line)));
+                    listener.MessageRecieved(Message.fromData(new Stringer(line)));
                 }
             }
         } catch (IOException e) {
@@ -38,7 +41,7 @@ public class Messager extends Thread
         while (true) {
             try {
                 Socket s = new Socket(InetAddress.getByName(ServerListener.HOSTNAME), ServerListener.PORT_NUMBER);
-                System.out.println("Socket achieved");
+                if(s != null) System.out.println("Socket achieved");
                 return s;
             } catch (IOException e) {
                 System.out.println("no connection");

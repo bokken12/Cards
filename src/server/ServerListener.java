@@ -15,7 +15,7 @@ public class ServerListener extends ConsoleProgram
     private ServerSocket listener;
     public static void main(String[] args)
     {
-        (new ServerListener()).start();
+        (server = new ServerListener()).start();
     }
     public void run(){
         try {
@@ -23,7 +23,8 @@ public class ServerListener extends ConsoleProgram
             println("Waiting for a connection.");
 
             while (true) {
-                new ClientListener(null, listener.accept()).start();
+                new ClientListener(new LoginState(), listener.accept()).start();
+                printLine("Got a connection!");
             }
         } catch (IOException e) {
             //  Auto-generated catch block

@@ -27,12 +27,16 @@ public class ClientListener extends Thread
         states = new Stack<ListenerState>();
         setState(ls);
         socket = s;
+    }
+    @Override
+    public void run(){
         try {
             input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             output = new PrintWriter(socket.getOutputStream());
             while(true){
                 String line = input.readLine();
                 if(line != null){
+                    ServerListener.printLine("read: " + line);
                     getCurrentState().MessageRecieved(Message.fromData(new Stringer(input.readLine())));
                 }
             }

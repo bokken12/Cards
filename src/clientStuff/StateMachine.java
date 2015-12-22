@@ -20,6 +20,7 @@ public class StateMachine extends JFrame implements MessageListener
     public StateMachine(){
         state = new Stack<State>();
         messager = new Messager(this);
+        messager.start();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
         setVisible(true);
