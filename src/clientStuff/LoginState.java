@@ -77,7 +77,7 @@ public class LoginState extends State
 	@Override
 	public void onBegin(StateMachine stater)
 	{
-		stater.setSize(500, 100);
+		stater.setSize(520, 70);
 		//stater.setPreferredSize(new Dimension(500, 300));
 	}
 

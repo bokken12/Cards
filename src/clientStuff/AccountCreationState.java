@@ -21,6 +21,7 @@ public class AccountCreationState extends State
     private JTextField newPasswordText;
     private JTextField verifyPasswordText;
     private JButton newcreateAccount;
+    private JButton backToLogin;
     static JLabel error;
     private JPanel south;
     
@@ -36,7 +37,9 @@ public class AccountCreationState extends State
             }else {
 
             }
-        } 
+        }  else if(e.getSource().equals(backToLogin)){
+            StateMachine.getFrame().back();
+        }
     }
 
     @Override
@@ -61,6 +64,7 @@ public class AccountCreationState extends State
         newPasswordText = new JTextField("Enter Password");
         verifyPasswordText = new JTextField("Verify Password");
         newcreateAccount = new JButton("Create Account");
+        backToLogin = new JButton("Back To Login");
         south.add(emailText);
         emailText.addActionListener(this);
         south.add(newUsernameText);
@@ -71,6 +75,8 @@ public class AccountCreationState extends State
         verifyPasswordText.addActionListener(this);
         south.add(newcreateAccount);
         newcreateAccount.addActionListener(this);
+        south.add(backToLogin);
+        backToLogin.addActionListener(this);
         error = new JLabel("");
         south.add(error);
         this.add(south);
@@ -79,7 +85,7 @@ public class AccountCreationState extends State
     @Override
     public void onBegin(StateMachine stater)
     {
-        stater.setSize(500, 300);
+        stater.setSize(735, 70);
 
     }
 

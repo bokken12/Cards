@@ -36,6 +36,7 @@ public class StateMachine extends JFrame implements MessageListener
             getCurrentState().onBegin(this);
             add(getCurrentState());
         }
+        repaint();
     }
     public void setState(State s){
         if(!(state.isEmpty())){
@@ -46,6 +47,7 @@ public class StateMachine extends JFrame implements MessageListener
         getCurrentState().onInitialize(this);
         getCurrentState().onBegin(this);
         add(getCurrentState());
+        repaint();
     }
     public Messager getMessager()
     {
