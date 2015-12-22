@@ -24,6 +24,8 @@ public class Messager extends Thread
         try {
             input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             output = new PrintWriter(socket.getOutputStream());
+            output.println("yay happy, I'm a message");
+            output.flush();
             while(true){
                 String line = input.readLine();
                 if(line != null){

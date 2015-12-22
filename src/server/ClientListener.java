@@ -41,11 +41,12 @@ public class ClientListener extends Thread
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            ServerListener.printLine("I had an IOException");
         }
     }
     public void send(Message m){
         output.println(m.toString());
+        output.flush();
     }
     public ListenerState getCurrentState(){
         return states.peek();

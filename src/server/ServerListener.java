@@ -23,7 +23,7 @@ public class ServerListener extends ConsoleProgram
             println("Waiting for a connection.");
 
             while (true) {
-                new ClientListener(new LoginState(), listener.accept()).start();
+                (new ClientListener(new LoginState(), listener.accept())).start();
                 printLine("Got a connection!");
             }
         } catch (IOException e) {
