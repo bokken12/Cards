@@ -5,9 +5,10 @@ import java.util.Stack;
 import javax.swing.JFrame;
 
 import messaging.Message;
+import messaging.MessageListener;
 import messaging.Messager;
 
-public class StateMachine extends JFrame
+public class StateMachine extends JFrame implements MessageListener
 {
     private Stack<State> state;
     private Messager messager;
@@ -18,7 +19,7 @@ public class StateMachine extends JFrame
     }
     public StateMachine(){
         state = new Stack<State>();
-        messager = new Messager();
+        messager = new Messager(this);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
         setVisible(true);
@@ -54,5 +55,12 @@ public class StateMachine extends JFrame
     }
     public static void sendMessage(Message m){
         frame.getMessager().send(m);
+    }
+    @Override
+    public void MessageRecieved(Message message)
+    {
+        if(!(state.isEmpty())){
+            getCurrentState().MessageRecieved(message);
+        }
     }
 }

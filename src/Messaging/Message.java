@@ -12,7 +12,7 @@ public abstract class Message
     }
     
     public Message() {
-    	data = new Stringer();
+    	data = new Stringer(getClass());
     }
     
     public static Message fromData(Stringer data){
