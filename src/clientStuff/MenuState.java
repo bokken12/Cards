@@ -26,9 +26,11 @@ public class MenuState extends State
     private JLabel wait;
     private ArrayList<JButton> deckButtons;
     
+    Player player;
+    
     
     public MenuState(Player p){
-       
+       player = p;
     }
     
 
@@ -99,15 +101,15 @@ public class MenuState extends State
         decklist.createVerticalScrollBar();
         decklist.getViewport().setPreferredSize(b);
 
-        String[] decks = gs.getPlayer().getDecks().keySet().toArray(new String[10]);
-        for (int i = 0; i < gs.getPlayer().getDecks().size(); i++)
+        String[] decks = player.getDecks().keySet().toArray(new String[10]);
+        for (int i = 0; i < player.getDecks().size(); i++)
         {
             JLabel a = new JLabel(decks[i]);
             decklist.add(a);
         }
         add(decklist);
 
-        CardList cl = new CardList(gs.getPlayer());
+        CardList cl = new CardList(player);
         add(cl);
 
         JCheckBox a = new JCheckBox("Show all cards");
@@ -117,11 +119,9 @@ public class MenuState extends State
     public void matchScreen()
     {
         this.removeAll();
-        this.revalidate();
         this.repaint();
-        output.println("--remPlay" + gs.getPlayer().getUsername() + "|"
-                + gs.getPlayer().getRank());
-        HashMap<String, int[]> deecks = gs.getPlayer().getDecks();
+       
+        HashMap<String, int[]> deecks = player.getDecks();
         Object[] a = deecks.keySet().toArray();
 
         add(Box.createHorizontalGlue());
