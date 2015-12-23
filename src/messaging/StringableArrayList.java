@@ -29,6 +29,7 @@ public class StringableArrayList<E extends Stringable> extends ArrayList<E> impl
         String delim = "" + this.hashCode();
         String str = "";
         str += delim;
+        str += "delim";
         if(size() > 0){
             str += get(0).getClass().getName();
             for(E obj: this){
@@ -43,7 +44,7 @@ public class StringableArrayList<E extends Stringable> extends ArrayList<E> impl
     public void fromString(String str)
     {
         String delim = str.substring(0, str.indexOf("delim"));
-        StringTokenizer st = new StringTokenizer(str.substring(str.indexOf("delim" + 5), str.length()), delim);
+        StringTokenizer st = new StringTokenizer(str.substring(str.indexOf("delim" + 5 + delim.length()), str.length()), delim);
         try
         {
             if(st.hasMoreTokens()){
