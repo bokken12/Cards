@@ -28,7 +28,7 @@ public class StateMachine extends JFrame implements MessageListener
     public State getCurrentState(){
         return state.peek();
     }
-    public void back(){
+    private void internalBack(){
         remove(getCurrentState());
         getCurrentState().onDestroy(this);
         state.pop();
@@ -38,7 +38,7 @@ public class StateMachine extends JFrame implements MessageListener
         }
         repaint();
     }
-    public void setState(State s){
+    private void setInternalState(State s){
         if(!(state.isEmpty())){
             getCurrentState().onLeave(this);
             remove(getCurrentState());
@@ -65,5 +65,11 @@ public class StateMachine extends JFrame implements MessageListener
         if(!(state.isEmpty())){
             getCurrentState().MessageRecieved(message);
         }
+    }
+    public static void setState(State s){
+        frame.setInternalState(s);
+    }
+    public static void back(){
+        frame.internalBack();
     }
 }

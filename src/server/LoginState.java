@@ -42,7 +42,7 @@ public class LoginState extends ListenerState {
 			} 
 
 		} else if(message instanceof AccountCreationMessage) {
-			if(users.get(((AccountCreationMessage) message).getUsername()) != null) {
+			if(users.get(((AccountCreationMessage) message).getUsername()) == null) {
 				send(new AccountConfirmationMessage(true));
 				String username = ((AccountCreationMessage) message).getUsername();
 				users.put(username, ((AccountCreationMessage) message).getPassword());

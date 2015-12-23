@@ -50,6 +50,7 @@ public class AccountCreationState extends State
                 StateMachine.sendMessage(new LoginMessage(newUsernameText.getText(), newPasswordText.getText()));
             } else {
                 error.setText("Account not Confirmed");
+                repaint();
             }
         }
     }

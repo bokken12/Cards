@@ -42,7 +42,7 @@ public class LoginState extends State
 		}	
 		else if(e.getSource().equals(createAccount)){
 
-		    StateMachine.getFrame().setState(new AccountCreationState());
+		    StateMachine.setState(new AccountCreationState());
 		}
 
 
@@ -108,8 +108,8 @@ public class LoginState extends State
 				ArrayList<Integer> cards = ((LoginAcceptedMessage) message).getCards();
 				ArrayList<String> friends = ((LoginAcceptedMessage) message).getFriends();
 				HashMap<String, int[]> decks = null;
-
 				Player player = new Player(email, name, password, cards, decks, rank, friends, gold);
+				StateMachine.setState(new MenuState(player));
 			} else {
 				Player player = ((LoginAcceptedMessage) message).getPlayer();
 			}
