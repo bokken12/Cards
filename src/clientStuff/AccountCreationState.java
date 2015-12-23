@@ -47,7 +47,9 @@ public class AccountCreationState extends State
     {
         if(message instanceof AccountConfirmationMessage) {
             if(((AccountConfirmationMessage) message).isConfirmed()) {
+            	StateMachine.getFrame().setState(new LoginState());
                 StateMachine.sendMessage(new LoginMessage(newUsernameText.getText(), newPasswordText.getText()));
+                
             } else {
                 error.setText("Account not Confirmed");
                 repaint();
