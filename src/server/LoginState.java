@@ -28,7 +28,7 @@ public class LoginState extends ListenerState {
 	static final HashMap<String, ClientListener> players = new HashMap<String, ClientListener>();
 
 	static HashMap<String, Player> userdata = new HashMap<String, Player>();
-	
+
 
 	@Override
 	public void MessageRecieved(Message message) {
@@ -46,8 +46,8 @@ public class LoginState extends ListenerState {
 				send(new AccountConfirmationMessage(true));
 				String username = ((AccountCreationMessage) message).getUsername();
 				users.put(username, ((AccountCreationMessage) message).getPassword());
-				userdata.put(username, new Player(((AccountCreationMessage) message).getEmail(), username, ((AccountCreationMessage) message).getPassword(), null/*Server.getStarterCards()*/, null/*sever.getStarterDeck()*/, 0, new ArrayList<String>(), 0));
-				
+				userdata.put(username, new Player(((AccountCreationMessage) message).getEmail(), username, ((AccountCreationMessage) message).getPassword(), getStarterCards(), getStarterDeck(), 0, new ArrayList<String>(), 0));
+
 			} else {
 				send(new AccountConfirmationMessage(false));
 			}
@@ -72,4 +72,21 @@ public class LoginState extends ListenerState {
 
 	}
 
+	public HashMap<String, int[]> getStarterDeck() {
+		HashMap<String, int[]> x = new HashMap<String, int[]>();
+		x.put("Starter", new int[] { 1, 1, 2,2,3,3,4,4,5,5,6,6,7,7,8,8,9,9,10,10});
+		return x;
+	}
+
+	public ArrayList<Integer> getStarterCards() {
+		
+		ArrayList<Integer> e = new ArrayList<Integer>();
+
+		for(int f = 0; f < 11; f++) {
+			for(int i = 0; i < 2; i++) {
+				e.add(f);
+			}
+		}
+		return e;
+	}
 }

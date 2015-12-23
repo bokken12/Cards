@@ -131,7 +131,7 @@ public class MenuState extends State
         {
             JButton b = new JButton(a[i].toString());
             System.out.println(deecks);
-            b.addActionListener(control);
+            b.addActionListener(this);
             deckButtons.add(b);
 
             add(b);
