@@ -47,6 +47,7 @@ public class StateMachine extends JFrame implements MessageListener
         getCurrentState().onInitialize(this);
         getCurrentState().onBegin(this);
         add(getCurrentState());
+        revalidate();
         repaint();
     }
     public Messager getMessager()
