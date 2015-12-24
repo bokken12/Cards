@@ -25,12 +25,13 @@ public class Stringer
             e.printStackTrace();
         }
         for(int index = cs + 2; index < str.length(); index++){
-            int parens = str.indexOf(index, '(');
+            int parens = str.indexOf('(', index);
             if(parens == -1){
                 break;
             }
             String dataName = str.substring(index, parens);
             String stringableInfo = fromParens(str, parens);
+            System.out.println("StringableInfo is: " + stringableInfo);
             Stringable stringable = fromString(stringableInfo);
             data.put(dataName, stringable);
             index = parens + stringableInfo.length() + 3;
@@ -62,6 +63,9 @@ public class Stringer
             // TODO Auto-generated catch block
             e.printStackTrace();
         }*/
+        for(String string: data.keySet()){
+            System.out.println("I have a key: " + string);
+        }
     }
     public void add(String name, Stringable s){
         data.put(name, s);
@@ -95,22 +99,24 @@ public class Stringer
         return type;
     }
     public static String fromParens(String str, int index){
+        System.out.println("index originally was: " + index);
         int opens = 0;
         int closes = 0;
         int current = index;
         while(true){
-            char c = str.charAt(index);
+            char c = str.charAt(current);
             if(c == '('){
                 opens++;
             } else if(c == ')'){
                 closes++;
             }
+            current++;
             if(opens == closes){
                 break;
             }
-            current++;
         }
-        return str.substring(index + 1, current);
+        System.out.println("index is: " + index + ", and current is: " + current);
+        return str.substring(index + 1, current - 1);
     }
     public static Stringable fromString(String str){
         if(str.equals("null")){
@@ -119,6 +125,7 @@ public class Stringer
         int parens = str.indexOf('(');
         String className = str.substring(0, parens);
         String info = fromParens(str, parens);
+        System.out.println("Classname is: " + className);
         return (Stringable) new MetaClass(className).createInstance(info);
     }
     public static String printStringable(Stringable str){

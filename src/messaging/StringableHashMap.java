@@ -30,6 +30,11 @@ public class StringableHashMap<K extends Stringable, V extends Stringable> exten
         }
         return str;
     }
+    
+    public StringableHashMap(String str){
+        super();
+        fromString(str);
+    }
 
     @Override
     public void fromString(String str)

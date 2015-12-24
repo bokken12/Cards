@@ -12,6 +12,10 @@ public class StringableBoolean implements Stringable<Boolean>
         setBoolean(bool);
     }
     
+    public StringableBoolean(String str){
+        fromString(str);
+    }
+    
     @Override
     public String toString()
     {

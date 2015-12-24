@@ -33,6 +33,10 @@ public class StringablePlayer implements Stringable
     public StringablePlayer(Player p) {
     }
     
+    public StringablePlayer(String str){
+        
+    }
+    
     public Player toPlayer() {
     	return null;
     }

@@ -17,6 +17,10 @@ public class StringableInteger implements Stringable<Integer>
     {
         this(i.intValue());
     }
+    
+    public StringableInteger(String str){
+        fromString(str);
+    }
 
     @Override
     public void fromString(String str)
