@@ -1,6 +1,7 @@
 package messaging;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.StringTokenizer;
 
 public class StringableArrayList<E extends Stringable> extends ArrayList<E> implements Stringable<ArrayList>
@@ -26,7 +27,7 @@ public class StringableArrayList<E extends Stringable> extends ArrayList<E> impl
     @Override
     public String toString()
     {
-        String delim = "" + this.hashCode();
+        /*String delim = "" + this.hashCode();
         String str = "";
         str += delim;
         str += "delim";
@@ -37,13 +38,20 @@ public class StringableArrayList<E extends Stringable> extends ArrayList<E> impl
                 str += obj.toString();
             }
         }
+        return str;*/
+        String str = "";
+        for(Stringable obj: this){
+            str += "(";
+            str += Stringer.printStringable(obj);
+            str += ")";
+        }
         return str;
     }
 
     @Override
     public void fromString(String str)
     {
-        String delim = str.substring(0, str.indexOf("delim"));
+        /*String delim = str.substring(0, str.indexOf("delim"));
         StringTokenizer st = new StringTokenizer(str.substring(str.indexOf("delim" + 5 + delim.length()), str.length()), delim);
         try
         {
@@ -58,6 +66,12 @@ public class StringableArrayList<E extends Stringable> extends ArrayList<E> impl
         {
             // TODO Auto-generated catch block
             e.printStackTrace();
+        }*/
+        for(int index = 0; index < str.length(); index++){
+            String stringableInfo = Stringer.fromParens(str, index);
+            Stringable stringable = Stringer.fromString(stringableInfo);
+            add((E) stringable);
+            index += stringableInfo.length() + 1;
         }
     }
     @Override

@@ -37,7 +37,7 @@ public class ClientListener extends Thread
                 String line = input.readLine();
                 if(line != null){
                     ServerListener.printLine("read: " + line);
-                    getCurrentState().MessageRecieved(Message.fromData(new Stringer(input.readLine())));
+                    getCurrentState().MessageRecieved(Message.fromData(new Stringer(line)));
                 }
             }
         } catch (IOException e) {

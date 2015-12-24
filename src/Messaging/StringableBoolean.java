@@ -46,5 +46,12 @@ public class StringableBoolean implements Stringable<Boolean>
     {
         bool = e.booleanValue();
     }
-
+    @Override
+    public int hashCode(){
+        if(bool){
+            return 1;
+        } else {
+            return 0;
+        }
+    }
 }

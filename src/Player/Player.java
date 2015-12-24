@@ -6,9 +6,10 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
 
+import messaging.Stringable;
 import cards.Card;
 
-public class Player {
+public class Player implements Stringable<Player>{
 	String email;
 	String username;
 	String password;
@@ -24,7 +25,7 @@ public class Player {
 	@Override
 	public String toString() {
 
-		Set<String> a = decks.keySet();
+		/*Set<String> a = decks.keySet();
 		Iterator<String> y = a.iterator();
 		String s = "";
 		for(int i = 0; i < a.size(); i++) {
@@ -41,7 +42,15 @@ public class Player {
 				+ ", password=" + password + ", cardCollection="
 				+ cardCollection + ", decks=" + s
 				+ ", rank=" + rank + ", friends=" + friends
-				+ ", gold=" + gold + "]";
+				+ ", gold=" + gold + "]";*/
+	    String str = "";
+	    str += email;
+	    str += ", ";
+	    str += username;
+	    str += ", ";
+	    str += password;
+	    str += ", ";
+	    str += cardC
 	}
 	public void addFriend(String friend){
 		friends.add(friend);
@@ -116,4 +125,27 @@ public class Player {
 		this.friends = friends;
 		this.gold = gold;
 	}
+    @Override
+    public void fromString(String str)
+    {
+        // TODO Auto-generated method stub
+        
+    }
+    @Override
+    public Player getMirror()
+    {
+        return this;
+    }
+    @Override
+    public void fromMirror(Player e)
+    {
+        setEmail(e.getEmail());
+        setUsername(e.getUsername());
+        setPassword(e.getPassword());
+        setCardCollection(e.getCardCollection());
+        setDecks(e.getDecks());
+        setRank(e.getRank());
+        setFriends(e.getFriends());
+        setGold(e.getGold());
+    }
 }
