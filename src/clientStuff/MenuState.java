@@ -50,9 +50,20 @@ public class MenuState extends State
     	 wait = new JLabel();
     	 deckButtons = new ArrayList<JButton>();
     	 foo = new JPanel();
-         
-       
-
+         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
+         add(Box.createHorizontalGlue());
+         foo.setLayout(new BoxLayout(foo, BoxLayout.PAGE_AXIS));
+         foo.add(Box.createVerticalGlue());
+         foo.add(play);
+         play.setAlignmentX(CENTER_ALIGNMENT);
+         foo.add(cards);
+         cards.setAlignmentX(CENTER_ALIGNMENT);
+         foo.add(settings);
+         settings.setAlignmentX(CENTER_ALIGNMENT);
+         foo.setOpaque(false);
+         foo.add(Box.createVerticalGlue());
+         add(foo);
+         add(Box.createHorizontalGlue());
     }
     
     @Override
@@ -66,26 +77,7 @@ public class MenuState extends State
         stater.setSize(600, 340);
         stater.setVisible(true);
         stater.setResizable(true);
-        
-        setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
-		add(Box.createHorizontalGlue());
-        foo.setLayout(new BoxLayout(foo, BoxLayout.PAGE_AXIS));
- 		foo.add(Box.createVerticalGlue());
- 		foo.add(play);
- 		play.setAlignmentX(CENTER_ALIGNMENT);
- 		foo.add(cards);
- 		cards.setAlignmentX(CENTER_ALIGNMENT);
- 		foo.add(settings);
- 		settings.setAlignmentX(CENTER_ALIGNMENT);
- 		foo.setOpaque(false);
- 		foo.add(Box.createVerticalGlue());
- 		add(foo);
- 		
- 		
- 		add(Box.createHorizontalGlue());
         stater.repaint();
-        repaint();
-        
     }
 
     @Override

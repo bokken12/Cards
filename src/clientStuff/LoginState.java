@@ -71,7 +71,7 @@ public class LoginState extends State
 		createAccount.addActionListener(this);
 		south.add(createAccount);
 		south.add(error);
-		this.add(south);
+		add(south);
 	}
 
 	@Override
