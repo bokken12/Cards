@@ -58,11 +58,11 @@ public class LoginAcceptedMessage extends Message {
 		return data.get("email").toString();
 	}
 	public ArrayList<Integer> getCards(){
-		return (ArrayList<Integer>) data.get("cards").getMirror();
+		return (ArrayList<Integer>) getMirror(data.get("cards"));
 	}
 	
 	public ArrayList<String> getFriends(){
-		return (ArrayList<String>) data.get("friends").getMirror();
+		return (ArrayList<String>) getMirror(data.get("friends"));
 	}
 	
 	public Player getPlayer() {

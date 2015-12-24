@@ -1,19 +1,23 @@
 package clientStuff;
 
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import player.Player;
 import messaging.Message;
+import messaging.PlayingMessage;
 
 public class MenuState extends State
 {
@@ -25,6 +29,7 @@ public class MenuState extends State
     private JScrollPane decklist;
     private JLabel wait;
     private ArrayList<JButton> deckButtons;
+    private JPanel foo;
     
     Player player;
     
@@ -44,7 +49,29 @@ public class MenuState extends State
     	 decklist = new JScrollPane();
     	 wait = new JLabel();
     	 deckButtons = new ArrayList<JButton>();
+    	 foo = new JPanel();
+    	 add(play);
+         add(cards);
+         add(settings);
+         
+        foo.setLayout(new BoxLayout(foo, BoxLayout.PAGE_AXIS));
+ 		foo.add(Box.createVerticalGlue());
+ 		foo.add(play);
+ 		play.setAlignmentX(CENTER_ALIGNMENT);
+ 		foo.add(cards);
+ 		cards.setAlignmentX(CENTER_ALIGNMENT);
+ 		foo.add(settings);
+ 		settings.setAlignmentX(CENTER_ALIGNMENT);
+ 		foo.setOpaque(false);
+ 		foo.add(Box.createVerticalGlue());
+ 		add(foo);
+ 		add(Box.createHorizontalGlue());
 
+    }
+    
+    @Override
+    public void paintComponent(Graphics g) {
+    	g.drawImage(background.getImage(), 0, 0, this);
     }
 
     @Override
@@ -53,6 +80,7 @@ public class MenuState extends State
         stater.setSize(500, 400);
         stater.setVisible(true);
         stater.setResizable(false);
+        
     }
 
     @Override
@@ -77,7 +105,7 @@ public class MenuState extends State
     public void actionPerformed(ActionEvent e)
     {
         if(e.getSource().equals(play)) {
-        	
+        	StateMachine.sendMessage(new PlayingMessage(player.getUsername(), player.getRank()));
         } else if(e.getSource().equals(cards)) {
         	
         } else if(e.getSource().equals(settings)) {
@@ -114,6 +142,12 @@ public class MenuState extends State
 
         JCheckBox a = new JCheckBox("Show all cards");
         add(a);
+    }
+    
+    public void waitScreen() {
+    	this.removeAll();
+    	JLabel waiting = new JLabel("Finding a match...");
+    	add(waiting);
     }
     
     public void matchScreen()

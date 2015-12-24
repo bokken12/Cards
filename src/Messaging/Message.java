@@ -40,4 +40,10 @@ public abstract class Message
     {
         this.data = data;
     }
+    public Object getMirror(Stringable str){
+    	if(str == null){
+    		return str;
+    	}
+    	return str.getMirror();
+    }
 }
