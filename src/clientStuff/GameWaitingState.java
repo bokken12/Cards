@@ -45,6 +45,7 @@ public class GameWaitingState extends State {
 
 	@Override
 	public void onInitialize(StateMachine stater) {
+	    deckButtons = new ArrayList<JButton>();
 		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 		HashMap<String, ArrayList<Integer>> deecks = player.getDecks();
         Object[] a = deecks.keySet().toArray();

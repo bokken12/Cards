@@ -104,6 +104,9 @@ public class Stringer
         int closes = 0;
         int current = index;
         while(true){
+            if(current >= str.length()){
+                break;
+            }
             char c = str.charAt(current);
             if(c == '('){
                 opens++;
@@ -125,6 +128,7 @@ public class Stringer
         int parens = str.indexOf('(');
         String className = str.substring(0, parens);
         String info = fromParens(str, parens);
+        System.out.println("Info is: " + info);
         System.out.println("Classname is: " + className);
         return (Stringable) new MetaClass(className).createInstance(info);
     }

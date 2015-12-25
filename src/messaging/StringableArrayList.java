@@ -22,6 +22,7 @@ public class StringableArrayList<E extends Stringable> extends ArrayList<E> impl
     }
     public StringableArrayList(Class<? extends E> cls, ArrayList ar){
         super();
+        this.cls = cls;
         fromMirror(ar);
     }
     @Override

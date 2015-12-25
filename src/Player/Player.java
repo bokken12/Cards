@@ -16,7 +16,7 @@ import messaging.Stringer;
 import cards.Card;
 
 public class Player implements Stringable<Player>{
-    private static String seperator = "I'm such a great player, aren't I great. I must be amazing. Wow, I'm a wonderful player, don't you think that my username is fabulous?";
+    private static String seperator = "|||";//"I'm such a great player, aren't I great. I must be amazing. Wow, I'm a wonderful player, don't you think that my username is fabulous?";
 	StringableString email;
 	StringableString username;
 	StringableString password;

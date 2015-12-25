@@ -10,7 +10,7 @@ public class StringableHashMap<K extends Stringable, V extends Stringable> exten
     @Override
     public String toString()
     {
-        String delim = "" + this.hashCode();
+        /*String delim = "" + this.hashCode();
         String str = "";
         str += delim;
         str += "delim";
@@ -28,6 +28,16 @@ public class StringableHashMap<K extends Stringable, V extends Stringable> exten
                 str += get(obj);
             }
         }
+        return str;*/
+        String str = "";
+        for(Stringable obj: this.keySet()){
+            str += "((";
+            str += Stringer.printStringable(obj);
+            str += ")";
+            str += "(";
+            str += Stringer.printStringable(get(obj));
+            str += "))";
+        }
         return str;
     }
     
@@ -43,8 +53,8 @@ public class StringableHashMap<K extends Stringable, V extends Stringable> exten
     @Override
     public void fromString(String str)
     {
-        String delim = str.substring(0, str.indexOf("delim"));
-        StringTokenizer st = new StringTokenizer(str.substring(str.indexOf("delim" + 5 + delim.length()), str.length()), delim);
+        /*String delim = str.substring(0, str.indexOf("delim"));
+        StringTokenizer st = new StringTokenizer(str.substring(str.indexOf("delim") + 5, str.length()), delim);
         try
         {
             if(st.hasMoreTokens()){
@@ -60,6 +70,15 @@ public class StringableHashMap<K extends Stringable, V extends Stringable> exten
         {
             // TODO Auto-generated catch block
             e.printStackTrace();
+        }*/
+        for(int index = 0; index < str.length();){
+            String pairInfo = Stringer.fromParens(str, index);
+            String keyInfo = Stringer.fromParens(pairInfo, 0);
+            Stringable key = Stringer.fromString(keyInfo);
+            String valueInfo = Stringer.fromParens(pairInfo, keyInfo.length() + 2);
+            Stringable value = Stringer.fromString(valueInfo);
+            put((K) key, (V) value);
+            index += pairInfo.length() + 2;
         }
     }
 
