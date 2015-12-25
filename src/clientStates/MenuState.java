@@ -1,4 +1,4 @@
-package clientStuff;
+package clientStates;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -15,6 +15,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import clientStuff.CardList;
+import clientStuff.StateMachine;
 import player.Player;
 import messaging.Message;
 import messaging.PlayingMessage;

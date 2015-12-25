@@ -5,7 +5,7 @@ import java.awt.Point;
 import java.util.ArrayList;
 
 import clientStuff.Content;
-import clientStuff.BoardState;
+import clientStuff.Board;
 import cards.InPlayCreature;
 
 public class Lane
@@ -20,7 +20,7 @@ public class Lane
     public static final int CARD_WIDTH = 120;
     public static final int CARD_HEIGHT = 170;
 
-    private BoardState gamestate;
+    private Board gamestate;
     public int getNumber() {
 		return number;
 	}
@@ -77,7 +77,7 @@ public class Lane
         return creatures;
     }
 
-    public Lane(BoardState gs, int num)
+    public Lane(Board gs, int num)
     {
         gamestate = gs;
         number = num;
@@ -171,7 +171,7 @@ public class Lane
         return Integer.toString(number);
     }
 
-    public BoardState gameState()
+    public Board gameState()
     {
         return gamestate;
     }

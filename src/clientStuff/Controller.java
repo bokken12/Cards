@@ -36,12 +36,12 @@ import events.UntargetedSpellPlayedEvent;
 
 public class Controller implements MouseListener, KeyListener, ActionListener, Constants
 {
-	private BoardState gs;
+	private Board gs;
 	Display display;
 	Networker network;
 	Game game;
 
-	public Controller(BoardState gs, Display d) {
+	public Controller(Board gs, Display d) {
 		this.gs = gs;
 		display = d;
 	}

@@ -1,12 +1,12 @@
 package events;
 
 import player.PlayerRep;
-import clientStuff.BoardState;
+import clientStuff.Board;
 import cards.CreatureCard;
 
 public class AttackEvent extends GameEvent {
 
-	public AttackEvent(BoardState gs)
+	public AttackEvent(Board gs)
     {
         super(gs);
     }

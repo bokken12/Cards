@@ -1,4 +1,4 @@
-package clientStuff;
+package clientStates;
 
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
@@ -11,6 +11,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 
+import clientStuff.StateMachine;
 import messaging.Message;
 import player.Player;
 
@@ -36,7 +37,6 @@ public class GameWaitingState extends State {
 	@Override
 	public void MessageRecieved(Message message) {
 		
-
 	}
 	
 	public GameWaitingState(Player p) {

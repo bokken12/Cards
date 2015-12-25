@@ -1,4 +1,4 @@
-package clientStuff;
+package clientStates;
 
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
@@ -8,6 +8,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import clientStuff.StateMachine;
 import messaging.AccountConfirmationMessage;
 import messaging.AccountCreationMessage;
 import messaging.LoginMessage;

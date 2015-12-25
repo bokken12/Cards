@@ -1,4 +1,4 @@
-package clientStuff;
+package clientStates;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -12,6 +12,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
+import clientStuff.StateMachine;
 import messaging.AccountConfirmationMessage;
 import messaging.AccountCreationMessage;
 import messaging.LoginAcceptedMessage;

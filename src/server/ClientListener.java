@@ -13,7 +13,7 @@ import javax.swing.JFrame;
 import messaging.Message;
 import messaging.Messager;
 import messaging.Stringer;
-import clientStuff.State;
+import clientStates.State;
 import clientStuff.StateMachine;
 import server.Server;
 

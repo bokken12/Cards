@@ -1,6 +1,6 @@
 package events;
 
-import clientStuff.BoardState;
+import clientStuff.Board;
 import cards.InPlayCreature;
 
 public class ModifyEvent extends GameEvent{
@@ -16,7 +16,7 @@ public class ModifyEvent extends GameEvent{
 		
 	}
 	
-	public ModifyEvent(BoardState gs, InPlayCreature target, int power, int health) {
+	public ModifyEvent(Board gs, InPlayCreature target, int power, int health) {
 	    super(gs);
 		this.power = power;
 		this.health = health;

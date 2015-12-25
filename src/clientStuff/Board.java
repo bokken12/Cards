@@ -22,7 +22,7 @@ import events.DamageEvent;
 import events.EventBus;
 import uselessSubclasses.Lane;
 
-public class BoardState implements Constants
+public class Board implements Constants
 {
     private boolean startTurn;
     private boolean clear = false;
@@ -61,7 +61,7 @@ public class BoardState implements Constants
     private Lane[] lanes;
     private Player player;
 
-    public BoardState()
+    public Board()
     {
         Lane lane1 = new Lane(this, 1);
         Lane lane2 = new Lane(this, 2);

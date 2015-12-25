@@ -4,6 +4,8 @@ import java.util.Stack;
 
 import javax.swing.JFrame;
 
+import clientStates.LoginState;
+import clientStates.State;
 import messaging.Message;
 import messaging.MessageListener;
 import messaging.Messager;
