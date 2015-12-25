@@ -13,6 +13,7 @@ import javax.swing.JLabel;
 
 import clientStuff.StateMachine;
 import messaging.Message;
+import messaging.PlayingMessage;
 import player.Player;
 
 public class GameWaitingState extends State {
@@ -22,10 +23,16 @@ public class GameWaitingState extends State {
 	 JLabel wait = new JLabel("");
 	 Player player;
 	 ImageIcon background  = new ImageIcon("MenuBackground.jpg");
+	 ArrayList<Integer> deck;
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
+		if(deckButtons.contains(e.getSource())) {
+			StateMachine.sendMessage(new PlayingMessage(player.getUsername(), player.getRank()));
+			deck = player.getDecks().get(((JButton) e.getSource()).getText());
+			//StateMachine.setState(new GameState(player, player.getDecks().get(((JButton) e.getSource()).getText())));
+		}
 
 	}
 	
@@ -36,7 +43,10 @@ public class GameWaitingState extends State {
 
 	@Override
 	public void MessageRecieved(Message message) {
-		
+
+		if(message instanceof MatchMessage) {
+			StateMachine.setState(new GameState());
+		}
 	}
 	
 	public GameWaitingState(Player p) {
