@@ -72,9 +72,15 @@ public class LoginState extends ListenerState {
 
 	}
 
-	public HashMap<String, int[]> getStarterDeck() {
-		HashMap<String, int[]> x = new HashMap<String, int[]>();
-		x.put("Starter", new int[] { 1, 1, 2,2,3,3,4,4,5,5,6,6,7,7,8,8,9,9,10,10});
+	public HashMap<String, ArrayList<Integer>> getStarterDeck() {
+		HashMap<String, ArrayList<Integer>> x = new HashMap<String, ArrayList<Integer>>();
+		ArrayList<Integer> e = new ArrayList<Integer>();
+		for(int f = 0; f < 11; f++) {
+			for(int i = 0; i < 2; i++) {
+				e.add(f);
+			}
+		}
+		x.put("Starter", e);
 		return x;
 	}
 
