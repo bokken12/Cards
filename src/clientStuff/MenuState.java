@@ -49,6 +49,9 @@ public class MenuState extends State
     	 decklist = new JScrollPane();
     	 wait = new JLabel();
     	 deckButtons = new ArrayList<JButton>();
+    	 play.addActionListener(this);
+    	 cards.addActionListener(this);
+    	 settings.addActionListener(this);
     	 foo = new JPanel();
          setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
          add(Box.createHorizontalGlue());
@@ -102,7 +105,7 @@ public class MenuState extends State
     public void actionPerformed(ActionEvent e)
     {
         if(e.getSource().equals(play)) {
-        	StateMachine.sendMessage(new PlayingMessage(player.getUsername(), player.getRank()));
+        	StateMachine.setState(new GameWaitingState(player));
         } else if(e.getSource().equals(cards)) {
         	
         } else if(e.getSource().equals(settings)) {
@@ -152,7 +155,7 @@ public class MenuState extends State
         this.removeAll();
         this.repaint();
        
-        HashMap<String, int[]> deecks = player.getDecks();
+        HashMap<String, ArrayList<Integer>> deecks = player.getDecks();
         Object[] a = deecks.keySet().toArray();
 
         add(Box.createHorizontalGlue());

@@ -94,7 +94,7 @@ public class LoginState extends State
 		// TODO Auto-generated method stub
 
 	}
-
+	
 	@Override
 	public void MessageRecieved(Message message)
 	{
@@ -108,16 +108,13 @@ public class LoginState extends State
 				int rank = ((LoginAcceptedMessage) message).getRank();
 				ArrayList<Integer> cards = ((LoginAcceptedMessage) message).getCards();
 				ArrayList<String> friends = ((LoginAcceptedMessage) message).getFriends();
-				HashMap<String, int[]> decks = null;
+				HashMap<String, ArrayList<Integer>> decks = ((LoginAcceptedMessage) message).getDecks();
 				Player player = new Player(email, name, password, cards, decks, rank, friends, gold);
 				StateMachine.setState(new MenuState(player));
 			} else {
 				Player player = ((LoginAcceptedMessage) message).getPlayer();
 				StateMachine.setState(new MenuState(player));
 			}
-
 		}
-
 	}
-
 }

@@ -21,7 +21,7 @@ public class LoginAcceptedMessage extends Message {
 
 		StringableArrayList<StringableInteger> cards = new StringableArrayList<StringableInteger>(StringableInteger.class, cardList);
 		StringableArrayList<StringableString> friends = new StringableArrayList<StringableString>(StringableString.class, friendList);
-		//decks & friends
+		//StringableHashMap...
 		
 		data.add("username", username);
 		data.add("password", password);
@@ -33,7 +33,8 @@ public class LoginAcceptedMessage extends Message {
 	}
 	
 	public LoginAcceptedMessage(Player player) {
-		StringablePlayer p = new StringablePlayer(player);
+		super();
+		Player p = player;
 		
 		data.add("player", p);
 	}
@@ -66,6 +67,10 @@ public class LoginAcceptedMessage extends Message {
 	}
 	
 	public Player getPlayer() {
-		return ((StringablePlayer) data.get("player")).toPlayer();
+		return ((Player) data.get("player"));
+	}
+	
+	public HashMap<String, ArrayList<Integer>> getDecks() {
+		return (HashMap<String, ArrayList<Integer>>) data.get("decks");
 	}
 }
