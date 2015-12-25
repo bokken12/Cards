@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.StringTokenizer;
 
 import messaging.Stringable;
 import messaging.StringableArrayList;
@@ -15,6 +16,7 @@ import messaging.Stringer;
 import cards.Card;
 
 public class Player implements Stringable<Player>{
+    private static String seperator = "I'm such a great player, aren't I great. I must be amazing. Wow, I'm a wonderful player, don't you think that my username is fabulous?";
 	StringableString email;
 	StringableString username;
 	StringableString password;
@@ -59,7 +61,26 @@ public class Player implements Stringable<Player>{
 	    str += Stringer.printStringable(new StringableArrayList<StringableInteger>(StringableInteger.class, cardCollection));
 	    str += ", ";*/
 	    //StringableHashMap<StringableString, StringableArrayList<StringableInteger>> stringableDecks = new StringableHashMap<StringableString, StringableArrayList<StringableInteger>>(decks);
-	    return null;
+	    String str = "";
+	    str += Stringer.printStringable(email);
+	    str += seperator;
+	    str += Stringer.printStringable(username);
+	    str += seperator;
+	    str += Stringer.printStringable(password);
+	    str += seperator;
+	    str += Stringer.printStringable(cardCollection);
+	    str += seperator;
+	    str += Stringer.printStringable(decks);
+	    str += seperator;
+	    str += Stringer.printStringable(rank);
+	    str += seperator;
+	    str += Stringer.printStringable(friends);
+	    str += seperator;
+	    str += Stringer.printStringable(gold);
+	    return str;
+	}
+	public Player(String str){
+	    this.fromString(str);
 	}
 	public void addFriend(String friend){
 		friends.add(new StringableString(friend));
@@ -136,8 +157,15 @@ public class Player implements Stringable<Player>{
     @Override
     public void fromString(String str)
     {
-        // TODO Auto-generated method stub
-        
+        StringTokenizer st = new StringTokenizer(str, seperator);
+        email = (StringableString) Stringer.fromString(st.nextToken());
+        username = (StringableString) Stringer.fromString(st.nextToken());
+        password = (StringableString) Stringer.fromString(st.nextToken());
+        cardCollection = (StringableArrayList<StringableInteger>) Stringer.fromString(st.nextToken());
+        decks = (StringableHashMap<StringableString, StringableArrayList<StringableInteger>>) Stringer.fromString(st.nextToken());
+        rank = (StringableInteger) Stringer.fromString(st.nextToken());
+        friends = (StringableArrayList<StringableString>) Stringer.fromString(st.nextToken());
+        gold = (StringableInteger) Stringer.fromString(st.nextToken());
     }
     @Override
     public Player getMirror()
