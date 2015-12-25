@@ -7,20 +7,24 @@ import java.util.Iterator;
 import java.util.Set;
 
 import messaging.Stringable;
+import messaging.StringableArrayList;
+import messaging.StringableHashMap;
+import messaging.StringableInteger;
+import messaging.StringableString;
+import messaging.Stringer;
 import cards.Card;
 
 public class Player implements Stringable<Player>{
-	String email;
-	String username;
-	String password;
-	ArrayList<Integer> cardCollection;
-	HashMap<String, int[]> decks = new HashMap<String, int[]>();
-	int rank;
-
-	ArrayList<String> friends = new ArrayList<String>();
-	int gold;
+	StringableString email;
+	StringableString username;
+	StringableString password;
+	StringableArrayList<StringableInteger> cardCollection;
+	StringableHashMap<StringableString, StringableArrayList<StringableInteger>> decks = new StringableHashMap<StringableString, StringableArrayList<StringableInteger>>();
+	StringableInteger rank;
+	StringableArrayList<StringableString> friends = new StringableArrayList<StringableString>();
+	StringableInteger gold;
 	public void addCardToCollection(int card){
-		cardCollection.add(card);
+		cardCollection.add(new StringableInteger(card));
 	}
 	@Override
 	public String toString() {
@@ -43,87 +47,91 @@ public class Player implements Stringable<Player>{
 				+ cardCollection + ", decks=" + s
 				+ ", rank=" + rank + ", friends=" + friends
 				+ ", gold=" + gold + "]";*/
-	    String str = "";
-	    str += email;
+	    /*String str = "";
+	    str += Stringer.printStringable(new StringableString(email));
 	    str += ", ";
-	    str += username;
+	    str += Stringer.printStringable(new StringableString(username));
 	    str += ", ";
-	    str += password;
+	    str += Stringer.printStringable(new StringableString(password));
 	    str += ", ";
-	    str += cardC
+	    //StringableArrayList<StringableInteger> stringableCardCollection = new StringableArrayList<StringableInteger>();
+	    //stringableCardCollection.fromMirror(cardCollection);
+	    str += Stringer.printStringable(new StringableArrayList<StringableInteger>(StringableInteger.class, cardCollection));
+	    str += ", ";*/
+	    //StringableHashMap<StringableString, StringableArrayList<StringableInteger>> stringableDecks = new StringableHashMap<StringableString, StringableArrayList<StringableInteger>>(decks);
+	    return null;
 	}
 	public void addFriend(String friend){
-		friends.add(friend);
+		friends.add(new StringableString(friend));
 	}
 	public void removeFriend(String friend){
-		friends.remove(friend);
+		friends.remove(new StringableString(friend));
 	}
-	public void removeCardFromCollection(Card card){
-		cardCollection.remove(card);
-	}
-	public void setDeck(String name, int[] deck){
-		decks.remove(name);
-		decks.put(name, deck);
+	public void setDeck(String name, ArrayList<Integer> deck){
+		//decks.remove(name);
+		decks.put(new StringableString(name), new StringableArrayList<StringableInteger>(StringableInteger.class, deck));
 	}
 	public String getEmail() {
-		return email;
+		return email.toString();
 	}
 	public void setEmail(String email) {
-		this.email = email;
+		this.email = new StringableString(email);
 	}
 	public String getUsername() {
-		return username;
+		return username.toString();
 	}
 	public void setUsername(String username) {
-		this.username = username;
+		this.username = new StringableString(username);
 	}
 	public String getPassword() {
-		return password;
+		return password.toString();
 	}
 	public void setPassword(String password) {
-		this.password = password;
+		this.password = new StringableString(password);
 	}
 	public ArrayList<Integer> getCardCollection() {
-		return cardCollection;
+		return cardCollection.getMirror();
 	}
 	public void setCardCollection(ArrayList<Integer> cardCollection) {
-		this.cardCollection = cardCollection;
+		this.cardCollection = new StringableArrayList<StringableInteger>(StringableInteger.class, cardCollection);
 	}
-	public HashMap<String, int[]> getDecks() {
-		return decks;
+	public HashMap<String, ArrayList<Integer>> getDecks() {
+		return decks.getMirror();
 	}
-	public void setDecks(HashMap<String, int[]> decks) {
-		this.decks = decks;
+	public void setDecks(HashMap<String, ArrayList<Integer>> decks){
+	    for(String key: decks.keySet()){
+	        setDeck(key, decks.get(key));
+	    }
 	}
 	public int getRank() {
-		return rank;
+		return rank.getInt();
 	}
 	public void setRank(int rank) {
-		this.rank = rank;
+		this.rank = new StringableInteger(rank);
 	}
 	public ArrayList<String> getFriends() {
-		return friends;
+		return friends.getMirror();
 	}
 	public void setFriends(ArrayList<String> friends) {
-		this.friends = friends;
+		this.friends = new StringableArrayList<StringableString>(StringableString.class, friends);
 	}
 	public int getGold() {
-		return gold;
+		return gold.getInt();
 	}
 	public void setGold(int gold) {
-		this.gold = gold;
+		this.gold = new StringableInteger(gold);
 	}
 	public Player(String email, String username, String password,
-			ArrayList<Integer> cardCollection, HashMap<String, int[]> decks, int rank,
+			ArrayList<Integer> cardCollection, HashMap<String, ArrayList<Integer>> decks, int rank,
 			ArrayList<String> friends, int gold) {
-		this.email = email;
-		this.username = username;
-		this.password = password;
-		this.cardCollection = cardCollection;
-		this.decks = decks;
-		this.rank = rank;
-		this.friends = friends;
-		this.gold = gold;
+		setEmail(email);
+		setUsername(username);
+		setPassword(password);
+		setCardCollection(cardCollection);
+		setDecks(decks);
+		setRank(rank);
+		setFriends(friends);
+		setGold(gold);
 	}
     @Override
     public void fromString(String str)
