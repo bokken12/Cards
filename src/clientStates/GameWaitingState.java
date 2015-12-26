@@ -24,6 +24,7 @@ public class GameWaitingState extends State {
 	 JLabel wait = new JLabel("");
 	 Player player;
 	 ImageIcon background  = new ImageIcon("MenuBackground.jpg");
+	 ArrayList<Integer> deck;
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -31,6 +32,7 @@ public class GameWaitingState extends State {
 		if(deckButtons.contains(e.getSource())) {
 	        ArrayList<Integer> deck = player.getDecks().get(((JButton) e.getSource()).getText());
 			StateMachine.sendMessage(new PlayingMessage(player.getUsername(), player.getRank(), deck));
+
 			//StateMachine.setState(new GameState(player, player.getDecks().get(((JButton) e.getSource()).getText())));
 		}
 

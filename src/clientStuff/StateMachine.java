@@ -40,7 +40,7 @@ public class StateMachine extends JFrame implements MessageListener
         }
         repaint();
     }
-    private void setInternalState(State s){
+    private void setInternalState(State s) {
         if(!(state.isEmpty())){
             getCurrentState().onLeave(this);
             remove(getCurrentState());
