@@ -21,14 +21,6 @@ public class Lane
     public static final int CARD_HEIGHT = 170;
 
     private Board gamestate;
-    public int getNumber() {
-		return number;
-	}
-
-	public void setNumber(int number) {
-		this.number = number;
-	}
-
 	private ArrayList<InPlayCreature> creatures = new ArrayList<InPlayCreature>();
     private ArrayList<InPlayCreature> enemyCreatures = new ArrayList<InPlayCreature>();
 

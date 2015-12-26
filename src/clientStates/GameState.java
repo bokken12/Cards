@@ -17,6 +17,7 @@ import clientStuff.Board;
 import clientStuff.BoardDisplay;
 import clientStuff.StateMachine;
 import messaging.Message;
+import miniStates.MiniState;
 import uselessSubclasses.Lane;
 
 public class GameState extends State
