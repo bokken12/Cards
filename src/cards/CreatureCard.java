@@ -1,12 +1,10 @@
 package cards;
 
 import java.util.Arrays;
-import java.util.StringTokenizer;
 
 import javax.swing.ImageIcon;
 
 import abilities.Ability;
-import abilities.InPlayRunnable;
 import events.GameEvent;
 import events.GameListener;
 
@@ -18,12 +16,6 @@ public class CreatureCard extends Card implements GameListener {
     Ability[] abilities;
     String type;
     ImageIcon image;
-    InPlayRunnable intoPlay = new InPlayRunnable() {
-
-        public void run(InPlayCreature c) {
-
-        }
-    };
 
     public CreatureCard(String n, int p, int t, int c, ImageIcon img, String type, int id, Ability... a) {
 
@@ -72,15 +64,6 @@ public class CreatureCard extends Card implements GameListener {
         return abilities[index].getText();
     }
 
-    public void setIntoPlay(InPlayRunnable a) {
-        intoPlay = a;
-    }
-
-    public InPlayRunnable getIntoPlay() {
-        return intoPlay;
-
-    }
-
     @Override
     public ImageIcon getImageIcon() {
         return image;
@@ -95,7 +78,7 @@ public class CreatureCard extends Card implements GameListener {
         return "CreatureCard [" + power + "~~" + toughness
                 + "~~" + cost + "~~" + name + "~~" + Arrays.toString(abilities)
                 + "~~" + type + "~~" + image
-                + "~~" + intoPlay + "]";
+                + "~~" + "]";
     }
 
     /*public CreatureCard(String creature) {

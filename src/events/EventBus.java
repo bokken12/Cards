@@ -5,12 +5,6 @@ import java.util.HashMap;
 
 public class EventBus {
 
-	private static final EventBus INSTANCE = new EventBus();
-
-	public static EventBus getInstance() {
-		return INSTANCE;
-	}
-
 	static HashMap<Class<? extends GameEvent>, HashMap<Integer, ArrayList<GameListener>>> listening = new HashMap<Class<? extends GameEvent>, HashMap<Integer, ArrayList<GameListener>>>();
 	@SuppressWarnings("unchecked")
 

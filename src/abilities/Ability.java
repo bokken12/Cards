@@ -1,41 +1,47 @@
 package abilities;
 
+import clientStuff.Board;
 import clientStuff.Content;
 import events.EventBus;
 import events.GameEvent;
 import events.GameListener;
 
-public class Ability implements GameListener{
-	String name;
-	String description;
-	Class<? extends GameEvent> activation;
-	AbilityRunnable a;
-	public Ability(String name, String desc, Class<? extends GameEvent> activation, AbilityRunnable a) {
+public class Ability implements GameListener
+{
+    private String name;
+    private String description;
+    private Class<? extends GameEvent> activation;
+    private AbilityRunnable a;
+    private int priority;
+    private Board board;
+    private Object[] args;
 
-		this.a = a;
-		this.name = name;
-		description = desc;
-		this.activation = activation;
-	}
+    public Ability(String name, String desc,
+            Class<? extends GameEvent> activation, AbilityRunnable a, int priority, Board board, Object... args)
+    {
 
-	public void passEvent(GameEvent event){
-		a.run(event);
-	}
-	
-	public void RegisterListeners() {
-		EventBus.getInstance().addGameListener(10, activation, this);
-	}
+        this.a = a;
+        this.name = name;
+        description = desc;
+        this.activation = activation;
+        this.priority = priority;
+        this.board = board;
+        this.args = args;
+    }
 
-	public String getText() {
-		// TODO Auto-generated method stub
-		return description;
-	}
+    public void passEvent(GameEvent event)
+    {
+        a.run(event, board, args);
+    }
 
-	@Override
-	public String toString() {
-		return "Ability [name=" + name + ", description=" + description
-				+ ", activation=" + activation + ", a=" + a + "]";
-	}
-	
-	
+    public void RegisterListeners()
+    {
+        board.getBus().addGameListener(priority, activation, this);
+    }
+
+    public String getText()
+    {
+        return description;
+    }
+
 }
