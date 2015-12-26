@@ -4,6 +4,9 @@ import java.util.ArrayList;
 
 public class MatchMessage extends Message {
 
+    public MatchMessage(){
+        super();
+    }
 	public MatchMessage(ArrayList<Integer> startingHand, String opponent) {
 	    super();
 	    StringableArrayList<StringableInteger> sh = new StringableArrayList<StringableInteger>(StringableInteger.class, startingHand);
