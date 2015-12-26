@@ -35,8 +35,11 @@ public class LoginState extends ListenerState {
 		// TODO Auto-generated method stub
 		if(message instanceof LoginMessage) {
 			if(players.get(((LoginMessage) message).getUsername()) == null && users.get(((LoginMessage) message).getUsername()) != null) {
-				send(new LoginAcceptedMessage(userdata.get(((LoginMessage) message).getUsername())));
+			    Player player = userdata.get(((LoginMessage) message).getUsername());
+				send(new LoginAcceptedMessage(player));
+				listener.setPlayer(player);
 				players.put(((LoginMessage) message).getUsername(), listener/*Don't have no handler no more*/);
+				setState(new MenuState());
 			} else if(users.get(((LoginMessage) message).getUsername()) == null) {
 				//Send LoginDeniedMessage -- no account
 			} 

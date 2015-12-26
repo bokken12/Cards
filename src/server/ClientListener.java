@@ -10,6 +10,7 @@ import java.util.Stack;
 
 import javax.swing.JFrame;
 
+import player.Player;
 import messaging.Message;
 import messaging.Messager;
 import messaging.Stringer;
@@ -19,6 +20,7 @@ import server.Server;
 
 public class ClientListener extends Thread
 {
+    private Player player;
     private Socket socket;
     private Stack<ListenerState> states;
     private BufferedReader input;
@@ -65,5 +67,11 @@ public class ClientListener extends Thread
         states.push(ls);
         getCurrentState().onInitialize(this);
         getCurrentState().onBegin(this);
+    }
+    public Player getPlayer(){
+        return player;
+    }
+    public void setPlayer(Player p){
+        player = p;
     }
 }
