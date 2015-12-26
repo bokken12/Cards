@@ -11,8 +11,7 @@ public class PlayingMessage extends Message {
 	public PlayingMessage(String name, int rank, ArrayList<Integer> deck) {
 		StringableString nam = new StringableString(name);
 		StringableInteger r = new StringableInteger(rank);
-		StringableArrayList<StringableInteger> ar = new StringableArrayList<StringableInteger>();
-		ar.fromMirror(deck);
+		StringableArrayList<StringableInteger> ar = new StringableArrayList<StringableInteger>(StringableInteger.class, deck);
 		data.add("name", nam);
 		data.add("rank", r);
 		data.add("deck", ar);
