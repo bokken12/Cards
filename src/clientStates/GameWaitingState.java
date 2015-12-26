@@ -29,8 +29,8 @@ public class GameWaitingState extends State {
 	public void actionPerformed(ActionEvent e) {
 		
 		if(deckButtons.contains(e.getSource())) {
-			StateMachine.sendMessage(new PlayingMessage(player.getUsername(), player.getRank()d));
-			deck = player.getDecks().get(((JButton) e.getSource()).getText());
+	        ArrayList<Integer> deck = player.getDecks().get(((JButton) e.getSource()).getText());
+			StateMachine.sendMessage(new PlayingMessage(player.getUsername(), player.getRank(), deck));
 			//StateMachine.setState(new GameState(player, player.getDecks().get(((JButton) e.getSource()).getText())));
 		}
 
