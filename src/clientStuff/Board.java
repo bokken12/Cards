@@ -60,6 +60,7 @@ public class Board implements Constants
     private volatile SimplePlayerProfile match;
     private Lane[] lanes;
     private Player player;
+    
 
     public Board()
     {

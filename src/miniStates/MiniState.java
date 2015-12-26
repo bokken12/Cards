@@ -9,7 +9,7 @@ import messaging.MessageListener;
 
 public abstract class MiniState implements MessageListener, ActionListener, MouseListener
 {
-    private GameState game;
+    protected GameState game;
     public void onInititialize(GameState stater){
         game = stater;
     }
