@@ -25,8 +25,8 @@ public class GameState extends State
     private Board board;
     private BoardDisplay display;
     private MiniState currentState;
-    int currentLane;
-    ArrayList<InPlayCreature> myCreatures;
+    private int currentLane;
+    private ArrayList<InPlayCreature> myCreatures;
     
     ImageIcon screen;
     @Override
@@ -99,6 +99,7 @@ public class GameState extends State
     {
         this.currentState.onLeave(this);
         this.currentState = currentState;
+        currentState.onInititialize(this);
         currentState.onBegin(this);
     }
     
