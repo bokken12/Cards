@@ -11,6 +11,7 @@ import events.GameEvent;
 public class Card
 {
     String name;
+    HashMap<GameEvent, ArrayList<Ability>> listenerMap;
     ImageIcon image;
     int imX;
     int imY;
