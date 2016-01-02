@@ -27,10 +27,10 @@ import javax.swing.JTextArea;
 
 import cards.Card;
 import cards.Cards;
-import Player.GamePlayer;
-import Player.Player;
-import Player.SimplePlayerProfile;
-import Player.SimplerProfile;
+import player.GamePlayer;
+import player.Player;
+import player.SimplePlayerProfile;
+import player.SimplerProfile;
 import acm.program.ConsoleProgram;
 
 
@@ -71,7 +71,7 @@ public class Server extends ConsoleProgram{
 			Integer rank = null;
 			Integer gold = null;
 			ArrayList<Integer> cards = null;
-			HashMap<String, int[]> decks = null;
+			HashMap<String, ArrayList<Integer>> decks = null;
 			ArrayList<String> friends = null;
 
 			while (true) {
@@ -218,18 +218,23 @@ public class Server extends ConsoleProgram{
 
 
 
-	public static HashMap<String, int[]> getDecksFromString(String string){
-		HashMap<String, int[]> ret = new HashMap<String, int[]>();
+	public static HashMap<String, ArrayList<Integer>> getDecksFromString(String string){
+		HashMap<String, ArrayList<Integer>> ret = new HashMap<String, ArrayList<Integer>>();
 
 		StringTokenizer t = new StringTokenizer(string, "|");
 
 		while(t.hasMoreTokens()) {
 			String a = t.nextToken();
-			int[] arr = null;
-			arr = getArray(a.substring(a.indexOf("[") - 1 ));
+			ArrayList<Integer> list = new ArrayList<Integer>();
+			
+			int[] arr = getArray(a.substring(a.indexOf("[") - 1 ));
+			
+			for(int i : arr) {
+				list.add(i);
+			}
 
 
-			ret.put(a.substring(0, a.indexOf("[")), arr);
+			ret.put(a.substring(0, a.indexOf("[")), list);
 		}
 
 		return ret;
@@ -338,27 +343,27 @@ public class Server extends ConsoleProgram{
 							atemail = true;
 						}
 					}
-					Player player = new Player(email, username, password, Cards.getStarterCards(), new HashMap<String, int[]>(), 0, new ArrayList<String>(), 0);
+					Player player = new Player(email, username, password, Cards.getStarterCards(), new HashMap<String, ArrayList<Integer>>(), 0, new ArrayList<String>(), 0);
 					pllayer = player;
 					name = username;
-					HashMap<String, int[]> dacks = new HashMap<String, int[]>();
-					int[] a = new int[7];
-					a[0] = 0;
-					a[1] = 0;
-					a[2] = 1;
-					a[3] = 1;
-					a[4] = 2;
-					a[5] = 3;
-					a[6] = 4;
+					HashMap<String, ArrayList<Integer>> dacks = new HashMap<String, ArrayList<Integer>>();
+					ArrayList<Integer> a = new ArrayList<Integer>();
+					a.add(0);
+					a.add(0);
+					a.add(1);
+					a.add(1);
+					a.add(2);
+					a.add(3);
+					a.add(4);
 					dacks.put("Starter", a);
 					player.setDecks(dacks);
 					if(!(users.containsKey(username))) {
 						userdata.put(username, player);
 						String decks = "";
 						int count = 0;
-						for(Entry<String, int[]> entry : dacks.entrySet()){ 
+						for(Entry<String, ArrayList<Integer>> entry : dacks.entrySet()){ 
 							 decks += entry.getKey();
-							 decks += Arrays.toString(entry.getValue()); 
+							 decks += entry.getValue().toString(); 
 							 if(!(count < dacks.keySet().size())) {
 								 decks += "|";
 							 }

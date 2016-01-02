@@ -1,7 +1,7 @@
 package events;
 
 import cards.CreatureCard;
-import Player.PlayerRep;
+import player.PlayerRep;
 
 public class AttackEvent extends GameEvent {
 

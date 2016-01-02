@@ -1,6 +1,6 @@
 package events;
 
-import Player.GamePlayer;
+import player.GamePlayer;
 
 public class TurnStartedEvent extends GameEvent {
 

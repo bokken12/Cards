@@ -23,11 +23,11 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
-import Player.Player;
 import messaging.LoginMessage;
 import messaging.Message;
 import messaging.MessageListener;
 import messaging.Messager;
+import player.Player;
 
 public class Launcher extends JFrame implements ActionListener, MessageListener {
 
@@ -58,7 +58,7 @@ public class Launcher extends JFrame implements ActionListener, MessageListener 
 	private JTextField verifyPasswordText = new JTextField("Verify Password");
 	private JButton newcreateAccount = new JButton("Create Account");
 	static JLabel error = new JLabel("");
-	
+
 	private JPanel south;
 	String username = "";
 	JButton play = new JButton("Play");
@@ -67,13 +67,13 @@ public class Launcher extends JFrame implements ActionListener, MessageListener 
 	java.util.Timer timer = new java.util.Timer();
 
 	Messager m = new Messager(this);
-	
+
 	static Game game;
 
 	public static void main(String[] args){
 		frame = new Launcher();
 		System.out.println("We're done initializing!");
-		
+
 	}
 
 	public void init() {
@@ -111,7 +111,7 @@ public class Launcher extends JFrame implements ActionListener, MessageListener 
 		init();
 		this.pack();
 		this.setVisible(true);
-		
+
 		try {
 			/* Continuously read messages from the source. */
 			while (true) {
@@ -127,23 +127,27 @@ public class Launcher extends JFrame implements ActionListener, MessageListener 
 					doLogin(newUsernameText.getText(), newPasswordText.getText());
 				} else if(currentline.startsWith("--loginaccepted")) {
 					System.out.println("Started Logging in");
-					Player player;
-					String subbedLine = currentline.substring(17);
-					ArrayList<Integer> collection = new ArrayList<Integer>();
-					ArrayList<String> collectionStrings = new ArrayList<String>(Arrays.asList((subbedLine.substring(subbedLine.indexOf("cardCollection=")
-							+ 16, subbedLine.indexOf(", decks") - 1)).split(", ")));
-					for(int i = 0; i < collectionStrings.size() - 1; i++) {
-						collection.add(Integer.parseInt(collectionStrings.get(i)));
-					}
-					player = new Player(subbedLine.substring(subbedLine.indexOf("email=") + 6, subbedLine.indexOf(", username")), 
-							subbedLine.substring(subbedLine.indexOf("username=") + 9, subbedLine.indexOf(", password")), 
-							subbedLine.substring(subbedLine.indexOf("password=") + 9, subbedLine.indexOf(", cardCollection")), 
-							collection, 
-							getDecksFromString((subbedLine.substring(subbedLine.indexOf("decks=") + 6, subbedLine.indexOf(", rank")))), 
-							Integer.parseInt(subbedLine.substring(subbedLine.indexOf("rank=") + 5, subbedLine.indexOf(", friends"))), 
-							new ArrayList<String>(Arrays.asList((subbedLine.substring(subbedLine.indexOf("friends=") + 8, subbedLine.indexOf(", gold"))).split(","))), 
-							Integer.parseInt(subbedLine.substring(subbedLine.indexOf("gold=") + 5, subbedLine.lastIndexOf("]")))
-							);
+
+					String subbedLine = currentline.substring(16);
+					System.out.println(subbedLine);
+					Player player = new Player(subbedLine);
+					//ArrayList<Integer> collection = new ArrayList<Integer>();
+					//ArrayList<String> collectionStrings = new ArrayList<String>(Arrays.asList((subbedLine.substring(subbedLine.indexOf("cardCollection=")
+					//		+ 16, subbedLine.indexOf(", decks") - 1)).split(", ")));
+					//for(int i = 0; i < collectionStrings.size() - 1; i++) {
+					//	collection.add(Integer.parseInt(collectionStrings.get(i)));
+					//}
+
+
+					//					player = new Player(subbedLine.substring(subbedLine.indexOf("email=") + 6, subbedLine.indexOf(", username")), 
+					//							subbedLine.substring(subbedLine.indexOf("username=") + 9, subbedLine.indexOf(", password")), 
+					//							subbedLine.substring(subbedLine.indexOf("password=") + 9, subbedLine.indexOf(", cardCollection")), 
+					//							collection, 
+					//							getDecksFromString((subbedLine.substring(subbedLine.indexOf("decks=") + 6, subbedLine.indexOf(", rank")))), 
+					//							Integer.parseInt(subbedLine.substring(subbedLine.indexOf("rank=") + 5, subbedLine.indexOf(", friends"))), 
+					//							new ArrayList<String>(Arrays.asList((subbedLine.substring(subbedLine.indexOf("friends=") + 8, subbedLine.indexOf(", gold"))).split(","))), 
+					//							Integer.parseInt(subbedLine.substring(subbedLine.indexOf("gold=") + 5, subbedLine.lastIndexOf("]")))
+					//							);
 					System.out.println("Finished Logging in");
 					menu(player);
 				} else if(currentline.startsWith("--match")) {
@@ -227,7 +231,7 @@ public class Launcher extends JFrame implements ActionListener, MessageListener 
 					south.add(newcreateAccount);
 					newcreateAccount.addActionListener(frame);
 
-			 		frame.pack();
+					frame.pack();
 				}
 			});
 		}
@@ -296,30 +300,38 @@ public class Launcher extends JFrame implements ActionListener, MessageListener 
 		return player;
 	}
 	public void doLogin(String username, String password){
-		//sendText("--login " + username + " " + password);
-		
-		m.send(new LoginMessage(username, password));
+		sendText("--login " + username + " " + password);
+
+		//m.send(new LoginMessage(username, password));
 	}
 
 	public static void menu(Player player) {
 
 		game = new Game(player, output);
-		frame.dispose();
+		if(frame != null) {
+			frame.dispose();
+		}
 		//this.setVisible(false);
 	}
-	public static HashMap<String, int[]> getDecksFromString(String string){
-		HashMap<String, int[]> ret = new HashMap<String, int[]>();
+
+
+	public static HashMap<String, ArrayList<Integer>> getDecksFromString(String string) {
+		HashMap<String, ArrayList<Integer>> ret = new HashMap<String, ArrayList<Integer>>();
 
 		StringTokenizer t = new StringTokenizer(string, "|");
 
 		while(t.hasMoreTokens()) {
 			String a = t.nextToken();
-			int[] arr = null;
-			if(t.hasMoreTokens()) {
-				arr = getArray(t.nextToken());
+			ArrayList<Integer> list = new ArrayList<Integer>();
+
+			int[] arr = getArray(a.substring(a.indexOf("[") - 1 ));
+
+			for(int i : arr) {
+				list.add(i);
 			}
 
-			ret.put(a, arr);
+
+			ret.put(a.substring(0, a.indexOf("[")), list);
 		}
 
 		return ret;
@@ -343,7 +355,7 @@ public class Launcher extends JFrame implements ActionListener, MessageListener 
 	@Override
 	public void MessageRecieved(Message message) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

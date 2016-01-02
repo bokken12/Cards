@@ -11,6 +11,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -49,13 +50,15 @@ import events.TargetedSpellPlayedEvent;
 import events.TurnEndedEvent;
 import events.TurnStartedEvent;
 import events.UntargetedSpellPlayedEvent;
+import messaging.Message;
+import messaging.MessageListener;
 import player.GamePlayer;
 import player.Player;
 import player.SimplePlayerProfile;
 import uselessSubclasses.Lane;
 
 
-public class Content extends JPanel implements ActionListener, MouseListener, KeyListener {
+public class Content extends JPanel implements ActionListener, MouseListener, KeyListener, MouseMotionListener, MessageListener {
 
 	ImageIcon background = new ImageIcon("MenuBackground.jpg");
 	ImageIcon screen = new ImageIcon("CardScreen.png");
@@ -82,14 +85,15 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 	boolean isMtn1Full = false;
 	boolean isMtn2Full = false;
 	boolean isMtn3Full = false;
+	boolean blockDragging = false;
 
 	Integer mana = 0;
 	Integer maxMana = 0;
 	Integer turnNum = 0;
-	
+
 	int health = 20;
 	int enemyHealth = 20;
-	
+
 	static final int CARD_WIDTH = 115;
 	static final int MOUNTAIN_1_X = 300;
 	static final int MOUNTAIN_2_X = 700;
@@ -125,7 +129,7 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 
 	HashMap<InPlayCreature, InPlayCreature> blockers = new HashMap<InPlayCreature, InPlayCreature>();
 
-	
+
 
 	ArrayList<HandCard> handCards = new ArrayList<HandCard>();
 	HandCard selectedHandCard;
@@ -134,7 +138,7 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 	HandCardDragger cd = new HandCardDragger();
 
 	Point blockCardPoint = new Point();
-	BlockCardDragger bd = new BlockCardDragger();
+	//BlockCardDragger bd = new BlockCardDragger();
 	InPlayCreature blocker;
 
 	Lane lane1 = new Lane(this, 1);
@@ -150,13 +154,13 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 		super.paintComponent(g);
 		this.g = g;
 		if(clear) {
-			screen.setImage(screen.getImage().getScaledInstance((int) 1200, 800, Image.SCALE_DEFAULT));
+			
 			screen.paintIcon(this, g, 0, 0);
 			paintInPlayCreatures(g);
 			paintHandCards(g);
 			paintArrivals(g);
 			Font f = new Font("FONT", 2, 30);
-			
+
 			g.setFont(f);
 			g.drawString(Integer.toString(enemyHealth), 500, 50);
 
@@ -176,6 +180,7 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 		Dimension a = new Dimension(width, height);
 		addMouseListener(this);
 		addKeyListener(this);
+		addMouseMotionListener(this);
 
 		lane1.setStartX(/*game.getLocation().x + */51);
 		lane1.setStartY(/*game.getLocation().y + */67);
@@ -194,6 +199,8 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 		lanes.add(lane2);
 		lanes.add(lane3);
 
+		screen.setImage(screen.getImage().getScaledInstance((int) 1200, 800, Image.SCALE_DEFAULT));
+		
 		setPreferredSize(a);
 		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 		add(Box.createHorizontalGlue());
@@ -286,34 +293,34 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 			add(manaLabel);
 			this.revalidate();
 
-//			Ability playCards = new Ability("Play Creatures", "puts the creatures into play", TurnStartedEvent.class, new AbilityRunnable() {
-//				@Override
-//				public void run(GameEvent event) {
-//					System.out.println("Trying to put in creature");
-//					TurnStartedEvent e = (TurnStartedEvent) event;
-//					for(int i = 0; i < arrivalCreatures.size(); i++) {
-//						if (arrivalLanes.get(i) == null) {
-//							System.out.println("actionPerformed: lane is null for " + arrivalCreatures.get(i) + "!");
-//							System.out.println("arrivalCreatures is " + arrivalCreatures);
-//						}
-//						InPlayCreature c = new InPlayCreature(arrivalCreatures.get(i), arrivalLanes.get(i));
-//						addCreature(c);
-//						if(c.getLane().equals(lane1)) {
-//							lane1.addCard(c);
-//						}
-//						if(c.getLane().equals(lane2)) {
-//							lane2.addCard(c);
-//						}
-//						if(c.getLane().equals(lane3)) {
-//							lane3.addCard(c);
-//						}
-//						arrivalLanes.remove(i);
-//						arrivalCreatures.remove(i);
-//					}
-//				}
-//			});
-//
-//			playCards.RegisterListeners();
+			//			Ability playCards = new Ability("Play Creatures", "puts the creatures into play", TurnStartedEvent.class, new AbilityRunnable() {
+			//				@Override
+			//				public void run(GameEvent event) {
+			//					System.out.println("Trying to put in creature");
+			//					TurnStartedEvent e = (TurnStartedEvent) event;
+			//					for(int i = 0; i < arrivalCreatures.size(); i++) {
+			//						if (arrivalLanes.get(i) == null) {
+			//							System.out.println("actionPerformed: lane is null for " + arrivalCreatures.get(i) + "!");
+			//							System.out.println("arrivalCreatures is " + arrivalCreatures);
+			//						}
+			//						InPlayCreature c = new InPlayCreature(arrivalCreatures.get(i), arrivalLanes.get(i));
+			//						addCreature(c);
+			//						if(c.getLane().equals(lane1)) {
+			//							lane1.addCard(c);
+			//						}
+			//						if(c.getLane().equals(lane2)) {
+			//							lane2.addCard(c);
+			//						}
+			//						if(c.getLane().equals(lane3)) {
+			//							lane3.addCard(c);
+			//						}
+			//						arrivalLanes.remove(i);
+			//						arrivalCreatures.remove(i);
+			//					}
+			//				}
+			//			});
+			//
+			//			playCards.RegisterListeners();
 
 			Ability addMana = new Ability("Add Mana", "adds to your mana", TurnStartedEvent.class, new AbilityRunnable() {
 				@Override
@@ -366,7 +373,7 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 			System.out.println(blockers);
 			//System.out.println(blocking);
 
-			
+
 			String s = "";
 			for(int i = 0; i < myCreatures.size(); i++) {
 				if(blockers.containsKey(myCreatures.get(i))) {
@@ -374,22 +381,22 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 					fightCreatures(i, attackingEnemyNums.get(i));
 				}
 			}
-			
+
 			for(int i = 0; i < attackingEnemys.size(); i++) {
 				health = health - attackingEnemys.get(i).getPower();
 			}
 			System.out.println("Your health is " + health);
-			
+
 			//s = s + "]";
 			System.out.println("Blocking with " + s);
 			output.println("--block " + s);
 			output.flush();
 			turn = false;
-			
+
 			blockers.clear();
 			blocker = null;
 			blocking = false;
-			
+
 			for(int i = 0; i < enemyCreatures.size(); i++) {
 				enemyCreatures.get(i).setRed(false);
 			}
@@ -445,10 +452,10 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 
 		return null;
 	}
-	
+
 	public void fightCreatures(int c1, int c2) {
 		System.out.println("Creatures are fighting");
-		
+
 		int a1 = myCreatures.get(c1).getPower();
 		int a2 = enemyCreatures.get(c2).getPower();
 		//System.out.println("My, enemy power is " + a1 + ", " + a2);
@@ -460,7 +467,7 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 		if(myCreatures.get(c1).getHealth() <= 0) {
 			myCreatures.get(c1).getLane().getCreatures().remove(myCreatures.get(c1));
 			myCreatures.remove(c1);
-			
+
 		}
 		if(enemyCreatures.get(c2).getHealth() <= 0) {
 			enemyCreatures.get(c2).getLane().getEnemyCreatures().remove(enemyCreatures.get(c2));
@@ -511,11 +518,11 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 							fightCreatures(attacker, blocker);
 						}
 					}
-					
-				
+
+
 				}
 			}
-			
+
 			for(InPlayCreature c : notBlocked) {
 				enemyHealth = enemyHealth - c.getPower();
 			}
@@ -539,14 +546,14 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 
 			try {
 				Card c;
-//				if(m.charAt(11) == '|') {
-//					c = cardsData.getCardFromID(Integer.parseInt(m.substring(10, 11)));
-//				} else {
-//					c = cardsData.getCardFromID(Integer.parseInt(m.substring(10, 12)));
-//				}
-				
+				//				if(m.charAt(11) == '|') {
+				//					c = cardsData.getCardFromID(Integer.parseInt(m.substring(10, 11)));
+				//				} else {
+				//					c = cardsData.getCardFromID(Integer.parseInt(m.substring(10, 12)));
+				//				}
+
 				c = cardsData.getCardFromID(Integer.parseInt(m.substring(10, m.indexOf("|"))));
-				
+
 				int l = Integer.parseInt(m.substring(m.indexOf("|") + 1));
 				if(l == Constants.LANE_1) {
 					InPlayCreature ic = new InPlayCreature( (CreatureCard) c, lane1);
@@ -652,8 +659,8 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 		img.setImage(img.getImage().getScaledInstance((int) 92, 83, Image.SCALE_DEFAULT));
 		String text = card.getText();
 		String cost = Integer.toString(card.getCost());
-		
-		
+
+
 		template.paintIcon(handPanel, g, x, y);
 		img.paintIcon(handPanel, g, x + 12, y + 25);
 		g.drawString(text, x + 10, y - 40);
@@ -680,10 +687,10 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 		}
 	}
 
-	
+
 	public void paintInPlayCreature(InPlayCreature c, Graphics g, int x, int y) {
 
-		
+
 		if(c.isGreen()) {
 			ImageIcon i = new ImageIcon("green.png");
 			i.setImage(i.getImage().getScaledInstance((int) 122, 172, Image.SCALE_DEFAULT));
@@ -700,25 +707,25 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 		img.setImage(img.getImage().getScaledInstance((int) 92, 83, Image.SCALE_DEFAULT));
 		String text = c.getCard().getText();
 		String cost = Integer.toString(c.getCard().getCost());
-		
-		
+
+
 		template.paintIcon(handPanel, g, x, y);
 		img.paintIcon(handPanel, g, x + 12, y + 25);
 		g.drawString(text, x + 10, y - 40);
 		g.drawString(cost, x + 100, y + 23);
 
-			String name = c.getCard().getName();
-			String power = Integer.toString(c.getPower());
-			String health = Integer.toString(c.getHealth());
-			g.setFont(new Font("Helvetica", Font.PLAIN, 12)); 
-			g.drawString(power, x + 20, y + 163);
-			g.drawString(health, x + 92, y + 163);
-			g.setFont(new Font("Helvetica", Font.PLAIN, 8)); 
-			g.drawString(name, x + 25, y + 23);
-			//System.out.println("Painting " + name + " with health " + health);
-			
-		
-		
+		String name = c.getCard().getName();
+		String power = Integer.toString(c.getPower());
+		String health = Integer.toString(c.getHealth());
+		g.setFont(new Font("Helvetica", Font.PLAIN, 12)); 
+		g.drawString(power, x + 20, y + 163);
+		g.drawString(health, x + 92, y + 163);
+		g.setFont(new Font("Helvetica", Font.PLAIN, 8)); 
+		g.drawString(name, x + 25, y + 23);
+		//System.out.println("Painting " + name + " with health " + health);
+
+
+
 	}
 
 	@Override
@@ -731,13 +738,13 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 			attacking.add(c);
 			selectedCard = c;
 			System.out.println("adding");
-			
+
 			int i = myCreatures.indexOf(c);
 			int b = c.getLane().getCreatures().indexOf(c);
 			c.setGreen(true);
 			myCreatures.set(i, c);
 			c.getLane().getCreatures().set(b, c);
-			
+
 		} else {
 			InPlayCreature cr = lane2.getClick(a);
 			if(cr != null && myCreatures.contains(cr)) {
@@ -749,7 +756,7 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 				cr.setGreen(true);
 				myCreatures.set(i, cr);
 				cr.getLane().getCreatures().set(b, cr);
-				
+
 			} else {
 				InPlayCreature cre = lane3.getClick(a);
 				if(cre != null && myCreatures.contains(cre)) {
@@ -799,21 +806,20 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 		if(blocking) {
 			InPlayCreature c = lane1.getClick(a);
 			if(c != null) {
-				bd = new BlockCardDragger();
 				blocker = c;
-				bd.execute();
+				blockDragging = true;
 			} else {
 				InPlayCreature cr = lane2.getClick(a);
 				if(cr != null) {
-					bd = new BlockCardDragger();
 					blocker = cr;
-					bd.execute();
+					blockDragging = true;
+					
 				} else {
 					InPlayCreature cre = lane3.getClick(a);
 					if(cre != null) {
-						bd = new BlockCardDragger();
+						
 						blocker = cre;
-						bd.execute();
+						blockDragging = true;
 					}
 				}
 			}
@@ -868,10 +874,10 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 
 
 
-		if(!(bd.isStopped())) {
+		if(blockDragging) {
 
-			System.out.println("isStopped? " + bd.isStopped() + "Blocker lane is" + blocker.getLane() + 
-					"Enemy2 is " + lane2.getClick(a));
+			//System.out.println("isStopped? " + bd.isStopped() + "Blocker lane is" + blocker.getLane() + 
+			//		"Enemy2 is " + lane2.getClick(a));
 
 			if(attackingEnemys.contains(lane1.getClick(a)) && blocker.getLane() == lane1) {
 				blockers.put(blocker, lane1.getClick(a));
@@ -893,7 +899,7 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 			//				}
 			//			}
 		}
-		bd.stop();
+		blockDragging = false;
 	}
 
 	public void arrivalHelper(Lane lane) {
@@ -918,7 +924,7 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 				int x = a.x + 5;
 				int y = a.y - 25;
 				a.setLocation(x, y);
-				
+
 				publish(a);
 			}
 			return ":{D";
@@ -944,7 +950,7 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 		}
 	}
 
-
+/*
 	private class BlockCardDragger extends SwingWorker<String, Point> {
 
 		volatile boolean stop = true;
@@ -983,7 +989,7 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 
 		}
 	}
-
+*/
 
 	public void addCreature(InPlayCreature n) {
 		cardsInPlay.add(n);
@@ -1002,10 +1008,10 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 		if(n.getLane().equals(lane3)) lane = 3;
 
 		String send = "--myBoard " + cardsData.getCollection().indexOf(n.getCard()) + "|" + lane;
-		
+
 		isMtn1Full = false;
 		isMtn2Full = false;
-		
+
 		//should send something like --myBoard 1|2
 		System.out.println("Sending " + send);
 		output.println(send);
@@ -1014,6 +1020,8 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 
 	public void paintInPlayCreatures(Graphics g) {
 
+		//blockCardPoint = MouseInfo.getPointerInfo().getLocation();
+		
 		ArrayList<InPlayCreature> k = lane1.getCreatures();
 		for(int i = 0; i < k.size(); i++) {
 			if(k.get(i).equals(blocker)) {
@@ -1129,7 +1137,7 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		
+
 	}
 
 	@Override
@@ -1144,8 +1152,30 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 			System.out.println("Calling AbilityEvent");
 			bus.callEvent(new AbilityEvent(selectedCard));
 			attacking.remove(selectedCard);
-			
+
 		}
+	}
+
+	@Override
+	public void MessageRecieved(Message message) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void mouseDragged(MouseEvent e) {
+		
+		if(blockDragging) { 
+			blockCardPoint = e.getPoint();
+			System.out.println("Things are dragging "  + e);
+			repaint();
+		}
+
+	}
+
+	@Override
+	public void mouseMoved(MouseEvent e) {
+	
 	}
 
 }

@@ -5,7 +5,7 @@ import javax.swing.JScrollPane;
 
 import cards.Card;
 import cards.Cards;
-import Player.Player;
+import player.Player;
 
 
 public class CardList extends JScrollPane {
