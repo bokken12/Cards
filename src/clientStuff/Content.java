@@ -49,9 +49,9 @@ import events.TargetedSpellPlayedEvent;
 import events.TurnEndedEvent;
 import events.TurnStartedEvent;
 import events.UntargetedSpellPlayedEvent;
-import Player.GamePlayer;
-import Player.Player;
-import Player.SimplePlayerProfile;
+import player.GamePlayer;
+import player.Player;
+import player.SimplePlayerProfile;
 import uselessSubclasses.Lane;
 
 
@@ -234,14 +234,14 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 
 		} else if(deckButtons.contains(e.getSource())) {
 			System.out.println("Got Deck Button Click");
-			int[] theDeck = player.getDecks().get(((JButton) e.getSource()).getText());
+			ArrayList<Integer> theDeck = player.getDecks().get(((JButton) e.getSource()).getText());
 			ArrayList<Integer> realDeck = new ArrayList<Integer>();
 			Random rand = new Random();
-			for(int i = 0; i < theDeck.length; i++) {
-				int card = rand.nextInt(theDeck.length);
-				if(theDeck[card] != -1) {
-					int a = theDeck[card];
-					theDeck[card] = -1;
+			for(int i = 0; i < theDeck.size(); i++) {
+				int card = rand.nextInt(theDeck.size());
+				if(theDeck.get(card) != -1) {
+					int a = theDeck.get(card);
+					theDeck.set(card, -1);
 					realDeck.add(a);
 				} else {
 					i--;
@@ -598,7 +598,7 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 		this.revalidate();
 		this.repaint();
 		output.println("--remPlay" + player.getUsername() + "|" + player.getRank());
-		HashMap<String, int[]> deecks = player.getDecks();
+		HashMap<String, ArrayList<Integer>> deecks = player.getDecks();
 		Object[] a = deecks.keySet().toArray();
 
 		add(Box.createHorizontalGlue());
