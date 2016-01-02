@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.util.ArrayList;
 
 import server.Server;
 
@@ -16,7 +17,9 @@ public class Messager extends Thread
     private MessageListener listener;
     private BufferedReader input;
     private PrintWriter output;
+    private ArrayList<PlainTextListener> ptls;
     public Messager(MessageListener l){
+    	ptls = new ArrayList<PlainTextListener>();
         listener = l;
     }
     @Override
@@ -30,6 +33,9 @@ public class Messager extends Thread
                 String line = input.readLine();
                 if(line != null){
                     System.out.println(line);
+                    for(PlainTextListener ptl: ptls){
+                    	ptl.messageRecieved(line);
+                    }
                     listener.MessageRecieved(Message.fromData(new Stringer(line)));
                 }
             }
@@ -41,6 +47,10 @@ public class Messager extends Thread
         output.println(m.toString());
         output.flush();
     }
+    public void sendPlainText(String str){
+    	output.println(str);
+    	output.flush();
+    }
     private Socket connect() {
         while (true) {
             try {
@@ -51,5 +61,8 @@ public class Messager extends Thread
                 System.out.println("no connection");
             }
         }  
+    }
+    public void addPlainTextListener(PlainTextListener l){
+    	ptls.add(l);
     }
 }
