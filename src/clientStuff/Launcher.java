@@ -24,6 +24,8 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
 import Player.Player;
+import messaging.LoginMessage;
+import messaging.Messager;
 
 public class Launcher extends JFrame implements ActionListener {
 
@@ -54,7 +56,7 @@ public class Launcher extends JFrame implements ActionListener {
 	private JTextField verifyPasswordText = new JTextField("Verify Password");
 	private JButton newcreateAccount = new JButton("Create Account");
 	static JLabel error = new JLabel("");
-
+	
 	private JPanel south;
 	String username = "";
 	JButton play = new JButton("Play");
@@ -62,6 +64,8 @@ public class Launcher extends JFrame implements ActionListener {
 	static String currentline = "";
 	java.util.Timer timer = new java.util.Timer();
 
+	static Messager m = new Messager(null);
+	
 	static Game game;
 
 	public static void main(String[] args){
@@ -288,7 +292,9 @@ public class Launcher extends JFrame implements ActionListener {
 		return player;
 	}
 	public static void doLogin(String username, String password){
-		sendText("--login " + username + " " + password);
+		//sendText("--login " + username + " " + password);
+		
+		m.send(new LoginMessage(username, password));
 	}
 
 	public static void menu(Player player) {
