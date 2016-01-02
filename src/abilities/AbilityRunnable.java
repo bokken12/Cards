@@ -14,5 +14,5 @@ public abstract class AbilityRunnable
     {
     }
 
-    public abstract void run(GameEvent event, Board board, Object... args);
+    public abstract void run(GameEvent event, Board board/*, Object... args*/);
 }

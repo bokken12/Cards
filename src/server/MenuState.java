@@ -20,11 +20,12 @@ public class MenuState extends ListenerState
     public void MessageRecieved(Message message)
     {
         if(message instanceof PlayingMessage){
+            ServerListener.printLine("Got a playing message");
             int rank = ((PlayingMessage) message).getRank();
             this.message = (PlayingMessage) message;
             if(listeners.get(rank) != null){
                 MenuState opponent = listeners.set(rank, null);
-                opponent.goToGameState(this);
+                //opponent.goToGameState(this);
                 goToGameState(opponent);
             } else {
                 //playing.set(rank, ((PlayingMessage) message).getName());
@@ -38,7 +39,6 @@ public class MenuState extends ListenerState
     public void onBegin(ClientListener stater)
     {
         // TODO Auto-generated method stub
-
     }
 
     @Override
@@ -55,11 +55,19 @@ public class MenuState extends ListenerState
     }
     
     public void goToGameState(MenuState opponent){
-        ArrayList<Integer> sh = new ArrayList<Integer>();
+        ServerListener.printLine("Going to gamestate");
+        PlayingHandler p = new PlayingHandler();
+        p.addPlayer(opponent, getDeck());
+        p.addPlayer(this, opponent.getDeck());
+        p.startGame();
+        /*ArrayList<Integer> sh = new ArrayList<Integer>();
         for(int i = 0; i < STARTING_HAND_SIZE; i++){
             sh.add(message.getDeck().remove((int)(Math.random() * message.getDeck().size())));
         }
         send(new MatchMessage(sh, opponent.getPlayer().getUsername()));
+        */
     }
-
+    public ArrayList<Integer> getDeck(){
+        return message.getDeck();
+    }
 }

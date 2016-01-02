@@ -76,5 +76,8 @@ public class AbilityTemplate
     {
         this.priority = priority;
     }
-    
+    protected Board getBoard(){
+        return null;
+        
+    }
 }

@@ -55,8 +55,7 @@ public class CreatureCard extends Card implements GameListener {
 
     @Override
     public void passEvent(GameEvent event) {
-        // TODO Auto-generated method stub
-
+        //ability.passEvent(event, this, board);?
     }
 
 

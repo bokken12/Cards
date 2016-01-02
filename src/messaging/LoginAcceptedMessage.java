@@ -8,7 +8,7 @@ import player.Player;
 public class LoginAcceptedMessage extends Message {
 
 	public LoginAcceptedMessage() {
-		
+		super();
 	}
 	
 	public LoginAcceptedMessage(String name, String pass, String mail, int goldMoney, int ranking, ArrayList<Integer> cardList, HashMap<String, ArrayList<Integer>> deckList, ArrayList<String> friendList){

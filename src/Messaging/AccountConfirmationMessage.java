@@ -3,7 +3,7 @@ package messaging;
 public class AccountConfirmationMessage extends Message {
 
 	public AccountConfirmationMessage() {
-
+	    super();
 	}
 
 	public AccountConfirmationMessage(boolean confirm) {

@@ -18,6 +18,7 @@ import clientStuff.BoardDisplay;
 import clientStuff.StateMachine;
 import messaging.Message;
 import miniStates.MiniState;
+import miniStates.YourTurnState;
 import uselessSubclasses.Lane;
 
 public class GameState extends State
@@ -26,7 +27,7 @@ public class GameState extends State
     private BoardDisplay display;
     private MiniState currentState;
     private ArrayList<InPlayCreature> myCreatures;
-    
+
     ImageIcon screen;
     @Override
     public void actionPerformed(ActionEvent e)
@@ -37,16 +38,17 @@ public class GameState extends State
     @Override
     public void onInitialize(StateMachine stater)
     {
-    	
-
+        board = new Board();
+        display = new BoardDisplay(board);
+        setCurrentState(new YourTurnState());
+        add(display);
     }
 
     @Override
     public void onBegin(StateMachine stater)
     {
-       stater.setSize(new Dimension(1200, 800));
-       stater.setResizable(false);
-
+        stater.setSize(new Dimension(1200, 800));
+        stater.setResizable(false);
     }
 
     @Override
@@ -96,12 +98,11 @@ public class GameState extends State
 
     public void setCurrentState(MiniState currentState)
     {
-        this.currentState.onLeave(this);
+        if(this.currentState != null){
+            this.currentState.onLeave(this);
+        }
         this.currentState = currentState;
         currentState.onInititialize(this);
         currentState.onBegin(this);
     }
-
-	
-    
 }

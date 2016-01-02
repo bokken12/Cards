@@ -3,7 +3,7 @@ package messaging;
 public class AccountCreationMessage extends Message {
 
 	public AccountCreationMessage() {
-		
+		super();
 	}
 	
 	public AccountCreationMessage(String name, String pass, String mail){

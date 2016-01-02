@@ -29,9 +29,9 @@ public class Ability implements GameListener
         this.args = args;
     }
 
-    public void passEvent(GameEvent event)
+    public void passEvent(GameEvent event, Board board)
     {
-        a.run(event, board, args);
+        a.run(event, board);
     }
 
     public void RegisterListeners()

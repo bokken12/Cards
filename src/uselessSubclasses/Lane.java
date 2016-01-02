@@ -20,7 +20,7 @@ public class Lane
     public static final int CARD_WIDTH = 120;
     public static final int CARD_HEIGHT = 170;
 
-    private Board gamestate;
+    //private Board gamestate;
 	private ArrayList<InPlayCreature> creatures = new ArrayList<InPlayCreature>();
     private ArrayList<InPlayCreature> enemyCreatures = new ArrayList<InPlayCreature>();
 
@@ -69,10 +69,8 @@ public class Lane
         return creatures;
     }
 
-    public Lane(Board gs, int num)
-    {
-        gamestate = gs;
-        number = num;
+    public Lane() {
+
     }
 
     public boolean containsPoint(Point p)
@@ -163,8 +161,4 @@ public class Lane
         return Integer.toString(number);
     }
 
-    public Board gameState()
-    {
-        return gamestate;
-    }
 }

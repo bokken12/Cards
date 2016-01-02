@@ -9,7 +9,7 @@ import javax.swing.ImageIcon;
 import clientStuff.Content;
 import abilities.Ability;
 import abilities.AbilityRunnable;
-import abilities.InPlayRunnable;
+import abilities.AbilityTemplate;
 import events.AbilityEvent;
 import events.AttackEvent;
 import events.CreaturePlayedEvent;
@@ -18,6 +18,7 @@ import events.EventBus;
 import events.GameEvent;
 import events.ModifyEvent;
 import events.TurnEndedEvent;
+import clientStuff.Board;
 
 public class Cards {
 
@@ -87,16 +88,16 @@ public class Cards {
 		});
 		cards.add(new CreatureCard("Flame Spirit", 4, 1, 3, new ImageIcon("Flame Spirit.png"),"Elemental", 7, a3)); 
 		cards.add(new CreatureCard("Reborn Footman", 3, 2, 3, new ImageIcon("RebornFoot.png"),"Undead", 8)); 
-		Ability a4 = new Ability("", "2: Give another creature +2/+1", AbilityEvent.class, new AbilityRunnable() {
+		AbilityTemplate a4 = new AbilityTemplate("", "2: Give another creature +2/+1", AbilityEvent.class, new AbilityRunnable() {
 			@Override
-			public void run(GameEvent event) {
+			public void run(GameEvent event, Board board) {
 				//super.run(event);
-				AbilityEvent AE = (AbilityEvent) event;
-				if(AE.getCard().getCard() == cards.get(9)) {
-					EventBus.getInstance().callEvent(new ModifyEvent(Content.selectedCard, 2, 1));
-				}
+				//AbilityEvent AE = (AbilityEvent) event;
+				//if(AE.getCard().getCard() == cards.get(9)) {
+				//	getBoard().getBus().callEvent(new ModifyEvent(Content.selectedCard, 2, 1));
+				//}
 			}
-		});
+		}, 10);
 		cards.add(new CreatureCard("Factory Bot", 2, 1, 2, new ImageIcon("FactoryBot.png"),"Mechanical", 9, a4)); 
 		Ability a5 = new Ability("", "2: put a 2/1 Factory Bot into play", AbilityEvent.class, new AbilityRunnable() {
 			@Override

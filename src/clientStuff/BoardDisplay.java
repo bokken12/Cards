@@ -44,7 +44,6 @@ public class BoardDisplay extends JPanel
 	}
 
 	public void paintCreature(Card card, Graphics g, int x, int y) {
-
 		ImageIcon img = card.getImageIcon();
 		ImageIcon template = new ImageIcon("CreatureTemplate.png");
 		template.setImage(template.getImage().getScaledInstance((int) 120, 170, Image.SCALE_DEFAULT));
@@ -132,4 +131,5 @@ public class BoardDisplay extends JPanel
 	public void paintHandCards(Graphics g) {
 		
 	}
+
 }
