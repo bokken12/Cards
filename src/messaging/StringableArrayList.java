@@ -1,0 +1,97 @@
+package messaging;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.StringTokenizer;
+
+public class StringableArrayList<E extends Stringable> extends ArrayList<E> implements Stringable<ArrayList>
+{
+
+    private Class<? extends Stringable> cls;
+
+    public StringableArrayList(){
+        super();
+    }
+
+    public StringableArrayList(String str){
+        super();
+        fromString(str);
+    }
+    public StringableArrayList(ArrayList<E> ar){
+        super(ar);
+    }
+    public StringableArrayList(Class<? extends E> cls, ArrayList ar){
+        super();
+        this.cls = cls;
+        fromMirror(ar);
+    }
+    @Override
+    public String toString()
+    {
+        /*String delim = "" + this.hashCode();
+        String str = "";
+        str += delim;
+        str += "delim";
+        if(size() > 0){
+            str += get(0).getClass().getName();
+            for(E obj: this){
+                str += delim;
+                str += obj.toString();
+            }
+        }
+        return str;*/
+        String str = "";
+        for(Stringable obj: this){
+            str += "(";
+            str += Stringer.printStringable(obj);
+            str += ")";
+        }
+        return str;
+    }
+
+    @Override
+    public void fromString(String str)
+    {
+        /*String delim = str.substring(0, str.indexOf("delim"));
+        StringTokenizer st = new StringTokenizer(str.substring(str.indexOf("delim" + 5 + delim.length()), str.length()), delim);
+        try
+        {
+            if(st.hasMoreTokens()){
+                String className = st.nextToken();
+                cls = (Class<? extends Stringable>) Class.forName(className);
+                while(st.hasMoreTokens()){
+                    add((E)(new MetaClass(className)).createInstance(st.nextToken()));
+                }
+            }
+        } catch (ClassNotFoundException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }*/
+        for(int index = 0; index < str.length(); index++){
+            String stringableInfo = Stringer.fromParens(str, index);
+            Stringable stringable = Stringer.fromString(stringableInfo);
+            add((E) stringable);
+            index += stringableInfo.length() + 1;
+        }
+    }
+    @Override
+    public ArrayList getMirror()
+    {
+        ArrayList a = new ArrayList();
+        for(E obj: this){
+            a.add(obj.getMirror());
+        }
+        return a;
+    }
+    @Override
+    public void fromMirror(ArrayList e)
+    {
+        this.clear();
+        for(Object obj: e){
+            add((E)(new MetaClass(cls.getName()).createInstance(obj)));
+            //Stringable newItem = cls.newInstance();
+            //newItem.fromMirror(obj);
+        }
+    }
+}
