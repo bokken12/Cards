@@ -25,9 +25,11 @@ import javax.swing.SwingUtilities;
 
 import Player.Player;
 import messaging.LoginMessage;
+import messaging.Message;
+import messaging.MessageListener;
 import messaging.Messager;
 
-public class Launcher extends JFrame implements ActionListener {
+public class Launcher extends JFrame implements ActionListener, MessageListener {
 
 	private static final boolean DEBUG = true;
 
@@ -64,13 +66,52 @@ public class Launcher extends JFrame implements ActionListener {
 	static String currentline = "";
 	java.util.Timer timer = new java.util.Timer();
 
-	static Messager m = new Messager(null);
+	Messager m = new Messager(this);
 	
 	static Game game;
 
 	public static void main(String[] args){
 		frame = new Launcher();
 		System.out.println("We're done initializing!");
+		
+	}
+
+	public void init() {
+		Socket s = connect();
+		System.out.println("=== Connection Established! ===");
+
+		/* Extract the input and output streams from the socket. */
+		try {
+			input = new BufferedReader(new InputStreamReader(s.getInputStream()));
+			output = new PrintWriter(s.getOutputStream());
+		} catch (IOException e) {
+			System.out.println("AAaaAAAAaaaaaAAAAA");
+		}
+
+		south = new JPanel();
+		south.setLayout(new FlowLayout());
+		usernameText = new JTextField("Username", 10);
+		usernameText.addActionListener(this);
+		south.add(usernameText);
+		passwordText = new JTextField("Password", 10);
+		passwordText.addActionListener(this);
+		south.add(passwordText);
+		login.addActionListener(this);
+		south.add(login);
+		createAccount = new JButton("Create Account");
+		createAccount.addActionListener(this);
+		south.add(createAccount);
+		south.add(error);
+		this.add(south);
+	}
+	public Launcher() {
+		super();
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setLayout(new FlowLayout());
+		init();
+		this.pack();
+		this.setVisible(true);
+		
 		try {
 			/* Continuously read messages from the source. */
 			while (true) {
@@ -128,43 +169,6 @@ public class Launcher extends JFrame implements ActionListener {
 			System.out.println("AAAAAaaaAAaaAaaa");
 		}
 		System.out.println("=== Connection Closed ===");
-	}
-
-	public void init() {
-		Socket s = connect();
-		System.out.println("=== Connection Established! ===");
-
-		/* Extract the input and output streams from the socket. */
-		try {
-			input = new BufferedReader(new InputStreamReader(s.getInputStream()));
-			output = new PrintWriter(s.getOutputStream());
-		} catch (IOException e) {
-			System.out.println("AAaaAAAAaaaaaAAAAA");
-		}
-
-		south = new JPanel();
-		south.setLayout(new FlowLayout());
-		usernameText = new JTextField("Username", 10);
-		usernameText.addActionListener(this);
-		south.add(usernameText);
-		passwordText = new JTextField("Password", 10);
-		passwordText.addActionListener(this);
-		south.add(passwordText);
-		login.addActionListener(this);
-		south.add(login);
-		createAccount = new JButton("Create Account");
-		createAccount.addActionListener(this);
-		south.add(createAccount);
-		south.add(error);
-		this.add(south);
-	}
-	public Launcher() {
-		super();
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setLayout(new FlowLayout());
-		init();
-		this.pack();
-		this.setVisible(true);
 	}
 
 
@@ -291,7 +295,7 @@ public class Launcher extends JFrame implements ActionListener {
 		}
 		return player;
 	}
-	public static void doLogin(String username, String password){
+	public void doLogin(String username, String password){
 		//sendText("--login " + username + " " + password);
 		
 		m.send(new LoginMessage(username, password));
@@ -334,6 +338,12 @@ public class Launcher extends JFrame implements ActionListener {
 
 	public void showErrorMessage(String message){
 
+	}
+
+	@Override
+	public void MessageRecieved(Message message) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
