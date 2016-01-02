@@ -16,34 +16,34 @@ import uselessSubclasses.Lane;
 
 public class BoardDisplay extends JPanel
 {
-	
+
 	ImageIcon screen;
 	private JButton attack;
 	private JButton block;
-    private Board displaying;
-	
-    public BoardDisplay(Board toDisplay){
-    	
-        displaying = toDisplay;
-        
-        screen = new ImageIcon("CardScreen.png");
-    }
-    public Board getDisplaying()
-    {
-        return displaying;
-    }
-    public void setDisplaying(Board displaying)
-    {
-        this.displaying = displaying;
-    }
-    @Override
-    public void paintComponent(Graphics g) {
-    	g.drawImage(screen.getImage(), 0, 0, this);
-    	
-    	paintInPlayCreatures(g);
-    }
-    
-    public void paintCreature(Card card, Graphics g, int x, int y) {
+	private Board board;
+
+	public BoardDisplay(Board toDisplay){
+
+		board = toDisplay;
+
+		screen = new ImageIcon("CardScreen.png");
+	}
+	public Board getDisplaying()
+	{
+		return board;
+	}
+	public void setDisplaying(Board displaying)
+	{
+		this.board = displaying;
+	}
+	@Override
+	public void paintComponent(Graphics g) {
+		g.drawImage(screen.getImage(), 0, 0, this);
+
+		paintInPlayCreatures(g);
+	}
+
+	public void paintCreature(Card card, Graphics g, int x, int y) {
 
 		ImageIcon img = card.getImageIcon();
 		ImageIcon template = new ImageIcon("CreatureTemplate.png");
@@ -51,8 +51,8 @@ public class BoardDisplay extends JPanel
 		img.setImage(img.getImage().getScaledInstance((int) 92, 83, Image.SCALE_DEFAULT));
 		String text = card.getText();
 		String cost = Integer.toString(card.getCost());
-		
-		
+
+
 		template.paintIcon(this, g, x, y);
 		img.paintIcon(this, g, x + 12, y + 25);
 		g.drawString(text, x + 10, y - 40);
@@ -78,10 +78,10 @@ public class BoardDisplay extends JPanel
 			g.drawString(name, x + 25, y + 23);
 		}
 	}
-    
-    public void paintInPlayCreature(InPlayCreature c, Graphics g, int x, int y) {
 
-		
+	public void paintInPlayCreature(InPlayCreature c, Graphics g, int x, int y) {
+
+
 		if(c.isGreen()) {
 			ImageIcon i = new ImageIcon("green.png");
 			i.setImage(i.getImage().getScaledInstance((int) 122, 172, Image.SCALE_DEFAULT));
@@ -98,34 +98,38 @@ public class BoardDisplay extends JPanel
 		img.setImage(img.getImage().getScaledInstance((int) 92, 83, Image.SCALE_DEFAULT));
 		String text = c.getCard().getText();
 		String cost = Integer.toString(c.getCard().getCost());
-		
-		
+
+
 		template.paintIcon(this, g, x, y);
 		img.paintIcon(this, g, x + 12, y + 25);
 		//g.drawString(text, x + 10, y - 40);
 		g.drawString(cost, x + 100, y + 23);
 
-			String name = c.getCard().getName();
-			String power = Integer.toString(c.getPower());
-			String health = Integer.toString(c.getHealth());
-			g.setFont(new Font("Helvetica", Font.PLAIN, 12)); 
-			g.drawString(power, x + 20, y + 163);
-			g.drawString(health, x + 92, y + 163);
-			g.setFont(new Font("Helvetica", Font.PLAIN, 8)); 
-			g.drawString(name, x + 25, y + 23);
-			//System.out.println("Painting " + name + " with health " + health);
-			
-		
+		String name = c.getCard().getName();
+		String power = Integer.toString(c.getPower());
+		String health = Integer.toString(c.getHealth());
+		g.setFont(new Font("Helvetica", Font.PLAIN, 12)); 
+		g.drawString(power, x + 20, y + 163);
+		g.drawString(health, x + 92, y + 163);
+		g.setFont(new Font("Helvetica", Font.PLAIN, 8)); 
+		g.drawString(name, x + 25, y + 23);
+		//System.out.println("Painting " + name + " with health " + health);
+
+
+
+	}
+
+	public void paintCloseUpCreature() {
+		//TODO
+	}
+
+	public void paintInPlayCreatures(Graphics g) {
+		for(int i = 0; i < board.getLane(board.getCurrentLane()).getCreatures().size(); i++) {
+			paintInPlayCreature(board.getLane(board.getCurrentLane()).getCreatures().get(i), g, 234, 199);
+		}
+	}
+	
+	public void paintHandCards(Graphics g) {
 		
 	}
-    
-    public void paintCloseUpCreature() {
-    	//TODO
-    }
-    
-    public void paintInPlayCreatures(Graphics g) {
-		for(int i = 0; i < new Lane(null, 0).getCreatures().size(); i++) {
-			paintInPlayCreature(new Lane(null, 0).getCreatures().get(i), g,  i*120, 600);
-		}
-    }
 }

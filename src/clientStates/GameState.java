@@ -25,7 +25,6 @@ public class GameState extends State
     private Board board;
     private BoardDisplay display;
     private MiniState currentState;
-    private int currentLane;
     private ArrayList<InPlayCreature> myCreatures;
     
     ImageIcon screen;
@@ -103,9 +102,6 @@ public class GameState extends State
         currentState.onBegin(this);
     }
 
-	public int getCurrentLane() {
-		
-		return currentLane;
-	}
+	
     
 }
