@@ -7,8 +7,9 @@ import java.util.Iterator;
 import java.util.Set;
 
 import cards.Card;
+import messaging.Stringable;
 
-public class Player {
+public class Player implements Stringable<Player> {
 	String email;
 	String username;
 	String password;
@@ -115,5 +116,21 @@ public class Player {
 		this.rank = rank;
 		this.friends = friends;
 		this.gold = gold;
+	}
+	@Override
+	public void fromString(String str) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
+	public Player getMirror() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public void fromMirror(Player e) {
+		// TODO Auto-generated method stub
+		
 	}
 }
