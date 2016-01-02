@@ -72,6 +72,7 @@ public class Launcher extends JFrame implements ActionListener, MessageListener 
 
 	public static void main(String[] args){
 		frame = new Launcher();
+		frame.run();
 		System.out.println("We're done initializing!");
 
 	}
@@ -111,7 +112,9 @@ public class Launcher extends JFrame implements ActionListener, MessageListener 
 		init();
 		this.pack();
 		this.setVisible(true);
+	}
 
+	public void run() {
 		try {
 			/* Continuously read messages from the source. */
 			while (true) {
@@ -308,10 +311,7 @@ public class Launcher extends JFrame implements ActionListener, MessageListener 
 	public static void menu(Player player) {
 
 		game = new Game(player, output);
-		if(frame != null) {
-			frame.dispose();
-		}
-		//this.setVisible(false);
+		frame.dispose();
 	}
 
 
