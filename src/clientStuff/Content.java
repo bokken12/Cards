@@ -32,6 +32,9 @@ import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 
+import player.GamePlayer;
+import player.Player;
+import player.SimplePlayerProfile;
 import abilities.Ability;
 import abilities.AbilityRunnable;
 import cards.Card;
@@ -52,13 +55,10 @@ import events.TurnStartedEvent;
 import events.UntargetedSpellPlayedEvent;
 import messaging.Message;
 import messaging.MessageListener;
-import player.GamePlayer;
-import player.Player;
-import player.SimplePlayerProfile;
 import uselessSubclasses.Lane;
 
 
-public class Content extends JPanel implements ActionListener, MouseListener, KeyListener, MouseMotionListener, MessageListener {
+public class Content extends JPanel implements ActionListener, MouseListener, KeyListener, MouseMotionListener, MessageListener, Constants {
 
 	ImageIcon background = new ImageIcon("MenuBackground.jpg");
 	ImageIcon screen = new ImageIcon("CardScreen.png");
@@ -185,12 +185,19 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 		addKeyListener(this);
 		addMouseMotionListener(this);
 
+<<<<<<< Updated upstream
 		template.setImage(template.getImage().getScaledInstance((int) 120, 170, Image.SCALE_DEFAULT));
 		
 		lane1.setStartX(/*game.getLocation().x + */51);
 		lane1.setStartY(/*game.getLocation().y + */67);
 		lane1.setEndX(/*game.getLocation().x + */305);
 		lane1.setEndY(/*game.getLocation().y + */600);
+=======
+		lane1.setStartX(LANE_1_START_X);
+		lane1.setStartY(LANE_1_START_Y);
+		lane1.setEndX(LANE_1_END_X);
+		lane1.setEndY(LANE_1_END_Y);
+>>>>>>> Stashed changes
 		lane2.setStartX(/*game.getLocation().x + */473);
 		lane2.setStartY(/*game.getLocation().y + */110);
 		lane2.setEndX(/*game.getLocation().x + */700);

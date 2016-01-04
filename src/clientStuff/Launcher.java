@@ -279,7 +279,8 @@ public class Launcher extends JFrame implements ActionListener, MessageListener 
 	private static Player loginConfirmation(){
 		Player player;
 		while(true){
-			if(currentline.startsWith("--loginaccepted")) {
+		    
+			/*if(currentline.startsWith("--loginaccepted")) {
 				System.out.println("Parsing login acceptance");
 				String args = currentline.substring(17);
 				ArrayList<Integer> collection = new ArrayList<Integer>();
@@ -299,9 +300,10 @@ public class Launcher extends JFrame implements ActionListener, MessageListener 
 						Integer.parseInt(args.substring(args.lastIndexOf("gold=") + 5, args.indexOf("]") - 1))
 						);
 				break;
-			}
+			}*/
+		    break;
 		}
-		return player;
+		return null;
 	}
 	public void doLogin(String username, String password){
 		//sendText("--login " + username + " " + password);
