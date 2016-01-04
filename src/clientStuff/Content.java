@@ -55,6 +55,7 @@ import events.TurnStartedEvent;
 import events.UntargetedSpellPlayedEvent;
 import messaging.Message;
 import messaging.MessageListener;
+import messaging.Messager;
 import uselessSubclasses.Lane;
 
 
@@ -102,7 +103,7 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 
 	JScrollPane decklist = new JScrollPane();
 	Graphics g;
-	PrintWriter output;
+	Messager m;
 
 	Player player;
 	Game game;
@@ -172,9 +173,9 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 		}
 	}
 
-	public Content(Game parent, Player p, PrintWriter out) {
+	public Content(Game parent, Player p, Messager m) {
 
-		output = out;
+		this.m = m;
 		game = parent;
 		player = p;
 		cardsData.init();
@@ -348,8 +349,7 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 				System.out.println("Ending Turn?");
 				turn = false;
 				bus.callEvent(new TurnEndedEvent(you));
-				output.println("--turn");
-				output.flush();
+				m.sendPlainText("--turn");
 			}
 		} else if(e.getSource().equals(attack)) {
 			//			System.out.println("Attacking with " + attacking.toString());
@@ -369,8 +369,7 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 			}
 			s = s + "]";
 			System.out.println("Attacking with " + s);
-			output.println("--attack " + s);
-			output.flush();
+			m.sendPlainText("--attack " + s);
 			turn = false;
 
 		} else if(e.getSource().equals(block)) {
@@ -393,8 +392,7 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 
 			//s = s + "]";
 			System.out.println("Blocking with " + s);
-			output.println("--block " + s);
-			output.flush();
+			m.sendPlainText("--block " + s);
 			turn = false;
 
 			blockers.clear();
@@ -449,8 +447,7 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 
 	public SimplePlayerProfile autoMatch() {
 
-		output.println("--Playing " + player.getRank() + " " + player.getUsername());
-		output.flush();
+		m.sendPlainText("--Playing " + player.getRank() + " " + player.getUsername());
 
 		System.out.println("Automatching");
 
@@ -608,7 +605,7 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 		this.removeAll();
 		this.revalidate();
 		this.repaint();
-		output.println("--remPlay" + player.getUsername() + "|" + player.getRank());
+		m.sendPlainText("--remPlay" + player.getUsername() + "|" + player.getRank());
 		HashMap<String, ArrayList<Integer>> deecks = player.getDecks();
 		Object[] a = deecks.keySet().toArray();
 
@@ -1011,8 +1008,7 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 
 		//should send something like --myBoard 1|2
 		System.out.println("Sending " + send);
-		output.println(send);
-		output.flush();
+		m.sendPlainText(send);
 	}
 
 	public void paintInPlayCreatures(Graphics g) {

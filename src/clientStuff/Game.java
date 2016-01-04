@@ -21,6 +21,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import messaging.Messager;
 import player.Player;
 import player.SimplePlayerProfile;
 
@@ -45,11 +46,11 @@ public class Game extends JFrame{
 	private static final Dimension SIZE = new Dimension(400, 350);
 	private static final Dimension SIZE2 = new Dimension(400, 350);
 
-	public Game(Player player) {
+	public Game(Player player, Messager m) {
 
 		super();
 		this.player = player;
-		a = new Content(this, player, output);
+		a = new Content(this, player, m);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.output = output;
 		content.add(a);

@@ -265,9 +265,9 @@ public class Launcher extends JFrame implements ActionListener, MessageListener,
 		m.send(new LoginMessage(username, password));
 	}
 
-	public static void menu(Player player) {
+	public void menu(Player player) {
 
-		game = new Game(player);
+		game = new Game(player, m);
 		frame.dispose();
 	}
 
