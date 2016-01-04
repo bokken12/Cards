@@ -28,9 +28,10 @@ import messaging.LoginMessage;
 import messaging.Message;
 import messaging.MessageListener;
 import messaging.Messager;
+import messaging.PlainTextListener;
 import player.Player;
 
-public class Launcher extends JFrame implements ActionListener, MessageListener {
+public class Launcher extends JFrame implements ActionListener, MessageListener, PlainTextListener {
 
 	private static final boolean DEBUG = true;
 
@@ -45,8 +46,8 @@ public class Launcher extends JFrame implements ActionListener, MessageListener 
 	private static final int NUM_COLUMNS = 30;
 
 	/* Input and output streams. */
-	private static BufferedReader input;
-	private static PrintWriter output;
+	//private static BufferedReader input;
+	//private static PrintWriter output;
 
 	static Launcher frame;
 	private JTextField usernameText;
@@ -64,31 +65,34 @@ public class Launcher extends JFrame implements ActionListener, MessageListener 
 	String username = "";
 	JButton play = new JButton("Play");
 	JButton cards = new JButton("Cards");
-	static String currentline = "";
+	//static String currentline = "";
 	java.util.Timer timer = new java.util.Timer();
 
-	Messager m = new Messager(this);
+	Messager m;
 
 	static Game game;
 
 	public static void main(String[] args){
 		frame = new Launcher();
-		frame.run();
+		//frame.run();
 		System.out.println("We're done initializing!");
 
 	}
 
 	public void init() {
-		Socket s = connect();
+		//Socket s = connect();
+	    m = new Messager(this);
+	    m.addPlainTextListener(this);
+	    m.start();
 		System.out.println("=== Connection Established! ===");
 
 		/* Extract the input and output streams from the socket. */
-		try {
-			input = new BufferedReader(new InputStreamReader(s.getInputStream()));
-			output = new PrintWriter(s.getOutputStream());
-		} catch (IOException e) {
-			System.out.println("AAaaAAAAaaaaaAAAAA");
-		}
+		//try {
+		//	input = new BufferedReader(new InputStreamReader(s.getInputStream()));
+		//	output = new PrintWriter(s.getOutputStream());
+		//} catch (IOException e) {
+		//	System.out.println("AAaaAAAAaaaaaAAAAA");
+		//}
 
 		south = new JPanel();
 		south.setLayout(new FlowLayout());
@@ -115,64 +119,15 @@ public class Launcher extends JFrame implements ActionListener, MessageListener 
 		this.setVisible(true);
 	}
 
-	public void run() {
-		try {
+	//public void run() {
+		//try {
 			/* Continuously read messages from the source. */
-			while (true) {
-				currentline = input.readLine();
-				if (currentline == null) break;
+			//while (true) {
+				//currentline = input.readLine();
+				//if (currentline == null) break;
 
-				System.out.println("Launcher got " + currentline);
-				/*else */
-				if(currentline.startsWith("--refresh")) {
-					currentline.substring(10);
-				} else if (currentline.startsWith("AccountConfirmed")){
-					System.out.println("Account confirmed! Yay!");
-					doLogin(newUsernameText.getText(), newPasswordText.getText());
-				} else if(currentline.startsWith("--loginaccepted")) {
-					System.out.println("Started Logging in");
-
-					String subbedLine = currentline.substring(16);
-					System.out.println(subbedLine);
-					Player player = new Player(subbedLine);
-					//ArrayList<Integer> collection = new ArrayList<Integer>();
-					//ArrayList<String> collectionStrings = new ArrayList<String>(Arrays.asList((subbedLine.substring(subbedLine.indexOf("cardCollection=")
-					//		+ 16, subbedLine.indexOf(", decks") - 1)).split(", ")));
-					//for(int i = 0; i < collectionStrings.size() - 1; i++) {
-					//	collection.add(Integer.parseInt(collectionStrings.get(i)));
-					//}
-
-
-					//					player = new Player(subbedLine.substring(subbedLine.indexOf("email=") + 6, subbedLine.indexOf(", username")), 
-					//							subbedLine.substring(subbedLine.indexOf("username=") + 9, subbedLine.indexOf(", password")), 
-					//							subbedLine.substring(subbedLine.indexOf("password=") + 9, subbedLine.indexOf(", cardCollection")), 
-					//							collection, 
-					//							getDecksFromString((subbedLine.substring(subbedLine.indexOf("decks=") + 6, subbedLine.indexOf(", rank")))), 
-					//							Integer.parseInt(subbedLine.substring(subbedLine.indexOf("rank=") + 5, subbedLine.indexOf(", friends"))), 
-					//							new ArrayList<String>(Arrays.asList((subbedLine.substring(subbedLine.indexOf("friends=") + 8, subbedLine.indexOf(", gold"))).split(","))), 
-					//							Integer.parseInt(subbedLine.substring(subbedLine.indexOf("gold=") + 5, subbedLine.lastIndexOf("]")))
-					//							);
-					System.out.println("Finished Logging in");
-					menu(player);
-				} else if(currentline.startsWith("--match")) {
-					game.toContent(currentline);
-				} else if(currentline.startsWith("--wait")) {
-					game.toContent(currentline);
-				} else if(currentline.startsWith("--nameTaken")) {
-					error.setText("Username already taken");
-					frame.repaint();
-					frame.pack();
-
-				} else if(currentline.startsWith("--myBoard")) {
-					game.toContent(currentline);
-				} else if(currentline.startsWith("--turn")) {
-					game.toContent(currentline);
-				} else if(currentline.startsWith("--attack")) {
-					game.toContent(currentline);
-				} else if(currentline.startsWith("--block")) {
-					game.toContent(currentline);
-				}
-			}
+				
+			/*}
 		} catch (IOException e) {
 			System.out.println("AAAAAaaaAAaaAaaa");
 		}
@@ -192,7 +147,7 @@ public class Launcher extends JFrame implements ActionListener, MessageListener 
 				//fatalError("Error connecting to the server, try again later.");
 			}
 		}  
-	}
+	}*/
 	public void fatalError(String errorMessage){
 		JLabel error = new JLabel(errorMessage);
 		//error.setFont("Dialog-20");
@@ -260,22 +215,21 @@ public class Launcher extends JFrame implements ActionListener, MessageListener 
 	 * 
 	 * @param line The text to send.
 	 */
-	private static void sendText(String line) {
+	private void sendText(String line) {
 		/* Output the data and flush the output stream to force
 		 * the data to send.
 		 */
-		output.println(line);
-		output.flush();
+		m.sendPlainText(line);
 
 	}
-	private boolean accountCreationConfirmation(){
-		while(true){
-			if(currentline.startsWith("AccountConfirmed")){
-				break;
-			}
-		}
-		return true;
-	}
+//	private boolean accountCreationConfirmation(){
+		//while(true){
+			//if(currentline.startsWith("AccountConfirmed")){
+			//	break;
+			//}
+	//	}
+	//	return true;
+	//}
 	private static Player loginConfirmation(){
 		Player player;
 		while(true){
@@ -313,7 +267,7 @@ public class Launcher extends JFrame implements ActionListener, MessageListener 
 
 	public static void menu(Player player) {
 
-		game = new Game(player, output);
+		game = new Game(player);
 		frame.dispose();
 	}
 
@@ -363,6 +317,61 @@ public class Launcher extends JFrame implements ActionListener, MessageListener 
 		}
 
 	}
+
+    @Override
+    public void messageRecieved(String currentline)
+    {
+      System.out.println("Launcher got " + currentline);
+        /*else */
+        if(currentline.startsWith("--refresh")) {
+            currentline.substring(10);
+        } else if (currentline.startsWith("AccountConfirmed")){
+            System.out.println("Account confirmed! Yay!");
+            doLogin(newUsernameText.getText(), newPasswordText.getText());
+        } else if(currentline.startsWith("--loginaccepted")) {
+            System.out.println("Started Logging in");
+
+            String subbedLine = currentline.substring(16);
+            System.out.println(subbedLine);
+            Player player = new Player(subbedLine);
+            //ArrayList<Integer> collection = new ArrayList<Integer>();
+            //ArrayList<String> collectionStrings = new ArrayList<String>(Arrays.asList((subbedLine.substring(subbedLine.indexOf("cardCollection=")
+            //      + 16, subbedLine.indexOf(", decks") - 1)).split(", ")));
+            //for(int i = 0; i < collectionStrings.size() - 1; i++) {
+            //  collection.add(Integer.parseInt(collectionStrings.get(i)));
+            //}
+
+
+            //                  player = new Player(subbedLine.substring(subbedLine.indexOf("email=") + 6, subbedLine.indexOf(", username")), 
+            //                          subbedLine.substring(subbedLine.indexOf("username=") + 9, subbedLine.indexOf(", password")), 
+            //                          subbedLine.substring(subbedLine.indexOf("password=") + 9, subbedLine.indexOf(", cardCollection")), 
+            //                          collection, 
+            //                          getDecksFromString((subbedLine.substring(subbedLine.indexOf("decks=") + 6, subbedLine.indexOf(", rank")))), 
+            //                          Integer.parseInt(subbedLine.substring(subbedLine.indexOf("rank=") + 5, subbedLine.indexOf(", friends"))), 
+            //                          new ArrayList<String>(Arrays.asList((subbedLine.substring(subbedLine.indexOf("friends=") + 8, subbedLine.indexOf(", gold"))).split(","))), 
+            //                          Integer.parseInt(subbedLine.substring(subbedLine.indexOf("gold=") + 5, subbedLine.lastIndexOf("]")))
+            //                          );
+            System.out.println("Finished Logging in");
+            menu(player);
+        } else if(currentline.startsWith("--match")) {
+            game.toContent(currentline);
+        } else if(currentline.startsWith("--wait")) {
+            game.toContent(currentline);
+        } else if(currentline.startsWith("--nameTaken")) {
+            error.setText("Username already taken");
+            frame.repaint();
+            frame.pack();
+
+        } else if(currentline.startsWith("--myBoard")) {
+            game.toContent(currentline);
+        } else if(currentline.startsWith("--turn")) {
+            game.toContent(currentline);
+        } else if(currentline.startsWith("--attack")) {
+            game.toContent(currentline);
+        } else if(currentline.startsWith("--block")) {
+            game.toContent(currentline);
+        }
+    }
 
 }
 /*public void KeyPressed(KeyEvent e){

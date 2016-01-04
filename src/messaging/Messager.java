@@ -36,7 +36,11 @@ public class Messager extends Thread
                     for(PlainTextListener ptl: ptls){
                     	ptl.messageRecieved(line);
                     }
+                    try {
                     listener.MessageRecieved(Message.fromData(new Stringer(line)));
+                    } catch (Exception e){
+                        System.out.println("Sorry, we're still using a plaintext system to send messages that cannot be parsed. :(");
+                    }
                 }
             }
         } catch (IOException e) {
@@ -47,6 +51,7 @@ public class Messager extends Thread
         output.println(m.toString());
         output.flush();
     }
+    
     public void sendPlainText(String str){
     	output.println(str);
     	output.flush();

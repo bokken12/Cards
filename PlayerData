@@ -25,3 +25,22 @@ cards [0, 0, 1, 1, 2, 3, 4]
 decks Starter[0, 0, 1, 1, 2, 3, 4, 11, 11, 10, 10]
 gold 0
 --
+
+username rname
+password sword
+email ail
+rank 0
+friends []
+cards [0, 0, 1, 1, 2, 3, 4]
+decks Starter[0, 0, 1, 1, 2, 3, 4]
+gold 0
+--
+username erUse
+password ord
+email Eail
+rank 0
+friends []
+cards [0, 0, 1, 1, 2, 3, 4]
+decks Starter[0, 0, 1, 1, 2, 3, 4]
+gold 0
+--

@@ -45,7 +45,7 @@ public class Game extends JFrame{
 	private static final Dimension SIZE = new Dimension(400, 350);
 	private static final Dimension SIZE2 = new Dimension(400, 350);
 
-	public Game(Player player, PrintWriter output) {
+	public Game(Player player) {
 
 		super();
 		this.player = player;
