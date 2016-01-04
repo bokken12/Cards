@@ -23,6 +23,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
+import messaging.LoginAcceptedMessage;
 import messaging.LoginMessage;
 import messaging.Message;
 import messaging.MessageListener;
@@ -303,9 +304,9 @@ public class Launcher extends JFrame implements ActionListener, MessageListener 
 		return player;
 	}
 	public void doLogin(String username, String password){
-		sendText("--login " + username + " " + password);
+		//sendText("--login " + username + " " + password);
 
-		//m.send(new LoginMessage(username, password));
+		m.send(new LoginMessage(username, password));
 	}
 
 	public static void menu(Player player) {
@@ -354,7 +355,10 @@ public class Launcher extends JFrame implements ActionListener, MessageListener 
 
 	@Override
 	public void MessageRecieved(Message message) {
-		// TODO Auto-generated method stub
+		if(message instanceof LoginAcceptedMessage) {
+			Player player = ((LoginAcceptedMessage) message).getPlayer();
+			menu(player);
+		}
 
 	}
 

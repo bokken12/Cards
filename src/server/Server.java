@@ -27,6 +27,11 @@ import javax.swing.JTextArea;
 
 import cards.Card;
 import cards.Cards;
+import messaging.LoginAcceptedMessage;
+import messaging.LoginMessage;
+import messaging.Message;
+import messaging.MessageListener;
+import messaging.Messager;
 import player.GamePlayer;
 import player.Player;
 import player.SimplePlayerProfile;
@@ -34,7 +39,7 @@ import player.SimplerProfile;
 import acm.program.ConsoleProgram;
 
 
-public class Server extends ConsoleProgram{
+public class Server extends ConsoleProgram {
 
 	static final List<PrintWriter> writers = Collections.synchronizedList(new ArrayList<PrintWriter>());
 	//players in the waiting for game list
@@ -49,17 +54,19 @@ public class Server extends ConsoleProgram{
 	public static int PORT_NUMBER = 5002;
 
 	public static final String HOSTNAME = "127.0.0.1";   
+
+
 	
 	public static void main(String[] args){
-	    Server server = new Server();
-	    server.start();
+		Server server = new Server();
+		server.start();
 	}
-	
+
 	public void run() {
 
 		Cards.init();
 		ServerSocket listener = null;
-		
+
 		try {
 			/* Open the file for reading. */
 			BufferedReader br = new BufferedReader(new FileReader("PlayerData"));
@@ -88,16 +95,16 @@ public class Server extends ConsoleProgram{
 						decks = null;
 						friends = null;
 					}
-					
-					
+
+
 					if(line.startsWith("username")) {
 						username = line.substring(9);
 					}
-					
+
 					if(line.startsWith("password")) {
 						password = line.substring(9);
 					}
-					
+
 					if(line.startsWith("rank")) {
 						rank = 	Integer.parseInt(line.substring(5));
 					}
@@ -105,7 +112,7 @@ public class Server extends ConsoleProgram{
 					if(line.startsWith("gold")) {
 						gold = Integer.parseInt(line.substring(5));
 					}
-					
+
 					if(line.startsWith("email")) {
 						email = line.substring(6);
 					}
@@ -161,8 +168,8 @@ public class Server extends ConsoleProgram{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
-		
+
+
 
 		try {
 			listener = new ServerSocket(PORT_NUMBER, 100, InetAddress.getByName(HOSTNAME));
@@ -226,9 +233,9 @@ public class Server extends ConsoleProgram{
 		while(t.hasMoreTokens()) {
 			String a = t.nextToken();
 			ArrayList<Integer> list = new ArrayList<Integer>();
-			
+
 			int[] arr = getArray(a.substring(a.indexOf("[") - 1 ));
-			
+
 			for(int i : arr) {
 				list.add(i);
 			}
@@ -241,12 +248,13 @@ public class Server extends ConsoleProgram{
 
 	}
 
-	class Handler extends Thread {
+	class Handler extends Thread implements MessageListener {
 		public String name;
 		private Socket socket;
 		private Player pllayer;
 		BufferedReader in;
 		PrintWriter out;
+		
 		GameHandler gh;
 		int me = 1;
 		/**
@@ -267,9 +275,9 @@ public class Server extends ConsoleProgram{
 		public void run() {
 			println("Got a connection");
 			// Create character streams for the socket.
-			
-			
-			
+
+
+
 			while(true){
 				try {
 					in = new BufferedReader(new InputStreamReader(
@@ -362,14 +370,14 @@ public class Server extends ConsoleProgram{
 						String decks = "";
 						int count = 0;
 						for(Entry<String, ArrayList<Integer>> entry : dacks.entrySet()){ 
-							 decks += entry.getKey();
-							 decks += entry.getValue().toString(); 
-							 if(!(count < dacks.keySet().size())) {
-								 decks += "|";
-							 }
-							 count++;
+							decks += entry.getKey();
+							decks += entry.getValue().toString(); 
+							if(!(count < dacks.keySet().size())) {
+								decks += "|";
+							}
+							count++;
 						}
-						
+
 						String str = "\nusername " + username + "\npassword " + password + "\nemail " + email + "\nrank " + 0 + "\nfriends []\ncards " + Cards.getStarterCards() + "\ndecks " + decks + "\ngold " + 0 + "\n--";
 						println(str);
 						File file = new File("PlayerData");
@@ -439,6 +447,15 @@ public class Server extends ConsoleProgram{
 			gh = g;
 			me = 1;
 		}
+
+
+		@Override
+		public void MessageRecieved(Message message) {
+			if(message instanceof LoginMessage)
+				if(users.containsKey(((LoginMessage) message).getUsername()) && users.get(((LoginMessage) message).getUsername()).equals(((LoginMessage) message).getPassword())) {
+					out.println(new LoginAcceptedMessage(userdata.get(((LoginMessage) message).getUsername())));
+				}
+		}
 	}
 
 	public Player doLogin(String params, PrintWriter output, Handler h){
@@ -472,5 +489,6 @@ public class Server extends ConsoleProgram{
 		return null;
 	}
 
+	
 
 }
