@@ -1,5 +1,6 @@
 package cards;
 
+import java.awt.Image;
 import java.util.StringTokenizer;
 
 import javax.swing.ImageIcon;
@@ -32,6 +33,7 @@ public class CreatureCard extends Card implements GameListener {
 		cost = c; 
 		ability = a;
 		image = img;
+		image.setImage(image.getImage().getScaledInstance((int) 92, 83, Image.SCALE_DEFAULT));
 	}
 
 	public int getPower() {

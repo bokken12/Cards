@@ -18,6 +18,7 @@ public class Card {
 
 	public Card(){
 		num =  Cards.cards.indexOf(this);
+		
 	}
 	public static Card fromName(String name){
 		return null;

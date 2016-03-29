@@ -82,7 +82,9 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 	boolean isMtn1Full = false;
 	boolean isMtn2Full = false;
 	boolean isMtn3Full = false;
-
+	
+	Font f = new Font("FONT", 2, 30);
+	
 	Integer mana = 0;
 	Integer maxMana = 0;
 	Integer turnNum = 0;
@@ -125,6 +127,9 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 
 	HashMap<InPlayCreature, InPlayCreature> blockers = new HashMap<InPlayCreature, InPlayCreature>();
 
+	ImageIcon green = new ImageIcon("green.png");
+	ImageIcon red = new ImageIcon("red.png");
+	ImageIcon template = new ImageIcon("CreatureTemplate.png");
 	
 
 	ArrayList<HandCard> handCards = new ArrayList<HandCard>();
@@ -142,6 +147,8 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 	Lane lane3 = new Lane(this, 3);
 	public static ArrayList<Lane> lanes = new ArrayList<Lane>();
 
+	Font f8 = new Font("Helvetica", Font.PLAIN, 8);
+	Font f12 = new Font("Helvetica", Font.PLAIN, 12);
 	volatile SimplePlayerProfile match;
 
 	public void paintComponent(Graphics g) {
@@ -150,12 +157,12 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 		super.paintComponent(g);
 		this.g = g;
 		if(clear) {
-			screen.setImage(screen.getImage().getScaledInstance((int) 1200, 800, Image.SCALE_DEFAULT));
+			
 			screen.paintIcon(this, g, 0, 0);
 			paintInPlayCreatures(g);
 			paintHandCards(g);
 			paintArrivals(g);
-			Font f = new Font("FONT", 2, 30);
+			
 			
 			g.setFont(f);
 			g.drawString(Integer.toString(enemyHealth), 500, 50);
@@ -176,24 +183,27 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 		Dimension a = new Dimension(width, height);
 		addMouseListener(this);
 		addKeyListener(this);
-
-		lane1.setStartX(/*game.getLocation().x + */51);
-		lane1.setStartY(/*game.getLocation().y + */67);
-		lane1.setEndX(/*game.getLocation().x + */305);
-		lane1.setEndY(/*game.getLocation().y + */600);
-		lane2.setStartX(/*game.getLocation().x + */473);
-		lane2.setStartY(/*game.getLocation().y + */110);
-		lane2.setEndX(/*game.getLocation().x + */700);
-		lane2.setEndY(/*game.getLocation().y + */600);
-		lane3.setStartX(/*game.getLocation().x + */855);
-		lane3.setStartY(/*game.getLocation().y + */115);
-		lane3.setEndX(/*game.getLocation().x + */1113);
-		lane3.setEndY(/*game.getLocation().y + */600);
+		template.setImage(template.getImage().getScaledInstance((int) 120, 170, Image.SCALE_DEFAULT));
+		green.setImage(green.getImage().getScaledInstance((int) 122, 172, Image.SCALE_DEFAULT));
+		red.setImage(red.getImage().getScaledInstance((int) 122, 172, Image.SCALE_DEFAULT));
+		lane1.setStartX(51);
+		lane1.setStartY(67);
+		lane1.setEndX(305);
+		lane1.setEndY(600);
+		lane2.setStartX(473);
+		lane2.setStartY(110);
+		lane2.setEndX(700);
+		lane2.setEndY(600);
+		lane3.setStartX(855);
+		lane3.setStartY(115);
+		lane3.setEndX(1113);
+		lane3.setEndY(600);
 
 		lanes.add(lane1);
 		lanes.add(lane2);
 		lanes.add(lane3);
-
+		
+		screen.setImage(screen.getImage().getScaledInstance((int) 1200,	 800, Image.SCALE_DEFAULT));
 		setPreferredSize(a);
 		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 		add(Box.createHorizontalGlue());
@@ -647,9 +657,6 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 	public void paintCreature(Card card, Graphics g, int x, int y) {
 
 		ImageIcon img = card.getImageIcon();
-		ImageIcon template = new ImageIcon("CreatureTemplate.png");
-		template.setImage(template.getImage().getScaledInstance((int) 120, 170, Image.SCALE_DEFAULT));
-		img.setImage(img.getImage().getScaledInstance((int) 92, 83, Image.SCALE_DEFAULT));
 		String text = card.getText();
 		String cost = Integer.toString(card.getCost());
 		
@@ -664,10 +671,10 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 			String name = cc.getName();
 			String power = Integer.toString(cc.getPower());
 			String health = Integer.toString(cc.getToughness());
-			g.setFont(new Font("Helvetica", Font.PLAIN, 12)); 
+			g.setFont(f12); 
 			g.drawString(power, x + 20, y + 163);
 			g.drawString(health, x + 92, y + 163);
-			g.setFont(new Font("Helvetica", Font.PLAIN, 8)); 
+			g.setFont(f8); 
 			g.drawString(name, x + 25, y + 23);
 			//System.out.println("Painting " + name + " with health " + health);
 		}
@@ -685,19 +692,15 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 
 		
 		if(c.isGreen()) {
-			ImageIcon i = new ImageIcon("green.png");
-			i.setImage(i.getImage().getScaledInstance((int) 122, 172, Image.SCALE_DEFAULT));
-			i.paintIcon(handPanel, g, x, y);
+			green.paintIcon(handPanel, g, x, y);
 		}
 		if(c.isRed()) {
-			ImageIcon i = new ImageIcon("red.png");
-			i.setImage(i.getImage().getScaledInstance((int) 122, 172, Image.SCALE_DEFAULT));
-			i.paintIcon(handPanel, g, x, y);
+			red.paintIcon(handPanel, g, x, y);
 		}
 		ImageIcon img = c.getCard().getImageIcon();
-		ImageIcon template = new ImageIcon("CreatureTemplate.png");
-		template.setImage(template.getImage().getScaledInstance((int) 120, 170, Image.SCALE_DEFAULT));
-		img.setImage(img.getImage().getScaledInstance((int) 92, 83, Image.SCALE_DEFAULT));
+		
+		
+		//img.setImage(img.getImage().getScaledInstance((int) 92, 83, Image.SCALE_DEFAULT));
 		String text = c.getCard().getText();
 		String cost = Integer.toString(c.getCard().getCost());
 		
@@ -710,10 +713,10 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 			String name = c.getCard().getName();
 			String power = Integer.toString(c.getPower());
 			String health = Integer.toString(c.getHealth());
-			g.setFont(new Font("Helvetica", Font.PLAIN, 12)); 
+			g.setFont(f12); 
 			g.drawString(power, x + 20, y + 163);
 			g.drawString(health, x + 92, y + 163);
-			g.setFont(new Font("Helvetica", Font.PLAIN, 8)); 
+			g.setFont(f8); 
 			g.drawString(name, x + 25, y + 23);
 			//System.out.println("Painting " + name + " with health " + health);
 			
