@@ -115,7 +115,7 @@ public class Cards {
 			} 
 		});
 		cards.add(new CreatureCard("The Factory", 0, 5, 6, new ImageIcon("Factory.png"), a5,"Mechanical", 10)); 
-		CreatureCard crcd1 = new CreatureCard("Charging Stag", 5, 5, 4, new ImageIcon("ChargingStag.png"), a0,"Beast", 10);
+		CreatureCard crcd1 = new CreatureCard("Charging Stag", 5, 5, 4, new ImageIcon("ChargingStag.png"), a0,"Beast", 11);
 		crcd1.setIntoPlay(new InPlayRunnable() {
 			@Override
 			public void run(InPlayCreature c, CreaturePlayedEvent e) {
@@ -142,9 +142,9 @@ public class Cards {
 				}
 			} 
 		});
-		cards.add(new CreatureCard("Verdant Spring", 0, 3, 1, new ImageIcon("Factory.jpg"), a6,"Plant", 10)); 
+		cards.add(new CreatureCard("Verdant Spring", 0, 3, 1, new ImageIcon("Factory.jpg"), a6,"Plant", 12)); 
 
-		cards.add(new SpellCard("War Axe", 2, "Give a creature +3 attack", true, 11, new SpellRunnable() {
+		cards.add(new SpellCard("War Axe", 2, "Give a creature +3 attack", true, 13, new SpellRunnable() {
 			@Override
 			public void run(Content c) {
 				EventBus.getInstance().callEvent(new ModifyEvent(c.selectedCard, 3, 0));

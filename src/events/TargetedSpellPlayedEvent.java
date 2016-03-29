@@ -15,6 +15,6 @@ public class TargetedSpellPlayedEvent<T> extends SpellPlayedEvent {
 	@Override
 	public void fireEvent() {
 		// TODO Auto-generated method stub
-		
+		card.getEffect().run(c);
 	}
 }

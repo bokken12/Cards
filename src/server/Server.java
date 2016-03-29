@@ -59,7 +59,7 @@ public class Server extends ConsoleProgram{
 
 		Cards.init();
 		ServerSocket listener = null;
-		
+		println("Server started. Reading existing accounts from file...");
 		try {
 			/* Open the file for reading. */
 			BufferedReader br = new BufferedReader(new FileReader("PlayerData"));
@@ -124,7 +124,7 @@ public class Server extends ConsoleProgram{
 
 					if(username != null && password != null && rank != null && gold != null && cards != null && decks != null && friends != null && email != null) {
 						Player p = new Player(email, username, password, cards, decks, rank, friends, gold);
-						println(p);
+						println("Recieved a player with name " + p.getUsername());
 						users.put(username, password);
 						userdata.put(username, p);
 					}
@@ -162,12 +162,11 @@ public class Server extends ConsoleProgram{
 			e.printStackTrace();
 		}
 		
-		
+		println("Recieved " + users.size() + " existing players. Server waiting for connections");
 
 		try {
 			listener = new ServerSocket(PORT_NUMBER, 100, InetAddress.getByName(HOSTNAME));
-			println("Waiting for a connection.");
-
+	
 			while (true) {
 				new Handler(listener.accept()).start();
 			}
@@ -445,19 +444,18 @@ public class Server extends ConsoleProgram{
 		String b = a.nextToken();
 		String c = a.nextToken();
 		if((players.containsKey(b))) {
-			println("Denying login");
+			println("Denying login: Account already logged in");
 			return null;
 		}
-		println("Username is " + b + " and is it in data? " + users.containsKey(b));
-		if(users.containsKey(b)) println(" is Pasword in data? " + users.get(b).equals(c));
-		println("Sending Login Acceptance to player");
 		if(users.containsKey(b) && users.get(b).equals(c)) {
-			println("Actually Sending Login Acceptance to player");
+			println("Username and password are in data");
+			println("Sending login acceptance to player");
 
 			output.println("--loginaccepted " + userdata.get(b).toString());
+		} else {
+			println("Incorrect username or password, login not accepted");
 		}
 		output.flush();
-		println("got a login");
 		players.put(b, h);
 		h.name = b;
 
