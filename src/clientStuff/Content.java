@@ -793,6 +793,18 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 	}
 
 	public InPlayCreature getClick(Point p) {
+		if(p.y > 400 && p.y < 500) {
+			//Clicked on your creature lane
+			int index = (p.x-50)/120;
+			return myCreatures.get(index);
+			
+		}
+		if(p.y > 180 && p.y < 280) {
+			//Clicked on enemy creature lane
+			int index = (p.x-50)/120;
+			return enemyCreatures.get(index);
+			
+		}
 		return null;
 	}
 
@@ -911,13 +923,13 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 			if(k.get(i).equals(blocker)) {
 				paintInPlayCreature(k.get(i), g, (int) blockCardPoint.getX(), (int) blockCardPoint.getY());
 			} else {
-				paintInPlayCreature(k.get(i), g, 50 + i*115, 400);
+				paintInPlayCreature(k.get(i), g, 50 + i*120, 400);
 			}
 		}
 
 		List<InPlayCreature> b = enemyCreatures;
 		for(int i = 0; i < b.size(); i++) {
-			paintInPlayCreature(b.get(i), g, 50 + i*115, 180);
+			paintInPlayCreature(b.get(i), g, 50 + i*120, 180);
 		}
 	}
 
