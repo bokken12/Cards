@@ -793,13 +793,13 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 	}
 
 	public InPlayCreature getClick(Point p) {
-		if(p.y > 400 && p.y < 500) {
+		if(p.y > 400 && p.y < 600) {
 			//Clicked on your creature lane
 			int index = (p.x-50)/120;
 			return myCreatures.get(index);
 			
 		}
-		if(p.y > 180 && p.y < 280) {
+		if(p.y > 180 && p.y < 350) {
 			//Clicked on enemy creature lane
 			int index = (p.x-50)/120;
 			return enemyCreatures.get(index);
