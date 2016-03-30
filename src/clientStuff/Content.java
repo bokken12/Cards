@@ -516,7 +516,7 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 			bus.callEvent(new TurnStartedEvent(you));
 			repaint();
 			for(int i = 0; i < arrivalCreatures.size(); i=0) {
-				bus.callEvent(new CreaturePlayedEvent(arrivalCreatures.get(i)));
+				bus.callEvent(new CreaturePlayedEvent(arrivalCreatures.get(i), this));
 			}
 
 		} else if(m.startsWith("--myBoard")) {
@@ -797,14 +797,13 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 	}
 
 	public void arrivalHelper() {
-		arrivalCreatures.add( (CreatureCard) selectedHandCard.getCard());
+		arrivalCreatures.add((CreatureCard) selectedHandCard.getCard());
 		handCards.remove(selectedHandCard);
 
 	}
 
-
 	private class HandCardDragger extends SwingWorker<String, Point> {
-
+		
 		volatile boolean stop = true;
 
 		@Override

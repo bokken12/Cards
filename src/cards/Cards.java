@@ -76,7 +76,7 @@ public class Cards {
 				//super.run(event);
 				TurnEndedEvent AE = (TurnEndedEvent) event;
 				if(AE.getPlayer().equals(Content.you)) {
-					EventBus.getInstance().callEvent(new CreaturePlayedEvent((CreatureCard) getCardFromID(5)));
+					EventBus.getInstance().callEvent(new CreaturePlayedEvent((CreatureCard) getCardFromID(5), null));
 				}
 			}
 		});
@@ -110,7 +110,7 @@ public class Cards {
 				//super.run(event);
 				AbilityEvent AE = (AbilityEvent) event;
 				if(AE.getCard().getCard() == cards.get(10)) {
-					EventBus.getInstance().callEvent(new CreaturePlayedEvent((CreatureCard) getCardFromID(9)));
+					EventBus.getInstance().callEvent(new CreaturePlayedEvent((CreatureCard) getCardFromID(9), null));
 				}
 			} 
 		});
@@ -135,7 +135,7 @@ public class Cards {
 							c.get(i).AddHealth(1);
 						}
 					}
-					EventBus.getInstance().callEvent(new CreaturePlayedEvent((CreatureCard) getCardFromID(9)));
+					EventBus.getInstance().callEvent(new CreaturePlayedEvent((CreatureCard) getCardFromID(9), null));
 				}
 			} 
 		});

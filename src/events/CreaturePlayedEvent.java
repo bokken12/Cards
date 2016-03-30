@@ -16,8 +16,9 @@ public class CreaturePlayedEvent extends CardPlayedEvent {
 		content.arrivalCreatures.remove(creature);
 	}
 	
-	public CreaturePlayedEvent(CreatureCard creature) {
+	public CreaturePlayedEvent(CreatureCard creature, Content c) {
 		this.creature = creature;
+		content = c;
 	}
 
 	public CreatureCard getCreature() {
