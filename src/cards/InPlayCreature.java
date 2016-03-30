@@ -3,7 +3,6 @@ package cards;
 import java.awt.Point;
 
 import uselessSubclasses.DamageableEntity;
-import uselessSubclasses.Lane;
 
 public class InPlayCreature implements DamageableEntity {
 
@@ -11,7 +10,6 @@ public class InPlayCreature implements DamageableEntity {
 	private int health;
 	String type;
 	int maxHealth;
-	Lane lane;
 	CreatureCard card;
 	
 	int startX;
@@ -26,8 +24,7 @@ public class InPlayCreature implements DamageableEntity {
 	@Override
 	public String toString() {
 		return "InPlayCreature [power=" + power + ", health=" + health
-				+ ", type=" + type + ", maxHealth=" + maxHealth + ", lane="
-				+ lane + ", card=" + card + "]";
+				+ ", type=" + type + ", maxHealth=" + maxHealth + ", card=" + card + "]";
 	}
 	
 //	public InPlayCreature fromString() {
@@ -41,8 +38,7 @@ public class InPlayCreature implements DamageableEntity {
 		health = health - dmg;
 	}
 	
-	public InPlayCreature(CreatureCard card, Lane lane) {
-		this.lane = lane;
+	public InPlayCreature(CreatureCard card) {
 		power = card.getPower();
 		health = card.getToughness();
 		maxHealth = health;
@@ -89,14 +85,6 @@ public class InPlayCreature implements DamageableEntity {
 		return maxHealth;
 	}
 
-	public Lane getLane() {
-		return lane;
-	}
-
-	public void setLane(Lane lane) {
-		this.lane = lane;
-	}
-	
 	public CreatureCard getCard() {
 		return card;
 	}

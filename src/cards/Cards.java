@@ -76,7 +76,7 @@ public class Cards {
 				//super.run(event);
 				TurnEndedEvent AE = (TurnEndedEvent) event;
 				if(AE.getPlayer().equals(Content.you)) {
-					EventBus.getInstance().callEvent(new CreaturePlayedEvent((CreatureCard) getCardFromID(5), 1));
+					EventBus.getInstance().callEvent(new CreaturePlayedEvent((CreatureCard) getCardFromID(5), null));
 				}
 			}
 		});
@@ -110,7 +110,7 @@ public class Cards {
 				//super.run(event);
 				AbilityEvent AE = (AbilityEvent) event;
 				if(AE.getCard().getCard() == cards.get(10)) {
-					EventBus.getInstance().callEvent(new CreaturePlayedEvent((CreatureCard) getCardFromID(9), 2));
+					EventBus.getInstance().callEvent(new CreaturePlayedEvent((CreatureCard) getCardFromID(9), null));
 				}
 			} 
 		});
@@ -120,9 +120,6 @@ public class Cards {
 			@Override
 			public void run(InPlayCreature c, CreaturePlayedEvent e) {
 
-				Random r = new Random();
-
-				e.setLane(r.nextInt(3)); 
 			}
 		});
 		cards.add(crcd1); 
@@ -138,7 +135,7 @@ public class Cards {
 							c.get(i).AddHealth(1);
 						}
 					}
-					EventBus.getInstance().callEvent(new CreaturePlayedEvent((CreatureCard) getCardFromID(9), 0));
+					EventBus.getInstance().callEvent(new CreaturePlayedEvent((CreatureCard) getCardFromID(9), null));
 				}
 			} 
 		});
