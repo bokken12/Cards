@@ -1,5 +1,7 @@
 package cards;
 
+import javax.swing.ImageIcon;
+
 public class SpellCard extends Card {
 
 	SpellRunnable effect;
@@ -7,13 +9,15 @@ public class SpellCard extends Card {
 	int cost;
 	String name;
 	boolean hasTarget;
+	ImageIcon image;
 	
-	public SpellCard(String name, int cost, String text, boolean hasTarget, int id, SpellRunnable effect) {
+	public SpellCard(String name, int cost, String text, boolean hasTarget, ImageIcon image, int id, SpellRunnable effect) {
 		this.name = name;
 		this.cost = cost;
 		this.effect = effect;
 		this.text = text;
 		this.hasTarget = hasTarget;
+		this.image = image;
 	}
 
 	public SpellRunnable getEffect() {
@@ -42,5 +46,9 @@ public class SpellCard extends Card {
 
 	public void setHasTarget(boolean hasTarget) {
 		this.hasTarget = hasTarget;
+	}
+	
+	public ImageIcon getImage() {
+		return image;
 	}
 }

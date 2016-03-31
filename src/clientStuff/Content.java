@@ -301,23 +301,6 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 			//
 			//			playCards.RegisterListeners();
 
-			Ability addMana = new Ability("Add Mana", "adds to your mana", TurnStartedEvent.class, new AbilityRunnable() {
-				@Override
-
-				public void run(GameEvent event) {
-					System.out.println("Updating mana");
-					TurnStartedEvent e = (TurnStartedEvent) event;
-
-					if(turnNum == 1 || turnNum == 2 || turnNum == 3 || turnNum == 5 || turnNum == 8
-							|| turnNum == 13 || turnNum == 21 || turnNum == 34) {
-						maxMana++;
-					}
-					mana = maxMana;
-				}
-			});
-
-			addMana.RegisterListeners();
-
 		} else if(e.getSource().equals(endTurn)) {
 			if(turn == true) {
 				System.out.println("Ending Turn?");
@@ -511,6 +494,10 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 		} else if(m.startsWith("--turn")) {
 			turn = true;
 			turnNum++;
+			if(isManaTurn(turnNum)) {
+				maxMana++;
+			}
+			mana = maxMana;
 			System.out.println("My Turn! :)");
 			drawCard();
 			bus.callEvent(new TurnStartedEvent(you));
@@ -518,6 +505,7 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 			for(int i = 0; i < arrivalCreatures.size(); i=0) {
 				bus.callEvent(new CreaturePlayedEvent(arrivalCreatures.get(i), this));
 			}
+			System.out.println("You have " + mana + " mana.");
 
 		} else if(m.startsWith("--myBoard")) {
 
@@ -562,6 +550,20 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 			System.out.println("Attacking enemy numbers are " + attackingEnemyNums);
 			System.out.println("Attacking enemys are " + attackingEnemys);
 		}
+	}
+
+	private boolean isManaTurn(int turnNum) {
+		int current = 1;
+		int past = 0;
+		while(current < turnNum + 1) {
+			int temp = current;
+			current += past;
+			past = temp;
+			if(current == turnNum) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public void matchScreen() {
@@ -620,7 +622,6 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 		ImageIcon img = card.getImageIcon();
 		String text = card.getText();
 		String cost = Integer.toString(card.getCost());
-		System.out.println(card.getID() + " " + card.getName());
 
 		template.paintIcon(handPanel, g, x, y);
 		img.paintIcon(handPanel, g, x + 12, y + 25);
@@ -637,7 +638,6 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 			g.drawString(health, x + 92, y + 163);
 			g.setFont(f8); 
 			g.drawString(name, x + 25, y + 23);
-			//System.out.println("Painting " + name + " with health " + health);
 		}
 		if(card.getClass().equals(SpellCard.class)) {
 			SpellCard sc = (SpellCard) card;
@@ -679,7 +679,6 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 		g.drawString(health, x + 92, y + 163);
 		g.setFont(f8); 
 		g.drawString(name, x + 25, y + 23);
-		//System.out.println("Painting " + name + " with health " + health);
 
 
 
@@ -718,14 +717,12 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 	public void mousePressed(MouseEvent e) {
 		Point a = MouseInfo.getPointerInfo().getLocation();
 		SwingUtilities.convertPointFromScreen(a, game);
-		//System.out.println("Got a click at " + a);
 
 
 		for(int i = 0; i < handCards.size(); i++) {
 			if(handCards.get(i).containsPoint(a)) {
 				if(turn == true || blocking == true) {
 					cd = new HandCardDragger();
-					System.out.println("Clicking a Hand Card! :D");
 					selectedHandCard = handCards.get(i);
 					cd.execute();
 				}
@@ -753,10 +750,11 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 		SwingUtilities.convertPointFromScreen(a, game);
 
 		if(!(cd.isStopped())) {
-			if(selectedHandCard.getCard() instanceof CreatureCard/* && mana >= selectedHandCard.getCard().getCost()*/) {
+			if(selectedHandCard.getCard() instanceof CreatureCard && mana >= selectedHandCard.getCard().getCost()) {
 				System.out.println("Playing Creature: " + selectedHandCard);
 				if(boardContainsPoint(selecCardPoint)) {
 					arrivalHelper();
+					mana -= selectedHandCard.getCard().getCost();
 				}
 				repaint();
 			} else if(selectedHandCard.getCard() instanceof SpellCard) {
@@ -778,16 +776,7 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 
 			if(attackingEnemys.contains(getClick(a))) {
 				blockers.put(blocker, getClick(a));
-				System.out.println("Blocking with creature: " + blocker + " in lane 1");
 			}
-
-			System.out.println(blockers);
-
-			//			for(Lane l : lanes) {
-			//				if(attackingEnemys.contains(l.getClick(a)) && blocker.getLane() == l) {
-			//					blockers.put(blocker, l.getClick(a));
-			//				}
-			//			}
 		}
 		bd.stop();
 	}
