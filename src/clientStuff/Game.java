@@ -61,4 +61,13 @@ public class Game extends JFrame{
 	public void toContent(String s) {
 		a.handleMessage(s);
 	}
+
+	public void newContent(Player p) {
+		a.setEnabled(false);
+		remove(a);
+		a.invalidate();
+		Content c = new Content(this, p, output);
+		
+		
+	}
 }

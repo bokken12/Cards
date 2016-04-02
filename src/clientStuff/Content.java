@@ -159,10 +159,21 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 
 			g.setFont(f);
 			g.drawString(Integer.toString(enemyHealth), 500, 50);
+			g.drawString(mana.toString(), 550, 50);
+			
+			if(enemyHealth <= 0) {
+				win();
+			}
 
 		} else {
 			background.paintIcon(this, g, 0, 0);
 		}
+	}
+
+	private void win() {
+		output.println("--winner");
+		game.newContent(player);
+		
 	}
 
 	public Content(Game parent, Player p, PrintWriter out) {
@@ -256,6 +267,7 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 			block.addActionListener(this);
 			buttons.add(manaLabel);
 			add(buttons);
+			add(manaLabel);
 			//add(handPanel);
 			int x;
 			int y;
@@ -506,7 +518,7 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 				bus.callEvent(new CreaturePlayedEvent(arrivalCreatures.get(i), this));
 			}
 			System.out.println("You have " + mana + " mana.");
-
+			manaLabel.setText(mana.toString());
 		} else if(m.startsWith("--myBoard")) {
 
 			try {
@@ -759,18 +771,22 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 				repaint();
 			} else if(selectedHandCard.getCard() instanceof SpellCard) {
 				SpellCard sc = (SpellCard) selectedHandCard.getCard();
-				if(sc.hasTarget()) {
-					EventBus.getInstance().callEvent(new TargetedSpellPlayedEvent(sc, this, selectedCard));
-				} else {
-					EventBus.getInstance().callEvent(new UntargetedSpellPlayedEvent(sc, this));
+				if(getClick(a) != null) {
+					if(sc.hasTarget()) {
+						EventBus.getInstance().callEvent(new TargetedSpellPlayedEvent<InPlayCreature>(sc, this, getClick(a)));
+						handCards.remove(selectedHandCard);
+					}
 				}
-				handCards.remove(selectedHandCard);
+				
+				if(!sc.hasTarget()) {
+					EventBus.getInstance().callEvent(new UntargetedSpellPlayedEvent(sc, this));
+					handCards.remove(selectedHandCard);
+				}
 			}
+			cd.stop();
+			selectedHandCard = null;
+
 		}
-		cd.stop();
-		selectedHandCard = null;
-
-
 
 		if(!(bd.isStopped())) {
 
@@ -779,6 +795,7 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 			}
 		}
 		bd.stop();
+		manaLabel.setText(mana.toString());
 	}
 
 	public InPlayCreature getClick(Point p) {
@@ -786,13 +803,13 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 			//Clicked on your creature lane
 			int index = (p.x-50)/120;
 			return myCreatures.get(index);
-			
+
 		}
 		if(p.y > 180 && p.y < 350) {
 			//Clicked on enemy creature lane
 			int index = (p.x-50)/120;
 			return enemyCreatures.get(index);
-			
+
 		}
 		return null;
 	}
@@ -804,7 +821,7 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 	}
 
 	private class HandCardDragger extends SwingWorker<String, Point> {
-		
+
 		volatile boolean stop = true;
 
 		@Override

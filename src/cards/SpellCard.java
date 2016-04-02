@@ -1,5 +1,7 @@
 package cards;
 
+import java.awt.Image;
+
 import javax.swing.ImageIcon;
 
 public class SpellCard extends Card {
@@ -18,6 +20,7 @@ public class SpellCard extends Card {
 		this.text = text;
 		this.hasTarget = hasTarget;
 		this.image = image;
+		this.image.setImage(image.getImage().getScaledInstance((int) 92, 83, Image.SCALE_DEFAULT));
 	}
 
 	public SpellRunnable getEffect() {
@@ -48,7 +51,8 @@ public class SpellCard extends Card {
 		this.hasTarget = hasTarget;
 	}
 	
-	public ImageIcon getImage() {
+	@Override
+	public ImageIcon getImageIcon() {
 		return image;
 	}
 }

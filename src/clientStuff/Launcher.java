@@ -97,7 +97,12 @@ public class Launcher extends JFrame implements ActionListener {
 							getDecksFromString((subbedLine.substring(subbedLine.indexOf("decks=") + 6, subbedLine.indexOf(", rank")))), 
 							Integer.parseInt(subbedLine.substring(subbedLine.indexOf("rank=") + 5, subbedLine.indexOf(", friends"))), 
 							new ArrayList<String>(Arrays.asList((subbedLine.substring(subbedLine.indexOf("friends=") + 8, subbedLine.indexOf(", gold"))).split(","))), 
-							Integer.parseInt(subbedLine.substring(subbedLine.indexOf("gold=") + 5, subbedLine.lastIndexOf("]")))
+							
+							Integer.parseInt(subbedLine.substring(subbedLine.indexOf("gold=") + 5, subbedLine.indexOf("wins=")))
+							
+									, Integer.parseInt(subbedLine.substring(subbedLine.indexOf("wins=") + 5, subbedLine.indexOf("losses=")))
+											
+											, Integer.parseInt(subbedLine.substring(subbedLine.indexOf("losses=") + 7, subbedLine.lastIndexOf("]")))
 							);
 					System.out.println("Finished Logging in");
 					menu(player);
@@ -273,14 +278,19 @@ public class Launcher extends JFrame implements ActionListener {
 				}
 
 				System.out.println((args.substring(args.indexOf("decks=") + 6, args.indexOf(", rank") - 1)));
-				player = new Player(args.substring(args.indexOf("email=") + 6, args.indexOf(", username") - 1), 
-						args.substring(args.indexOf("username=") + 9, args.indexOf(", password") - 1), 
-						args.substring(args.indexOf("password=") + 9, args.indexOf(", cardCollection") - 1), 
-						collection,
-						getDecksFromString((args.substring(args.indexOf("decks=") + 6, args.indexOf(", rank") - 1))), 
-						Integer.parseInt(args.substring(args.indexOf("rank=") + 5, args.indexOf(", friends") - 1)), 
-						new ArrayList<String>(Arrays.asList((args.substring(args.indexOf("friends=") + 8, args.indexOf(", gold") - 1)).split(","))), 
-						Integer.parseInt(args.substring(args.lastIndexOf("gold=") + 5, args.indexOf("]") - 1))
+				player = new Player(args.substring(args.indexOf("email=") + 6, args.indexOf(", username")), 
+						args.substring(args.indexOf("username=") + 9, args.indexOf(", password")), 
+						args.substring(args.indexOf("password=") + 9, args.indexOf(", cardCollection")), 
+						collection, 
+						getDecksFromString((args.substring(args.indexOf("decks=") + 6, args.indexOf(", rank")))), 
+						Integer.parseInt(args.substring(args.indexOf("rank=") + 5, args.indexOf(", friends"))), 
+						new ArrayList<String>(Arrays.asList((args.substring(args.indexOf("friends=") + 8, args.indexOf(", gold"))).split(","))), 
+						
+						Integer.parseInt(args.substring(args.indexOf("gold=") + 5, args.indexOf("wins=")))
+						
+								, Integer.parseInt(args.substring(args.indexOf("wins=") + 5, args.indexOf("losses=")))
+										
+										, Integer.parseInt(args.substring(args.indexOf("losses=") + 7, args.lastIndexOf("]")))
 						);
 				break;
 			}

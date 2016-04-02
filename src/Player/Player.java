@@ -14,6 +14,8 @@ public class Player {
 	String password;
 	ArrayList<Integer> cardCollection;
 	HashMap<String, int[]> decks = new HashMap<String, int[]>();
+	int wins = 0;
+	int losses = 0;
 	int rank;
 
 	ArrayList<String> friends = new ArrayList<String>();
@@ -41,7 +43,7 @@ public class Player {
 				+ ", password=" + password + ", cardCollection="
 				+ cardCollection + ", decks=" + s
 				+ ", rank=" + rank + ", friends=" + friends
-				+ ", gold=" + gold + "]";
+				+ ", gold=" + gold + "wins=" + wins + "losses=" + losses + "]";
 	}
 	public void addFriend(String friend){
 		friends.add(friend);
@@ -106,7 +108,7 @@ public class Player {
 	}
 	public Player(String email, String username, String password,
 			ArrayList<Integer> cardCollection, HashMap<String, int[]> decks, int rank,
-			ArrayList<String> friends, int gold) {
+			ArrayList<String> friends, int gold, int wins, int losses) {
 		this.email = email;
 		this.username = username;
 		this.password = password;

@@ -70,6 +70,8 @@ public class Server extends ConsoleProgram{
 			String email = null;
 			Integer rank = null;
 			Integer gold = null;
+			Integer wins = null;
+			Integer losses = null;
 			ArrayList<Integer> cards = null;
 			HashMap<String, int[]> decks = null;
 			ArrayList<String> friends = null;
@@ -122,8 +124,8 @@ public class Server extends ConsoleProgram{
 						friends = new ArrayList<String>();
 					}
 
-					if(username != null && password != null && rank != null && gold != null && cards != null && decks != null && friends != null && email != null) {
-						Player p = new Player(email, username, password, cards, decks, rank, friends, gold);
+					if(username != null && password != null && rank != null && gold != null && cards != null && decks != null && friends != null && email != null && wins != null && losses != null) {
+						Player p = new Player(email, username, password, cards, decks, rank, friends, gold, wins, losses);
 						println("Recieved a player with name " + p.getUsername());
 						users.put(username, password);
 						userdata.put(username, p);
@@ -304,6 +306,9 @@ public class Server extends ConsoleProgram{
 							playing.remove(0);
 						}
 					}
+					if(gh != null) {
+						gh.handleMessage(line + me);
+					}
 
 					break;
 				}
@@ -337,7 +342,7 @@ public class Server extends ConsoleProgram{
 							atemail = true;
 						}
 					}
-					Player player = new Player(email, username, password, Cards.getStarterCards(), new HashMap<String, int[]>(), 0, new ArrayList<String>(), 0);
+					Player player = new Player(email, username, password, Cards.getStarterCards(), new HashMap<String, int[]>(), 0, new ArrayList<String>(), 0, 0, 0);
 					pllayer = player;
 					name = username;
 					HashMap<String, int[]> dacks = new HashMap<String, int[]>();
