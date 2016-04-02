@@ -123,6 +123,14 @@ public class Server extends ConsoleProgram{
 					if(line.startsWith("friends")) {
 						friends = new ArrayList<String>();
 					}
+					
+					if(line.startsWith("wins")) {
+						wins = 	Integer.parseInt(line.substring(5));
+					}
+					
+					if(line.startsWith("losses")) {
+						losses = Integer.parseInt(line.substring(7));
+					}
 
 					if(username != null && password != null && rank != null && gold != null && cards != null && decks != null && friends != null && email != null && wins != null && losses != null) {
 						Player p = new Player(email, username, password, cards, decks, rank, friends, gold, wins, losses);
