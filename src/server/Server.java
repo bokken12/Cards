@@ -436,7 +436,7 @@ public class Server extends ConsoleProgram{
 					gh.handleMessage(line + me);
 				} else if(line.startsWith("--block")) {
 					gh.handleMessage(line + me);
-				} else if(line.startsWith("--win")) {
+				} else if(line.startsWith("--wi")) {
 					gh.handleMessage(line + me);
 				}
 

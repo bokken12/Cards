@@ -171,13 +171,16 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 	}
 
 	private void win() {
+		System.out.println("Winning");
 		output.println("--win");
+		output.flush();
 		game.add(new WinScreen(game, player, true));
 		game.remove(this);
 		
 	}
 	
 	private void lose() {
+		System.out.println("Losing");
 		game.add(new WinScreen(game, player, false));
 		game.remove(this);
 	}
@@ -567,7 +570,7 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 			}
 			System.out.println("Attacking enemy numbers are " + attackingEnemyNums);
 			System.out.println("Attacking enemys are " + attackingEnemys);
-		} else if(m.startsWith("--win")) {
+		} else if(m.startsWith("--wi")) {
 			lose();
 		}
 		repaint();

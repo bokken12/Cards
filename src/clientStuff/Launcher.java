@@ -123,6 +123,10 @@ public class Launcher extends JFrame implements ActionListener {
 					game.toContent(currentline);
 				} else if(currentline.startsWith("--block")) {
 					game.toContent(currentline);
+				} else if(currentline.startsWith("--win")) {
+					game.toContent(currentline);
+				} else {
+					game.toContent(currentline);
 				}
 			}
 		} catch (IOException e) {
