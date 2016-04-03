@@ -69,6 +69,12 @@ public class GameHandler extends Thread{
 			} else {
 				player1.send(m.substring(0, m.length() - 1));
 			}
+		} else if(m.startsWith("--win")) {
+			if(Integer.parseInt(m.substring(m.length() - 1)) == p1) {
+				player2.send("--win");
+			} else {
+				player1.send("--win");
+			}
 		}
 	}
 }
