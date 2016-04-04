@@ -79,6 +79,7 @@ public class Server extends ConsoleProgram{
 			while (true) {
 				String line = br.readLine();
 				if (line == null) break;
+				System.out.println("Read line " + line);
 				if(!(line.startsWith("//"))) {
 
 					if(line.startsWith("--")) {

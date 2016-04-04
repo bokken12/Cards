@@ -66,6 +66,7 @@ public class Game extends JFrame{
 		Content c = new Content(this, p, output);
 		add(c);
 		this.pack();
+		c.repaint();
 		
 	}
 }
