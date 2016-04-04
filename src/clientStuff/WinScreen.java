@@ -19,7 +19,10 @@ public class WinScreen extends JPanel implements MouseListener {
 	public WinScreen(Game g, Player p, boolean won) {
 		player = p;
 		game = g;
+		game.addMouseListener(this);
 		this.won = won;
+		repaint();
+		game.repaint();
 	}
 
 	@Override
@@ -34,7 +37,12 @@ public class WinScreen extends JPanel implements MouseListener {
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
+		System.out.println("Mouse was clicked, going to menu");
 		game.newContent(player);
+		game.remove(this);
+		game.pack();
+		repaint();
+		game.repaint();
 
 	}
 
