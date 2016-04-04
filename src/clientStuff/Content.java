@@ -56,6 +56,7 @@ import Player.SimplePlayerProfile;
 
 public class Content extends JPanel implements ActionListener, MouseListener, KeyListener {
 
+	
 	ImageIcon background = new ImageIcon("MenuBackground.jpg");
 	ImageIcon screen = new ImageIcon("CardScreen.png");
 
@@ -87,11 +88,17 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 	Integer mana = 0;
 	Integer maxMana = 0;
 	Integer turnNum = 0;
+	
+	static final int CARD_WIDTH = 115;
+	static final int CARD_HEIGHT = 185;
+	int SCREEN_WIDTH = 1200;
+	int SCREEN_HEIGHT = 750;
+	int HAND_Y_POSITION = SCREEN_HEIGHT - CARD_HEIGHT - 5;
 
 	int health = 20;
 	int enemyHealth = 20;
 
-	static final int CARD_WIDTH = 115;
+	
 	static final int MOUNTAIN_1_X = 300;
 	static final int MOUNTAIN_2_X = 700;
 	static final int ARRIVAL_CREATURE_Y = 350;
@@ -264,7 +271,7 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 			}
 
 			clear = true;
-			game.setSize(new Dimension(1200, 800));
+			game.setSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
 			this.removeAll();
 
 			add(field);
@@ -283,7 +290,7 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 			for(Integer i = 0; i < 5; i++) {
 				Card ca = cardsData.getCardFromID(deck.get(i));
 				x = i*120 + 50;
-				y = 600;
+				y = HAND_Y_POSITION;
 				HandCard c = new HandCard(x, y, x + 120, y + 170,ca,i);
 				handCards.add(c);
 			}
@@ -618,7 +625,7 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 			int i = deck.get(0);
 			deck.remove(0);
 			int x = handCards.get(handCards.size() - 1).getEndX() + 50;
-			HandCard draw = new HandCard(x + 50, 600, x + 170, 770, cardsData.getCardFromID(i), handCards.size());
+			HandCard draw = new HandCard(x + 50, HAND_Y_POSITION, x + 170, 770, cardsData.getCardFromID(i), handCards.size());
 			handCards.add(draw);
 			return i;
 		} else {
@@ -667,7 +674,7 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 			SpellCard sc = (SpellCard) card;
 			String name = sc.getName();
 			//g.setFont(new Font("Helvetica", Font.PLAIN, 11)); 
-			g.setFont(g.getFont().deriveFont (64.0f));
+			g.setFont(f12);
 			g.drawString(name, x + 25, y + 23);
 		}
 	}
@@ -958,7 +965,7 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 
 		for(int i = 0; i < handCards.size(); i++) {
 			x = i*120 + 50;
-			y = 600;
+			y = HAND_Y_POSITION;
 			HandCard h = handCards.get(i);
 			h.setStartX(x);
 			h.setStartY(y);
@@ -970,7 +977,7 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 		for(int i = 0; i < handCards.size(); i++) {
 
 			x = i*(CARD_WIDTH + 5) + 50;
-			y = 600;
+			y = HAND_Y_POSITION;
 			if(!(selectedHandCard == null)) {
 				if(!(selectedHandCard.equals(handCards.get(i)))) {
 
@@ -987,7 +994,7 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 				}
 			} else {
 				x = i*(CARD_WIDTH + 5) + 50;
-				y = 600;
+				y = HAND_Y_POSITION;
 				paintCreature(handCards.get(i).getCard(), g, x, y);
 			}
 		}
