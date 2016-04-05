@@ -579,6 +579,16 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 			System.out.println("Attacking enemys are " + attackingEnemys);
 		} else if(m.startsWith("--wi")) {
 			lose();
+		} else if(m.startsWith("--spellPlayed")) {
+			int spellId = Integer.parseInt(m.substring(m.indexOf(" ") + 1, m.lastIndexOf(" ")));
+			
+			String maybe = m.substring(m.lastIndexOf(" ") + 1);
+			if(maybe != "") {
+				int targetIndex = Integer.parseInt(maybe);
+				bus.callEvent(new TargetedSpellPlayedEvent<InPlayCreature>((SpellCard) cardsData.getCardFromID(spellId), this, cardsInPlay.get(targetIndex)));
+			} else {
+				bus.callEvent(new UntargetedSpellPlayedEvent((SpellCard) cardsData.getCardFromID(spellId), this));
+			}
 		}
 		repaint();
 	}
@@ -732,6 +742,10 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 			myCreatures.set(i, c);
 
 		}
+		
+		if(getClick(a) != null && e.getButton() == MouseEvent.BUTTON2) {
+			//Display closeup of card! :D
+		}
 	}
 
 
@@ -799,6 +813,8 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 						EventBus.getInstance().callEvent(new TargetedSpellPlayedEvent<InPlayCreature>(sc, this, getClick(a)));
 						handCards.remove(selectedHandCard);
 						mana -= selectedHandCard.getCard().getCost();
+						output.println("--spellPlayed " + selectedHandCard.getCard().getID() + " " + cardsInPlay.indexOf(getClick(a)));
+						output.flush();
 					}
 				}
 				
@@ -807,6 +823,8 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 					EventBus.getInstance().callEvent(new UntargetedSpellPlayedEvent(sc, this));
 					handCards.remove(selectedHandCard);
 					mana -= selectedHandCard.getCard().getCost();
+					output.println("--spellPlayed " + selectedHandCard.getCard().getID() + " ");
+					output.flush();
 				}
 			}
 			cd.stop();
@@ -825,17 +843,21 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 	}
 
 	public InPlayCreature getClick(Point p) {
+		try {
 		if(p.y > 400 && p.y < 600) {
 			//Clicked on your creature lane
 			int index = (p.x-50)/120;
 			return myCreatures.get(index);
 
 		}
-		if(p.y > 180 && p.y < 350) {
+		if(p.y > 120 && p.y < 300) {
 			//Clicked on enemy creature lane
 			int index = (p.x-50)/120;
 			return enemyCreatures.get(index);
 
+		}
+		} catch(IndexOutOfBoundsException e) {
+			System.out.println("Jeally!");
 		}
 		return null;
 	}
@@ -961,7 +983,7 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 
 		List<InPlayCreature> b = enemyCreatures;
 		for(int i = 0; i < b.size(); i++) {
-			paintInPlayCreature(b.get(i), g, 50 + i*120, 180);
+			paintInPlayCreature(b.get(i), g, 50 + i*120, 120);
 		}
 	}
 

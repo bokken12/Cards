@@ -439,6 +439,8 @@ public class Server extends ConsoleProgram{
 					gh.handleMessage(line + me);
 				} else if(line.startsWith("--wi")) {
 					gh.handleMessage(line + me);
+				} else {
+					gh.handleMessage(line + me);
 				}
 
 

@@ -12,12 +12,14 @@ public class SpellCard extends Card {
 	String name;
 	boolean hasTarget;
 	ImageIcon image;
+	int id;
 	
 	public SpellCard(String name, int cost, String text, boolean hasTarget, ImageIcon image, int id, SpellRunnable effect) {
 		this.name = name;
 		this.cost = cost;
 		this.effect = effect;
 		this.text = text;
+		this.id = id;
 		this.hasTarget = hasTarget;
 		this.image = image;
 		this.image.setImage(image.getImage().getScaledInstance((int) 92, 83, Image.SCALE_DEFAULT));
@@ -29,6 +31,11 @@ public class SpellCard extends Card {
 
 	public void setEffect(SpellRunnable effect) {
 		this.effect = effect;
+	}
+	
+	@Override
+	public int getID() {
+		return id;
 	}
 
 	public String getText() {
