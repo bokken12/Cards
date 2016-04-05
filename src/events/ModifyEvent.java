@@ -18,6 +18,7 @@ public class ModifyEvent extends GameEvent{
 	public ModifyEvent(InPlayCreature target, int power, int health) {
 		this.power = power;
 		this.health = health;
+		this.target = target;
 	}
 
 }

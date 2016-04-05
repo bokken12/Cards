@@ -676,7 +676,6 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 			String name = sc.getName();
 			//g.setFont(new Font("Helvetica", Font.PLAIN, 11)); 
 			g.setFont(f8);
-			System.out.println("Spelling");
 			g.drawString(name, x + 25, y + 23);
 		}
 	}
@@ -778,11 +777,12 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-
+		System.out.println("Mouse released");
 		Point a = MouseInfo.getPointerInfo().getLocation();
 		SwingUtilities.convertPointFromScreen(a, game);
 
 		if(!(cd.isStopped())) {
+			System.out.println("Mouse released on a card drag");
 			if(selectedHandCard.getCard() instanceof CreatureCard && mana >= selectedHandCard.getCard().getCost()) {
 				System.out.println("Playing Creature: " + selectedHandCard);
 				if(boardContainsPoint(selecCardPoint)) {
@@ -791,17 +791,22 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 				}
 				repaint();
 			} else if(selectedHandCard.getCard() instanceof SpellCard) {
+				System.out.println("Playing a spellCard");
 				SpellCard sc = (SpellCard) selectedHandCard.getCard();
 				if(getClick(a) != null) {
 					if(sc.hasTarget()) {
+						System.out.println("playing a targeted spell on a target");
 						EventBus.getInstance().callEvent(new TargetedSpellPlayedEvent<InPlayCreature>(sc, this, getClick(a)));
 						handCards.remove(selectedHandCard);
+						mana -= selectedHandCard.getCard().getCost();
 					}
 				}
 				
 				if(!sc.hasTarget()) {
+					System.out.println("playing an untargeted spell");
 					EventBus.getInstance().callEvent(new UntargetedSpellPlayedEvent(sc, this));
 					handCards.remove(selectedHandCard);
+					mana -= selectedHandCard.getCard().getCost();
 				}
 			}
 			cd.stop();
