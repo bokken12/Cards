@@ -649,14 +649,15 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 	}
 
 	public void paintCreature(Card card, Graphics g, int x, int y) {
-
+		
 		ImageIcon img = card.getImageIcon();
 		String text = card.getText();
 		String cost = Integer.toString(card.getCost());
 
 		template.paintIcon(handPanel, g, x, y);
 		img.paintIcon(handPanel, g, x + 12, y + 25);
-		g.drawString(text, x + 10, y - 40);
+		g.drawString(text, x + 10, y + 120);
+		g.setFont(f12);
 		g.drawString(cost, x + 100, y + 23);
 
 		if(card.getClass().equals(CreatureCard.class)) {
@@ -674,7 +675,8 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 			SpellCard sc = (SpellCard) card;
 			String name = sc.getName();
 			//g.setFont(new Font("Helvetica", Font.PLAIN, 11)); 
-			g.setFont(f12);
+			g.setFont(f8);
+			System.out.println("Spelling");
 			g.drawString(name, x + 25, y + 23);
 		}
 	}
