@@ -265,6 +265,7 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 			if(startTurn == true) {
 				opponent = new GamePlayer(2);
 				you = new GamePlayer(1);
+				mana = 1;
 			} else {
 				opponent = new GamePlayer(1);
 				you = new GamePlayer(2);
@@ -337,7 +338,7 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 				output.println("--turn");
 				output.flush();
 			}
-		} else if(e.getSource().equals(attack)) {
+		} else if(e.getSource().equals(attack) && turn == true && blocking == false) {
 			//			System.out.println("Attacking with " + attacking.toString());
 			//			output.println("--attack " + attacking.toString());
 			//			output.flush();
@@ -359,7 +360,7 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 			output.flush();
 			turn = false;
 
-		} else if(e.getSource().equals(block)) {
+		} else if(e.getSource().equals(block) && blocking == true) {
 			System.out.println(blockers);
 			//System.out.println(blocking);
 
@@ -593,7 +594,7 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 		repaint();
 	}
 
-	private boolean isManaTurn(int turnNum) {
+	public boolean isManaTurn(int turnNum) {
 		int current = 1;
 		int past = 0;
 		while(current < turnNum + 1) {
@@ -804,7 +805,7 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 					mana -= selectedHandCard.getCard().getCost();
 				}
 				repaint();
-			} else if(selectedHandCard.getCard() instanceof SpellCard) {
+			} else if(selectedHandCard.getCard() instanceof SpellCard && mana >= selectedHandCard.getCard().getCost()) {
 				System.out.println("Playing a spellCard");
 				SpellCard sc = (SpellCard) selectedHandCard.getCard();
 				if(getClick(a) != null) {
