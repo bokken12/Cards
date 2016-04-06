@@ -12,6 +12,7 @@ import abilities.AbilityRunnable;
 import abilities.InPlayRunnable;
 import events.AbilityEvent;
 import events.AttackEvent;
+import events.CreatureKilledEvent;
 import events.CreaturePlayedEvent;
 import events.DamageEvent;
 import events.EventBus;
@@ -140,11 +141,18 @@ public class Cards {
 			} 
 		});
 		cards.add(new CreatureCard("Verdant Spring", 0, 3, 1, new ImageIcon("Factory.jpg"), a6,"Plant", 12)); 
-
+		
 		cards.add(new SpellCard("War Axe", 2, "Give a creature +3 attack", true, new ImageIcon("War Axe.png"), 13, new SpellRunnable() {
 			@Override
 			public void run(Content c) {
 				EventBus.getInstance().callEvent(new ModifyEvent(c.selectedCard, 3, 0));
+			}
+		}));
+		
+		cards.add(new SpellCard("Hired Assassin", 3, "Destroy a creature with an attack of 4 or less", true, new ImageIcon("Assassin.jpg"), 14, new SpellRunnable() {
+			@Override
+			public void run(Content c) {
+				EventBus.getInstance().callEvent(new CreatureKilledEvent(c.selectedCard, c, c.myCreatures.contains(c.selectedCard)));
 			}
 		}));
 	}

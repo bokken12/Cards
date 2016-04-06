@@ -40,6 +40,7 @@ import cards.HandCard;
 import cards.InPlayCreature;
 import cards.SpellCard;
 import events.AbilityEvent;
+import events.CreatureKilledEvent;
 import events.CreaturePlayedEvent;
 import events.DamageEvent;
 import events.EventBus;
@@ -120,9 +121,9 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 	public Cards cardsData = new Cards();
 	public static InPlayCreature selectedCard;
 
-	static ArrayList<InPlayCreature> cardsInPlay = new ArrayList<InPlayCreature>();
-	static List<InPlayCreature> myCreatures = Collections.synchronizedList(new ArrayList<InPlayCreature>());
-	static List<InPlayCreature> enemyCreatures = Collections.synchronizedList(new ArrayList<InPlayCreature>());
+	public static ArrayList<InPlayCreature> cardsInPlay = new ArrayList<InPlayCreature>();
+	public static List<InPlayCreature> myCreatures = Collections.synchronizedList(new ArrayList<InPlayCreature>());
+	public static List<InPlayCreature> enemyCreatures = Collections.synchronizedList(new ArrayList<InPlayCreature>());
 	public static ArrayList<CreatureCard> arrivalCreatures = new ArrayList<CreatureCard>();
 	ArrayList<InPlayCreature> attacking = new ArrayList<InPlayCreature>();
 	ArrayList<InPlayCreature> attackingEnemys = new ArrayList<InPlayCreature>();
@@ -456,11 +457,13 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 		repaint();
 		//System.out.println("My Creature's health is " + myCreatures.get(c1).getHealth());
 		if(myCreatures.get(c1).getHealth() <= 0) {
-			myCreatures.remove(c1);
+			//myCreatures.remove(c1);
+			bus.callEvent(new CreatureKilledEvent(myCreatures.get(c1), this, true));
 
 		}
 		if(enemyCreatures.get(c2).getHealth() <= 0) {
-			enemyCreatures.remove(c2);
+			//enemyCreatures.remove(c2);
+			bus.callEvent(new CreatureKilledEvent(enemyCreatures.get(c2), this, false));
 		}
 		repaint();
 	}
