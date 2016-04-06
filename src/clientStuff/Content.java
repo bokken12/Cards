@@ -450,19 +450,15 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 
 		int a1 = myCreatures.get(c1).getPower();
 		int a2 = enemyCreatures.get(c2).getPower();
-		//System.out.println("My, enemy power is " + a1 + ", " + a2);
-		//System.out.println("My health was " + myCreatures.get(c1).getHealth());
+		
 		bus.callEvent(new DamageEvent(a2, myCreatures.get(c1)));
 		bus.callEvent(new DamageEvent(a1, enemyCreatures.get(c2)));
 		repaint();
-		//System.out.println("My Creature's health is " + myCreatures.get(c1).getHealth());
 		if(myCreatures.get(c1).getHealth() <= 0) {
-			//myCreatures.remove(c1);
 			bus.callEvent(new CreatureKilledEvent(myCreatures.get(c1), this, true));
 
 		}
 		if(enemyCreatures.get(c2).getHealth() <= 0) {
-			//enemyCreatures.remove(c2);
 			bus.callEvent(new CreatureKilledEvent(enemyCreatures.get(c2), this, false));
 		}
 		repaint();
