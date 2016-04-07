@@ -808,23 +808,25 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 				System.out.println("Playing a spellCard");
 				SpellCard sc = (SpellCard) selectedHandCard.getCard();
 				if(getClick(a) != null) {
-					if(sc.hasTarget()) {
+					if(sc.hasTarget() && sc.meetsSpellRequirements(getClick(a))) {
 						System.out.println("playing a targeted spell on a target");
+						output.println("--spellPlayed " + selectedHandCard.getCard().getID() + " " + cardsInPlay.indexOf(getClick(a)));
+						output.flush();
 						EventBus.getInstance().callEvent(new TargetedSpellPlayedEvent<InPlayCreature>(sc, this, getClick(a)));
 						handCards.remove(selectedHandCard);
 						mana -= selectedHandCard.getCard().getCost();
-						output.println("--spellPlayed " + selectedHandCard.getCard().getID() + " " + cardsInPlay.indexOf(getClick(a)));
-						output.flush();
+						
 					}
 				}
 				
 				if(!sc.hasTarget()) {
 					System.out.println("playing an untargeted spell");
+					output.println("--spellPlayed " + selectedHandCard.getCard().getID() + " ");
+					output.flush();
 					EventBus.getInstance().callEvent(new UntargetedSpellPlayedEvent(sc, this));
 					handCards.remove(selectedHandCard);
 					mana -= selectedHandCard.getCard().getCost();
-					output.println("--spellPlayed " + selectedHandCard.getCard().getID() + " ");
-					output.flush();
+					
 				}
 			}
 			cd.stop();

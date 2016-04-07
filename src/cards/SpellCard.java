@@ -13,12 +13,14 @@ public class SpellCard extends Card {
 	boolean hasTarget;
 	ImageIcon image;
 	int id;
+	RequirementRunnable requirement;
 	
-	public SpellCard(String name, int cost, String text, boolean hasTarget, ImageIcon image, int id, SpellRunnable effect) {
+	public SpellCard(String name, int cost, String text, boolean hasTarget, ImageIcon image, int id, SpellRunnable effect, RequirementRunnable r) {
 		this.name = name;
 		this.cost = cost;
 		this.effect = effect;
 		this.text = text;
+		requirement = r;
 		this.id = id;
 		this.hasTarget = hasTarget;
 		this.image = image;
@@ -61,5 +63,9 @@ public class SpellCard extends Card {
 	@Override
 	public ImageIcon getImageIcon() {
 		return image;
+	}
+	
+	public boolean meetsSpellRequirements(InPlayCreature target) {
+		return requirement.run(target);
 	}
 }

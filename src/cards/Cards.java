@@ -124,6 +124,23 @@ public class Cards {
 			}
 		});
 		cards.add(crcd1); 
+
+		RequirementRunnable yes = new RequirementRunnable() {
+
+			@Override
+			public boolean run(InPlayCreature target) {
+				return true;
+			}
+		};
+
+		RequirementRunnable lessthan4 = new RequirementRunnable() {
+
+			@Override
+			public boolean run(InPlayCreature target) {
+				return target.power <= 2;
+			}
+		};
+
 		Ability a6 = new Ability("", "At the end of your turn, restore 1 health to each beast", TurnEndedEvent.class, new AbilityRunnable() {
 			@Override
 			public void run(GameEvent event) {
@@ -141,19 +158,19 @@ public class Cards {
 			} 
 		});
 		cards.add(new CreatureCard("Verdant Spring", 0, 3, 1, new ImageIcon("Factory.jpg"), a6,"Plant", 12)); 
-		
+
 		cards.add(new SpellCard("War Axe", 2, "Give a creature +3 attack", true, new ImageIcon("War Axe.png"), 13, new SpellRunnable() {
 			@Override
 			public void run(Content c) {
 				EventBus.getInstance().callEvent(new ModifyEvent(c.selectedCard, 3, 0));
 			}
-		}));
-		
+		}, yes));
+
 		cards.add(new SpellCard("Hired Assassin", 3, "Destroy a creature with an attack of 4 or less", true, new ImageIcon("Assassin.jpg"), 14, new SpellRunnable() {
 			@Override
 			public void run(Content c) {
 				EventBus.getInstance().callEvent(new CreatureKilledEvent(c.selectedCard, c, c.myCreatures.contains(c.selectedCard)));
 			}
-		}));
+		}, lessthan4));
 	}
 }
