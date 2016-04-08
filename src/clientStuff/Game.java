@@ -53,6 +53,8 @@ public class Game extends JFrame{
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.output = output;
 		content.add(a);
+		content.addKeyListener(a);
+		addKeyListener(a);
 		this.pack();
 		this.setVisible(true);
 

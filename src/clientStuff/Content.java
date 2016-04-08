@@ -268,6 +268,7 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 				opponent = new GamePlayer(2);
 				you = new GamePlayer(1);
 				mana = 1;
+				maxMana = 1;
 			} else {
 				opponent = new GamePlayer(1);
 				you = new GamePlayer(2);
