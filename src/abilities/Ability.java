@@ -10,6 +10,7 @@ public class Ability implements GameListener{
 	String description;
 	Class<? extends GameEvent> activation;
 	AbilityRunnable a;
+	private boolean hasTarget;
 	public Ability(String name, String desc, Class<? extends GameEvent> activation, AbilityRunnable a) {
 
 		this.a = a;
@@ -35,6 +36,10 @@ public class Ability implements GameListener{
 	public String toString() {
 		return "Ability [name=" + name + ", description=" + description
 				+ ", activation=" + activation + ", a=" + a + "]";
+	}
+	
+	public boolean hasTarget() {
+		return hasTarget;
 	}
 	
 	

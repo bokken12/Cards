@@ -57,9 +57,9 @@ import Player.SimplePlayerProfile;
 
 public class Content extends JPanel implements ActionListener, MouseListener, KeyListener {
 
-	
+
 	ImageIcon background = new ImageIcon("MenuBackground.jpg");
-	ImageIcon screen = new ImageIcon("CardScreen.png");
+	ImageIcon screen = new ImageIcon("newBoard.png");
 
 	JButton play = new JButton("Play");
 	JButton settings = new JButton("Settings");
@@ -89,7 +89,7 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 	Integer mana = 0;
 	Integer maxMana = 0;
 	Integer turnNum = 0;
-	
+
 	static final int CARD_WIDTH = 115;
 	static final int CARD_HEIGHT = 185;
 	int SCREEN_WIDTH = 1200;
@@ -99,9 +99,9 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 	int health = 20;
 	int enemyHealth = 20;
 
-	
-	static final int MOUNTAIN_1_X = 300;
-	static final int MOUNTAIN_2_X = 700;
+
+	static final int MOUNTAIN_1_X = 80;
+	static final int MOUNTAIN_2_X = 1000;
 	static final int ARRIVAL_CREATURE_Y = 350;
 	static final int ARRIVAL_CREATURE_Y_2 = 150;
 
@@ -168,11 +168,11 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 			g.setFont(f);
 			g.drawString(Integer.toString(enemyHealth), 500, 50);
 			g.drawString(mana.toString(), 550, 50);
-			
+
 			if(enemyHealth <= 0) {
 				win();
 			}
-			
+
 		} else {
 			background.paintIcon(this, g, 0, 0);
 		}
@@ -184,9 +184,9 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 		output.flush();
 		game.add(new WinScreen(game, player, true));
 		game.remove(this);
-		
+
 	}
-	
+
 	private void lose() {
 		System.out.println("Losing");
 		game.add(new WinScreen(game, player, false));
@@ -204,6 +204,7 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 		Dimension a = new Dimension(width, height);
 		addMouseListener(this);
 		addKeyListener(this);
+		game.addKeyListener(this);
 		template.setImage(template.getImage().getScaledInstance((int) 120, 170, Image.SCALE_DEFAULT));
 		green.setImage(green.getImage().getScaledInstance((int) 122, 172, Image.SCALE_DEFAULT));
 		red.setImage(red.getImage().getScaledInstance((int) 122, 172, Image.SCALE_DEFAULT));
@@ -291,7 +292,7 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 			int y;
 			for(Integer i = 0; i < 5; i++) {
 				Card ca = cardsData.getCardFromID(deck.get(i));
-				x = i*120 + 50;
+				x = i*120 + 150;
 				y = HAND_Y_POSITION;
 				HandCard c = new HandCard(x, y, x + 120, y + 170,ca,i);
 				handCards.add(c);
@@ -450,7 +451,7 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 
 		int a1 = myCreatures.get(c1).getPower();
 		int a2 = enemyCreatures.get(c2).getPower();
-		
+
 		bus.callEvent(new DamageEvent(a2, myCreatures.get(c1)));
 		bus.callEvent(new DamageEvent(a1, enemyCreatures.get(c2)));
 		repaint();
@@ -581,7 +582,7 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 			lose();
 		} else if(m.startsWith("--spellPlayed")) {
 			int spellId = Integer.parseInt(m.substring(m.indexOf(" ") + 1, m.lastIndexOf(" ")));
-			
+
 			String maybe = m.substring(m.lastIndexOf(" ") + 1);
 			if(maybe != "") {
 				int targetIndex = Integer.parseInt(maybe);
@@ -659,7 +660,7 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 	}
 
 	public void paintCreature(Card card, Graphics g, int x, int y) {
-		
+
 		ImageIcon img = card.getImageIcon();
 		String text = card.getText();
 		String cost = Integer.toString(card.getCost());
@@ -733,16 +734,22 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 		repaint();
 		InPlayCreature c = getClick(a);
 		if(c != null && myCreatures.contains(c)) {
-			attacking.add(c);
+			if(!attacking.contains(c)) {
+				attacking.add(c);
+				c.setGreen(true);
+			} else {
+				c.setGreen(false);
+				attacking.remove(c);
+			}
 			selectedCard = c;
 			System.out.println("adding");
 
 			int i = myCreatures.indexOf(c);
-			c.setGreen(true);
+
 			myCreatures.set(i, c);
 
 		}
-		
+
 		if(getClick(a) != null && e.getButton() == MouseEvent.BUTTON2) {
 			//Display closeup of card! :D
 		}
@@ -815,10 +822,10 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 						EventBus.getInstance().callEvent(new TargetedSpellPlayedEvent<InPlayCreature>(sc, this, getClick(a)));
 						handCards.remove(selectedHandCard);
 						mana -= selectedHandCard.getCard().getCost();
-						
+
 					}
 				}
-				
+
 				if(!sc.hasTarget()) {
 					System.out.println("playing an untargeted spell");
 					output.println("--spellPlayed " + selectedHandCard.getCard().getID() + " ");
@@ -826,7 +833,7 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 					EventBus.getInstance().callEvent(new UntargetedSpellPlayedEvent(sc, this));
 					handCards.remove(selectedHandCard);
 					mana -= selectedHandCard.getCard().getCost();
-					
+
 				}
 			}
 			cd.stop();
@@ -846,18 +853,18 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 
 	public InPlayCreature getClick(Point p) {
 		try {
-		if(p.y > 400 && p.y < 600) {
-			//Clicked on your creature lane
-			int index = (p.x-50)/120;
-			return myCreatures.get(index);
+			if(p.y > 400 && p.y < 600) {
+				//Clicked on your creature lane
+				int index = (p.x-50)/120;
+				return myCreatures.get(index);
 
-		}
-		if(p.y > 120 && p.y < 300) {
-			//Clicked on enemy creature lane
-			int index = (p.x-50)/120;
-			return enemyCreatures.get(index);
+			}
+			if(p.y > 120 && p.y < 300) {
+				//Clicked on enemy creature lane
+				int index = (p.x-50)/120;
+				return enemyCreatures.get(index);
 
-		}
+			}
 		} catch(IndexOutOfBoundsException e) {
 			System.out.println("Jeally!");
 		}
@@ -956,10 +963,7 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 		myCreatures.add(n);
 		//arrivalLanes.remove(arrivalCreatures.indexOf(n));
 		//arrivalCreatures.remove(n);
-		n.getCard().registerListeners();
-		if (n == null) {
-			System.out.println("n is null in addCreature");
-		}
+		n.registerListeners();
 
 		String send = "--myBoard " + cardsData.getCollection().indexOf(n.getCard());
 
@@ -1032,18 +1036,28 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 	}
 
 	public void paintArrivals(Graphics g) {
+		
+		boolean foo = false;
+		
 		for(int i = 0; i < arrivalCreatures.size(); i++) {
 			CreatureCard c = arrivalCreatures.get(i);
 			if(! isMtn1Full) {
 				paintCreature(c, g, MOUNTAIN_1_X, ARRIVAL_CREATURE_Y);
 				isMtn1Full = true;
-			} else {
+			} else if(! isMtn2Full){
+				paintCreature(c, g, MOUNTAIN_2_X, ARRIVAL_CREATURE_Y);
+				isMtn1Full = true;
+			} else if(!foo){
 				paintCreature(c, g, MOUNTAIN_1_X, ARRIVAL_CREATURE_Y_2);
+				foo = true;
+			} else {
+				paintCreature(c, g, MOUNTAIN_2_X, ARRIVAL_CREATURE_Y_2);
 			}
 
 		}
 		isMtn1Full = false;
 		isMtn2Full = false;
+		foo = false;
 	}
 
 	@Override
@@ -1061,7 +1075,11 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 		System.out.println("Meanie!" + e.getKeyChar());
 		if(e.getKeyCode() == KeyEvent.VK_SPACE && selectedCard != null) {
 			System.out.println("Calling AbilityEvent");
-			bus.callEvent(new AbilityEvent(selectedCard));
+			if(!selectedCard.getCard().getAbility().hasTarget()) {
+				bus.callEvent(new AbilityEvent(selectedCard, null, this));
+			} else {
+				//Target the ability
+			}
 			attacking.remove(selectedCard);
 
 		}

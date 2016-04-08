@@ -63,7 +63,7 @@ public class Cards {
 				//super.run(event);
 				AbilityEvent AE = (AbilityEvent) event;
 				if(AE.getCard().getCard() == cards.get(2)) {
-					EventBus.getInstance().callEvent(new DamageEvent(1, Content.selectedCard));
+					EventBus.getInstance().callEvent(new DamageEvent(1, AE.target));
 				}
 			}
 		});
@@ -94,13 +94,14 @@ public class Cards {
 		});
 		cards.add(new CreatureCard("Flame Spirit", 4, 1, 3, new ImageIcon("Flame Spirit.png"), a3,"Elemental", 7)); 
 		cards.add(new CreatureCard("Reborn Footman", 3, 2, 3, new ImageIcon("RebornFoot.png"), a3,"Undead", 8)); 
-		Ability a4 = new Ability("", "2: Give another creature +2/+1", AbilityEvent.class, new AbilityRunnable() {
+		Ability a4 = new Ability("", "1: Give another creature +2/+1 and destroy this creature", AbilityEvent.class, new AbilityRunnable() {
 			@Override
 			public void run(GameEvent event) {
 				//super.run(event);
 				AbilityEvent AE = (AbilityEvent) event;
-				if(AE.getCard().getCard() == cards.get(9)) {
-					EventBus.getInstance().callEvent(new ModifyEvent(Content.selectedCard, 2, 1));
+				if(AE.getCard().getCard() == cards.get(9)) {		//This won't work, selected card is the fac bot
+					EventBus.getInstance().callEvent(new ModifyEvent(AE.target, 2, 1));
+					EventBus.getInstance().callEvent(new CreatureKilledEvent(AE.getCard(), AE.c, AE.c.myCreatures.contains(AE.c.selectedCard)));
 				}
 			}
 		});
@@ -111,7 +112,7 @@ public class Cards {
 				//super.run(event);
 				AbilityEvent AE = (AbilityEvent) event;
 				if(AE.getCard().getCard() == cards.get(10)) {
-					EventBus.getInstance().callEvent(new CreaturePlayedEvent((CreatureCard) getCardFromID(9), null));
+					EventBus.getInstance().callEvent(new CreaturePlayedEvent((CreatureCard) getCardFromID(9), AE.c));
 				}
 			} 
 		});
@@ -137,7 +138,7 @@ public class Cards {
 
 			@Override
 			public boolean run(InPlayCreature target) {
-				return target.power <= 2;
+				return target.power <= 4;
 			}
 		};
 

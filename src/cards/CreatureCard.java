@@ -88,6 +88,10 @@ public class CreatureCard extends Card implements GameListener {
 	public int getCost() {
 		return cost;
 	}
+	
+	public Ability getAbility() {
+		return ability;
+	}
 
 	@Override
 	public String toString() {

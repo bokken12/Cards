@@ -92,6 +92,10 @@ public class InPlayCreature implements DamageableEntity {
 	public int getStartX() {
 		return startX;
 	}
+	
+	public void registerListeners() {
+		card.registerListeners();
+	}
 
 	public void setStartX(int startX) {
 		this.startX = startX;
