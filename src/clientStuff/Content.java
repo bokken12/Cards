@@ -1030,9 +1030,9 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 
 		int x;
 		int y;
-
+		int offset = (game.getWidth()/2) - handCards.size()*(CARD_WIDTH + 5)/2 - (CARD_WIDTH/2);
 		for(int i = 0; i < handCards.size(); i++) {
-			x = i*120 + 50;
+			x = i*120 + offset;
 			y = HAND_Y_POSITION;
 			HandCard h = handCards.get(i);
 			h.setStartX(x);
@@ -1044,7 +1044,7 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 
 		for(int i = 0; i < handCards.size(); i++) {
 
-			x = i*(CARD_WIDTH + 5) + 50;
+			x = i*(CARD_WIDTH + 5) + offset;
 			y = HAND_Y_POSITION;
 			if(!(selectedHandCard == null)) {
 				if(!(selectedHandCard.equals(handCards.get(i)))) {
@@ -1061,8 +1061,6 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 					paintCreature(handCards.get(i).getCard(), g, (int) selecCardPoint.getX(), (int) selecCardPoint.getY());
 				}
 			} else {
-				x = i*(CARD_WIDTH + 5) + 50;
-				y = HAND_Y_POSITION;
 				paintCreature(handCards.get(i).getCard(), g, x, y);
 			}
 		}
