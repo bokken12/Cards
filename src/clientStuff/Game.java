@@ -26,7 +26,7 @@ import Player.SimplePlayerProfile;
 
 
 
-public class Game extends JFrame{
+public class Game extends JFrame {
 
 	JButton play = new JButton("Play");
 	JButton settings = new JButton("Settings");

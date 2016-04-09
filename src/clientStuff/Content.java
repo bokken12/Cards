@@ -151,6 +151,7 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 	Font f8 = new Font("Helvetica", Font.PLAIN, 8);
 	Font f12 = new Font("Helvetica", Font.PLAIN, 12);
 	volatile SimplePlayerProfile match;
+	boolean targetingAbility = false;
 
 	public void paintComponent(Graphics g) {
 
@@ -262,6 +263,7 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 					i--;
 				}
 			}
+			
 			deck = realDeck;
 			System.out.println("-------deck is: " + deck.toString());
 			if(startTurn == true) {
@@ -301,6 +303,7 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 			for(int a = 0; a < 5; a++) {
 				deck.remove(0);
 			}
+			this.resetKeyboardActions();
 			add(manaLabel);
 			this.revalidate();
 
@@ -791,6 +794,13 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 				bd.execute();
 			}
 		}
+		
+		if(targetingAbility == true) {
+			if(getClick(a) != null) {
+				bus.callEvent(new AbilityEvent(selectedCard, getClick(a), this));
+				targetingAbility = false;
+			}
+		}
 	}
 
 	public boolean boardContainsPoint(Point p) {
@@ -856,13 +866,15 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 		try {
 			if(p.y > 400 && p.y < 600) {
 				//Clicked on your creature lane
-				int index = (p.x-50)/120;
+				int offset = (game.getWidth()/2) - myCreatures.size()*(CARD_WIDTH + 5)/2 - (CARD_WIDTH/2);
+				int index = (p.x-offset)/120;
 				return myCreatures.get(index);
 
 			}
 			if(p.y > 120 && p.y < 300) {
 				//Clicked on enemy creature lane
-				int index = (p.x-50)/120;
+				int offset = (game.getWidth()/2) - myCreatures.size()*(CARD_WIDTH + 5)/2 - (CARD_WIDTH/2);
+				int index = (p.x-offset)/120;
 				return enemyCreatures.get(index);
 
 			}
@@ -979,7 +991,7 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 
 	public void paintInPlayCreatures(Graphics g) {
 
-		List<InPlayCreature> k = myCreatures;
+		/*List<InPlayCreature> k = myCreatures;
 		for(int i = 0; i < k.size(); i++) {
 			if(k.get(i).equals(blocker)) {
 				paintInPlayCreature(k.get(i), g, (int) blockCardPoint.getX(), (int) blockCardPoint.getY());
@@ -991,7 +1003,27 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 		List<InPlayCreature> b = enemyCreatures;
 		for(int i = 0; i < b.size(); i++) {
 			paintInPlayCreature(b.get(i), g, 50 + i*120, 120);
+		}*/
+		
+		
+		List<InPlayCreature> k = myCreatures;
+		
+		int offset = (game.getWidth()/2) - k.size()*(CARD_WIDTH + 5)/2 - (CARD_WIDTH/2);
+		for(int i = 0; i < k.size(); i++) {
+			if(k.get(i).equals(blocker)) {
+				paintInPlayCreature(k.get(i), g, (int) blockCardPoint.getX(), (int) blockCardPoint.getY());
+			} else {
+				paintInPlayCreature(k.get(i), g, 50 + i*120 + offset, 400);
+			}
 		}
+		
+		List<InPlayCreature> b = enemyCreatures;
+		int offset2 = game.getWidth() - b.size()*(CARD_WIDTH + 5)/2 - (CARD_WIDTH/2);
+		for(int i = 0; i < b.size(); i++) {
+			paintInPlayCreature(b.get(i), g, 50 + i*120 + offset, 120);
+		}
+		
+		
 	}
 
 	public void paintHandCards(Graphics g) {
@@ -1063,7 +1095,7 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-
+		System.out.println("Meanie!" + e.getKeyChar());
 	}
 
 	@Override
@@ -1079,7 +1111,7 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 			if(!selectedCard.getCard().getAbility().hasTarget()) {
 				bus.callEvent(new AbilityEvent(selectedCard, null, this));
 			} else {
-				//Target the ability
+				targetingAbility  = true;
 			}
 			attacking.remove(selectedCard);
 
