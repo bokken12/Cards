@@ -52,6 +52,6 @@ public class AI implements ActionListener{
 		
 		AbilityRunnable effect = effects.get(value).get(r.nextInt(effects.get(value).size()));
 		
-		return new Ability("", "", trigger, effect);
+		return new Ability("", "", trigger, effect, false);
 	}
 }

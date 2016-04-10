@@ -11,12 +11,13 @@ public class Ability implements GameListener{
 	Class<? extends GameEvent> activation;
 	AbilityRunnable a;
 	private boolean hasTarget;
-	public Ability(String name, String desc, Class<? extends GameEvent> activation, AbilityRunnable a) {
+	public Ability(String name, String desc, Class<? extends GameEvent> activation, AbilityRunnable a, boolean hasTarget) {
 
 		this.a = a;
 		this.name = name;
 		description = desc;
 		this.activation = activation;
+		this.hasTarget = hasTarget;
 	}
 
 	public void passEvent(GameEvent event){

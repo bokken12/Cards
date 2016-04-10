@@ -53,7 +53,7 @@ public class Cards {
 			public void run(GameEvent event) {
 
 			}
-		});
+		}, false);
 
 		cards.add(new CreatureCard("Dwarven Knight", 4, 3, 4, new ImageIcon("dwarf knight.png"), a0, "Dwarf", 0));
 		cards.add(new CreatureCard("Dwarven Footman", 2, 3, 2, new ImageIcon("DwarvenFootman.png"), a0, "Dwarf", 1));   
@@ -66,7 +66,7 @@ public class Cards {
 					EventBus.getInstance().callEvent(new DamageEvent(1, AE.target));
 				}
 			}
-		});
+		}, true);
 		cards.add(new CreatureCard("Dwarven Wizard", 3, 2, 4, new ImageIcon("Weezard.png"), a1, "Dwarf", 2)); 
 		cards.add(new CreatureCard("Dwarven ShieldBearer", 2, 5, 4, new ImageIcon("dwarf shield.png"), a0,"Dwarf", 3));
 		cards.add(new CreatureCard("Dwarven Champion", 4, 4, 5, new ImageIcon("dwarf champ.png"), a0,"Dwarf", 4));
@@ -80,7 +80,7 @@ public class Cards {
 					EventBus.getInstance().callEvent(new CreaturePlayedEvent((CreatureCard) getCardFromID(5), null));
 				}
 			}
-		});
+		}, false);
 		cards.add(new CreatureCard("Vraz, the Lich King", 4, 6, 6, new ImageIcon("Vraz.png"), a2,"Undead", 6)); 
 		Ability a3 = new Ability("", "3: Destroy Flame Spirit: Deal 5 damage", AbilityEvent.class, new AbilityRunnable() {
 			@Override
@@ -91,7 +91,7 @@ public class Cards {
 					EventBus.getInstance().callEvent(new DamageEvent(5, Content.selectedCard));
 				}
 			}
-		});
+		}, true);
 		cards.add(new CreatureCard("Flame Spirit", 4, 1, 3, new ImageIcon("Flame Spirit.png"), a3,"Elemental", 7)); 
 		cards.add(new CreatureCard("Reborn Footman", 3, 2, 3, new ImageIcon("RebornFoot.png"), a3,"Undead", 8)); 
 		Ability a4 = new Ability("", "1: Give another creature +2/+1 and destroy this creature", AbilityEvent.class, new AbilityRunnable() {
@@ -104,7 +104,7 @@ public class Cards {
 					EventBus.getInstance().callEvent(new CreatureKilledEvent(AE.getCard(), AE.c, AE.c.myCreatures.contains(AE.c.selectedCard)));
 				}
 			}
-		});
+		}, true);
 		cards.add(new CreatureCard("Factory Bot", 2, 1, 2, new ImageIcon("FactoryBot.png"), a4,"Mechanical", 9)); 
 		Ability a5 = new Ability("", "2: put a 2/1 Factory Bot into play", AbilityEvent.class, new AbilityRunnable() {
 			@Override
@@ -115,7 +115,7 @@ public class Cards {
 					EventBus.getInstance().callEvent(new CreaturePlayedEvent((CreatureCard) getCardFromID(9), AE.c));
 				}
 			} 
-		});
+		}, false);
 		cards.add(new CreatureCard("The Factory", 0, 5, 6, new ImageIcon("Factory.png"), a5,"Mechanical", 10)); 
 		CreatureCard crcd1 = new CreatureCard("Charging Stag", 5, 5, 4, new ImageIcon("ChargingStag.png"), a0,"Beast", 11);
 		crcd1.setIntoPlay(new InPlayRunnable() {
@@ -157,7 +157,7 @@ public class Cards {
 					EventBus.getInstance().callEvent(new CreaturePlayedEvent((CreatureCard) getCardFromID(9), null));
 				}
 			} 
-		});
+		}, false);
 		cards.add(new CreatureCard("Verdant Spring", 0, 3, 1, new ImageIcon("Factory.jpg"), a6,"Plant", 12)); 
 
 		cards.add(new SpellCard("War Axe", 2, "Give a creature +3 attack", true, new ImageIcon("War Axe.png"), 13, new SpellRunnable() {
