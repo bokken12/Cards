@@ -1,4 +1,5 @@
 package clientStuff;
+
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -55,9 +56,7 @@ import Player.GamePlayer;
 import Player.Player;
 import Player.SimplePlayerProfile;
 
-
 public class Content extends JPanel implements ActionListener, MouseListener, KeyListener {
-
 
 	ImageIcon background = new ImageIcon("MenuBackground.jpg");
 	ImageIcon screen = new ImageIcon("newBoard.png");
@@ -102,7 +101,6 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 	int health = 20;
 	int enemyHealth = 20;
 
-
 	static final int MOUNTAIN_1_X = 80;
 	static final int MOUNTAIN_2_X = 1000;
 	static final int ARRIVAL_CREATURE_Y = 350;
@@ -116,7 +114,6 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 	Game game;
 	JLabel wait = new JLabel();
 	JLabel manaLabel = new JLabel(mana.toString());
-
 
 	public static EventBus bus = EventBus.getInstance();
 	public static GamePlayer you;
@@ -133,14 +130,12 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 	ArrayList<Integer> attackingEnemyNums = new ArrayList<Integer>();
 	ArrayList<Integer> deck;
 
-
 	HashMap<InPlayCreature, InPlayCreature> blockers = new HashMap<InPlayCreature, InPlayCreature>();
 
 	ImageIcon green = new ImageIcon("green.png");
 	ImageIcon red = new ImageIcon("red.png");
 	ImageIcon template = new ImageIcon("CreatureTemplate.png");
 	ImageIcon blowupTemplate = new ImageIcon("CreatureTemplate.png");
-
 
 	ArrayList<HandCard> handCards = new ArrayList<HandCard>();
 	HandCard selectedHandCard;
@@ -151,6 +146,8 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 	Point blockCardPoint = new Point();
 	BlockCardDragger bd = new BlockCardDragger();
 	InPlayCreature blocker;
+	SpellCard animatedSpell;
+	Point animatedSpellLoc = new Point(0, 0);
 
 	Font f8 = new Font("Helvetica", Font.PLAIN, 8);
 	Font f12 = new Font("Helvetica", Font.PLAIN, 12);
@@ -169,11 +166,14 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 			paintHandCards(g);
 			paintArrivals(g);
 
-
 			g.setFont(f);
 			g.drawString(Integer.toString(enemyHealth), 500, 50);
 			g.drawString(mana.toString(), 550, 50);
 
+			if(animatedSpell != null) {
+			paintCreature(animatedSpell, g, animatedSpellLoc.x, animatedSpellLoc.y);
+			}
+			
 			if(enemyHealth <= 0) {
 				win();
 			}
@@ -189,7 +189,6 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 		output.flush();
 		game.add(new WinScreen(game, player, true));
 		game.remove(this);
-
 	}
 
 	private void lose() {
@@ -199,7 +198,6 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 	}
 
 	public Content(Game parent, Player p, PrintWriter out) {
-
 		output = out;
 		game = parent;
 		player = p;
@@ -209,7 +207,7 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 		Dimension a = new Dimension(width, height);
 		addMouseListener(this);
 		addKeyListener(this);
-		
+
 		game.addKeyListener(this);
 		template.setImage(template.getImage().getScaledInstance((int) 120, 170, Image.SCALE_DEFAULT));
 		blowupTemplate.setImage(template.getImage().getScaledInstance((int) BLOWUP_CARD_WIDTH, BLOWUP_CARD_HEIGHT, Image.SCALE_DEFAULT));
@@ -270,7 +268,7 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 					i--;
 				}
 			}
-			
+
 			deck = realDeck;
 			System.out.println("-------deck is: " + deck.toString());
 			if(startTurn == true) {
@@ -298,6 +296,8 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 			buttons.add(manaLabel);
 			add(buttons);
 			add(manaLabel);
+			game.addKeyListener(this);
+			addKeyListener(this);
 			//add(handPanel);
 			int x;
 			int y;
@@ -371,7 +371,12 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 				enemyCreatures.get(i).setRed(false);
 			}
 		}
-
+		this.resetKeyboardActions();
+		game.addKeyListener(this);
+		addKeyListener(this);
+		endTurn.addKeyListener(this);
+		attack.addKeyListener(this);
+		block.addKeyListener(this);
 	}	
 
 	public void playMenu() {
@@ -392,8 +397,8 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 		Dimension b = new Dimension(50, 50);
 
 		add(Box.createHorizontalGlue());
-
 		add(Box.createHorizontalGlue());
+
 		decklist.setPreferredSize(b);
 		decklist.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		decklist.createVerticalScrollBar();
@@ -557,6 +562,9 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 			String maybe = m.substring(m.lastIndexOf(" ") + 1);
 			if(maybe != "") {
 				int targetIndex = Integer.parseInt(maybe);
+				animatedSpell = (SpellCard) cardsData.getCardFromID(spellId);
+				animatedSpellLoc = new Point(500, 50); //Enemy hand position
+				animate(5, new Point(targetIndex*120 + 50, 400));
 				bus.callEvent(new TargetedSpellPlayedEvent<InPlayCreature>((SpellCard) cardsData.getCardFromID(spellId), this, cardsInPlay.get(targetIndex)));
 			} else {
 				bus.callEvent(new UntargetedSpellPlayedEvent((SpellCard) cardsData.getCardFromID(spellId), this));
@@ -614,7 +622,7 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 		} else {
 			return 1;
 		}
-		
+
 	}
 
 	public static ArrayList<InPlayCreature> getCards() {
@@ -762,22 +770,22 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 				bd.execute();
 			}
 		}
-		
+
 		if(targetingAbility == true) {
 			if(getClick(a) != null) {
-				 System.out.println("Targeted ability is activating!");
+				System.out.println("Targeted ability is activating!");
 				bus.callEvent(new AbilityEvent(selectedCard, getClick(a), this));
 				targetingAbility = false;
 			}
 		}
-		
+
 		if(getClick(a) != null && e.getButton() == MouseEvent.BUTTON2) {
-			
+
 		}
 	}
-	
+
 	public void displayBlowup(Point p, InPlayCreature a) {
-		
+
 	}
 
 	public boolean boardContainsPoint(Point p) {
@@ -810,6 +818,8 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 						EventBus.getInstance().callEvent(new TargetedSpellPlayedEvent<InPlayCreature>(sc, this, getClick(a)));
 						handCards.remove(selectedHandCard);
 						mana -= selectedHandCard.getCard().getCost();
+						
+						
 
 					}
 				}
@@ -981,10 +991,10 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 		for(int i = 0; i < b.size(); i++) {
 			paintInPlayCreature(b.get(i), g, 50 + i*120, 120);
 		}*/
-		
-		
+
+
 		List<InPlayCreature> k = myCreatures;
-		
+
 		int offset = (game.getWidth()/2) - k.size()*(CARD_WIDTH + 5)/2 - (CARD_WIDTH/2);
 		for(int i = 0; i < k.size(); i++) {
 			if(k.get(i).equals(blocker)) {
@@ -993,31 +1003,31 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 				paintInPlayCreature(k.get(i), g, 50 + i*120 + offset, 400);
 			}
 		}
-		
+
 		List<InPlayCreature> b = enemyCreatures;
 		int offset2 = game.getWidth() - b.size()*(CARD_WIDTH + 5)/2 - (CARD_WIDTH/2);
 		for(int i = 0; i < b.size(); i++) {
 			paintInPlayCreature(b.get(i), g, 50 + i*120 + offset, 120);
 		}
-		
-		
+
+
 	}
 
 	public void paintHandCards(Graphics g) {
-
+		HAND_Y_POSITION = game.getHeight() - CARD_HEIGHT - 5;
 		int x;
 		int y;
 		int offset = (game.getWidth()/2) - handCards.size()*(CARD_WIDTH + 5)/2 - (CARD_WIDTH/2);
-//		for(int i = 0; i < handCards.size(); i++) {
-//			x = i*120 + offset;
-//			y = HAND_Y_POSITION;
-//			HandCard h = handCards.get(i);
-//			h.setStartX(x);
-//			h.setStartY(y);
-//			h.setEndX(x + 120);
-//			h.setEndY(y + 170);
-//			handCards.set(i, h);
-//		}
+		//		for(int i = 0; i < handCards.size(); i++) {
+		//			x = i*120 + offset;
+		//			y = HAND_Y_POSITION;
+		//			HandCard h = handCards.get(i);
+		//			h.setStartX(x);
+		//			h.setStartY(y);
+		//			h.setEndX(x + 120);
+		//			h.setEndY(y + 170);
+		//			handCards.set(i, h);
+		//		}
 
 		for(int i = 0; i < handCards.size(); i++) {
 
@@ -1044,9 +1054,9 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 	}
 
 	public void paintArrivals(Graphics g) {
-		
+
 		boolean foo = false;
-		
+
 		for(int i = 0; i < arrivalCreatures.size(); i++) {
 			CreatureCard c = arrivalCreatures.get(i);
 			if(! isMtn1Full) {
@@ -1080,19 +1090,67 @@ public class Content extends JPanel implements ActionListener, MouseListener, Ke
 
 	@Override 
 	public void keyTyped(KeyEvent e) {
-		System.out.println("Meanie!" + e.getKeyChar());
+		System.out.println("KeyPressed " + e.getKeyChar());
+		if(selectedCard != null) {
+			System.out.println("Selected creature is " + selectedCard.getCard().getName());
+		} else {
+			System.out.println("Selected card is null");
+		}
 		if(e.getKeyCode() == KeyEvent.VK_W && selectedCard != null) {
 			System.out.println("Calling AbilityEvent");
 			if(!selectedCard.getCard().getAbility().hasTarget()) {
-				 System.out.println("Untargeted ability is activating!");
+				System.out.println("Untargeted ability is activating!");
 				bus.callEvent(new AbilityEvent(selectedCard, null, this));
 			} else {
-				 System.out.println("Targeted ability is targeting");
+				System.out.println("Targeted ability is targeting");
 				targetingAbility  = true;
 			}
 			attacking.remove(selectedCard);
 
 		}
 	}
+	public void animate(int wait, Point target) {
+		SwingUtilities.invokeLater(new SpellAnimateRunnable(this, wait, target));
+	}
 
+	class SpellAnimateRunnable implements Runnable {
+		private Content c;
+		private Point target;
+		int wait;
+
+		public SpellAnimateRunnable(Content c, int wait, Point target) {
+			this.c = c;
+			this.wait = wait;
+			this.target = target;
+		}
+		public void run() {
+
+
+			try {
+				Thread.sleep(wait);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+
+			if(animatedSpellLoc.x > target.x) {
+				animatedSpellLoc.setLocation(animatedSpellLoc.x - 1, animatedSpellLoc.y);
+			}
+			if(animatedSpellLoc.x < target.x) {
+				animatedSpellLoc.setLocation(animatedSpellLoc.x + 1, animatedSpellLoc.y);
+			}
+			if(animatedSpellLoc.y < target.y) {
+				animatedSpellLoc.setLocation(animatedSpellLoc.x + 1, animatedSpellLoc.y);
+			}
+			if(animatedSpellLoc.y > target.y) {
+				animatedSpellLoc.setLocation(animatedSpellLoc.x - 1, animatedSpellLoc.y);
+			}
+			if(!target.equals(animatedSpellLoc)) {
+				animate(wait, target);
+			} else {
+				//Done!
+			}
+
+		}
+
+	}
 }
