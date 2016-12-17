@@ -7,50 +7,49 @@ import javax.swing.ImageIcon;
 
 import abilities.Ability;
 import events.GameEvent;
+import events.GameListener;
 
-public class Card
-{
-    String name;
-    HashMap<GameEvent, ArrayList<Ability>> listenerMap;
-    ImageIcon image;
-    int imX;
-    int imY;
-    int num;
+public class Card implements GameListener {
+	String name;
+	HashMap<GameEvent, ArrayList<Ability>> listenerMap;
+	ImageIcon image;
+	int imX;
+	int imY;
+	int num;
 
-    public Card()
-    {
-        num = Cards.cards.indexOf(this);
-    }
+	public Card(){
+		num =  Cards.cards.indexOf(this);
+		
+	}
+	public static Card fromName(String name){
+		return null;
+	}
+	public String getName(){
+		return name;
+	}
+	public void passEvent(GameEvent event){
+		if(listenerMap.containsKey(event)){
+			for(Ability activatedAbility: listenerMap.get(event)){
+				activatedAbility.passEvent(event);
+			}
+		}
+	}
 
-    public static Card fromName(String name)
-    {
-        return null;
-    }
+	public ImageIcon getImageIcon() {
+		return image;
 
-    public String getName()
-    {
-        return name;
-    }
+	}
 
-    public ImageIcon getImageIcon()
-    {
-        return image;
+	public String getText() {
+		return "";
+	}
 
-    }
+	public int getCost() {
+		return 0;
+	}
 
-    public String getText()
-    {
-        return "";
-    }
-
-    public int getCost()
-    {
-        return 0;
-    }
-
-    public int getID()
-    {
-        return num;
-    }
+	public int getID() {
+		return num;
+	}
 
 }

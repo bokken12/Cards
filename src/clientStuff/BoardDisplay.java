@@ -17,16 +17,17 @@ import uselessSubclasses.Lane;
 public class BoardDisplay extends JPanel
 {
 
-	ImageIcon screen;
+	private ImageIcon screen;
+	private ImageIcon template;
 	private JButton attack;
 	private JButton block;
 	private Board board;
 
 	public BoardDisplay(Board toDisplay){
-
 		board = toDisplay;
-
 		screen = new ImageIcon("CardScreen.png");
+		template = new ImageIcon("CreatureTemplate.png");
+	    template.setImage(template.getImage().getScaledInstance((int) 120, 170, Image.SCALE_DEFAULT));
 	}
 	public Board getDisplaying()
 	{
@@ -38,15 +39,14 @@ public class BoardDisplay extends JPanel
 	}
 	@Override
 	public void paintComponent(Graphics g) {
-		g.drawImage(screen.getImage(), 0, 0, this);
-
-		paintInPlayCreatures(g);
+	    super.paintComponent(g);
+		//g.drawImage(screen.getImage(), 0, 0, this);
+		//paintInPlayCreatures(g);
+	    screen.paintIcon(this, g, 0, 0);
 	}
 
 	public void paintCreature(Card card, Graphics g, int x, int y) {
 		ImageIcon img = card.getImageIcon();
-		ImageIcon template = new ImageIcon("CreatureTemplate.png");
-		template.setImage(template.getImage().getScaledInstance((int) 120, 170, Image.SCALE_DEFAULT));
 		img.setImage(img.getImage().getScaledInstance((int) 92, 83, Image.SCALE_DEFAULT));
 		String text = card.getText();
 		String cost = Integer.toString(card.getCost());

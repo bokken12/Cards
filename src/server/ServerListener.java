@@ -5,7 +5,7 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 
 import acm.program.ConsoleProgram;
-
+//TODO Causes lag and intense cpu usage when players start a game
 public class ServerListener extends ConsoleProgram
 {
 

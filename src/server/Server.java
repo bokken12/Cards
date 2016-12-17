@@ -59,7 +59,7 @@ public class Server extends ConsoleProgram{
 
 		Cards.init();
 		ServerSocket listener = null;
-		
+		println("Server started. Reading existing accounts from file...");
 		try {
 			/* Open the file for reading. */
 			BufferedReader br = new BufferedReader(new FileReader("PlayerData"));
@@ -70,6 +70,8 @@ public class Server extends ConsoleProgram{
 			String email = null;
 			Integer rank = null;
 			Integer gold = null;
+			Integer wins = null;
+			Integer losses = null;
 			ArrayList<Integer> cards = null;
 			HashMap<String, int[]> decks = null;
 			ArrayList<String> friends = null;
@@ -77,6 +79,7 @@ public class Server extends ConsoleProgram{
 			while (true) {
 				String line = br.readLine();
 				if (line == null) break;
+				System.out.println("Read line " + line);
 				if(!(line.startsWith("//"))) {
 
 					if(line.startsWith("--")) {
@@ -121,10 +124,18 @@ public class Server extends ConsoleProgram{
 					if(line.startsWith("friends")) {
 						friends = new ArrayList<String>();
 					}
+					
+					if(line.startsWith("wins")) {
+						wins = 	Integer.parseInt(line.substring(5));
+					}
+					
+					if(line.startsWith("losses")) {
+						losses = Integer.parseInt(line.substring(7));
+					}
 
-					if(username != null && password != null && rank != null && gold != null && cards != null && decks != null && friends != null && email != null) {
-						Player p = new Player(email, username, password, cards, decks, rank, friends, gold);
-						println(p);
+					if(username != null && password != null && rank != null && gold != null && cards != null && decks != null && friends != null && email != null && wins != null && losses != null) {
+						Player p = new Player(email, username, password, cards, decks, rank, friends, gold, wins, losses);
+						println("Recieved a player with name " + p.getUsername());
 						users.put(username, password);
 						userdata.put(username, p);
 					}
@@ -162,12 +173,11 @@ public class Server extends ConsoleProgram{
 			e.printStackTrace();
 		}
 		
-		
+		println("Recieved " + users.size() + " existing players. Server waiting for connections");
 
 		try {
 			listener = new ServerSocket(PORT_NUMBER, 100, InetAddress.getByName(HOSTNAME));
-			println("Waiting for a connection.");
-
+	
 			while (true) {
 				new Handler(listener.accept()).start();
 			}
@@ -305,6 +315,9 @@ public class Server extends ConsoleProgram{
 							playing.remove(0);
 						}
 					}
+					if(gh != null) {
+						gh.handleMessage(line + me);
+					}
 
 					break;
 				}
@@ -338,7 +351,7 @@ public class Server extends ConsoleProgram{
 							atemail = true;
 						}
 					}
-					Player player = new Player(email, username, password, Cards.getStarterCards(), new HashMap<String, int[]>(), 0, new ArrayList<String>(), 0);
+					Player player = new Player(email, username, password, Cards.getStarterCards(), new HashMap<String, int[]>(), 0, new ArrayList<String>(), 0, 0, 0);
 					pllayer = player;
 					name = username;
 					HashMap<String, int[]> dacks = new HashMap<String, int[]>();
@@ -424,6 +437,10 @@ public class Server extends ConsoleProgram{
 					gh.handleMessage(line + me);
 				} else if(line.startsWith("--block")) {
 					gh.handleMessage(line + me);
+				} else if(line.startsWith("--wi")) {
+					gh.handleMessage(line + me);
+				} else {
+					gh.handleMessage(line + me);
 				}
 
 
@@ -445,19 +462,18 @@ public class Server extends ConsoleProgram{
 		String b = a.nextToken();
 		String c = a.nextToken();
 		if((players.containsKey(b))) {
-			println("Denying login");
+			println("Denying login: Account already logged in");
 			return null;
 		}
-		println("Username is " + b + " and is it in data? " + users.containsKey(b));
-		if(users.containsKey(b)) println(" is Pasword in data? " + users.get(b).equals(c));
-		println("Sending Login Acceptance to player");
 		if(users.containsKey(b) && users.get(b).equals(c)) {
-			println("Actually Sending Login Acceptance to player");
+			println("Username and password are in data");
+			println("Sending login acceptance to player");
 
 			output.println("--loginaccepted " + userdata.get(b).toString());
+		} else {
+			println("Incorrect username or password, login not accepted");
 		}
 		output.flush();
-		println("got a login");
 		players.put(b, h);
 		h.name = b;
 

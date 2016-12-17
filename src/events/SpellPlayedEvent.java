@@ -11,9 +11,7 @@ public class SpellPlayedEvent extends CardPlayedEvent {
 	
 	@Override
 	public void fireEvent() {
-		// TODO Auto-generated method stub
 		card.getEffect().run(c);
-		
 	}
 	
 	public SpellPlayedEvent(Board gs, SpellCard card) {

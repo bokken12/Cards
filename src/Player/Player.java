@@ -15,6 +15,7 @@ import messaging.StringableString;
 import messaging.Stringer;
 import cards.Card;
 
+<<<<<<< HEAD
 public class Player implements Stringable<Player>{
     private static String seperator = "|||";//"I'm such a great player, aren't I great. I must be amazing. Wow, I'm a wonderful player, don't you think that my username is fabulous?";
 	StringableString email;
@@ -25,6 +26,20 @@ public class Player implements Stringable<Player>{
 	StringableInteger rank;
 	StringableArrayList<StringableString> friends = new StringableArrayList<StringableString>();
 	StringableInteger gold;
+=======
+public class Player {
+	String email;
+	String username;
+	String password;
+	ArrayList<Integer> cardCollection;
+	HashMap<String, int[]> decks = new HashMap<String, int[]>();
+	int wins = 0;
+	int losses = 0;
+	int rank;
+
+	ArrayList<String> friends = new ArrayList<String>();
+	int gold;
+>>>>>>> master
 	public void addCardToCollection(int card){
 		cardCollection.add(new StringableInteger(card));
 	}
@@ -48,6 +63,7 @@ public class Player implements Stringable<Player>{
 				+ ", password=" + password + ", cardCollection="
 				+ cardCollection + ", decks=" + s
 				+ ", rank=" + rank + ", friends=" + friends
+<<<<<<< HEAD
 				+ ", gold=" + gold + "]";*/
 	    /*String str = "";
 	    str += Stringer.printStringable(new StringableString(email));
@@ -81,6 +97,9 @@ public class Player implements Stringable<Player>{
 	}
 	public Player(String str){
 	    this.fromString(str);
+=======
+				+ ", gold=" + gold + "wins=" + wins + "losses=" + losses + "]";
+>>>>>>> master
 	}
 	public void addFriend(String friend){
 		friends.add(new StringableString(friend));
@@ -143,6 +162,7 @@ public class Player implements Stringable<Player>{
 		this.gold = new StringableInteger(gold);
 	}
 	public Player(String email, String username, String password,
+<<<<<<< HEAD
 			ArrayList<Integer> cardCollection, HashMap<String, ArrayList<Integer>> decks, int rank,
 			ArrayList<String> friends, int gold) {
 		setEmail(email);
@@ -184,4 +204,17 @@ public class Player implements Stringable<Player>{
         setFriends(e.getFriends());
         setGold(e.getGold());
     }
+=======
+			ArrayList<Integer> cardCollection, HashMap<String, int[]> decks, int rank,
+			ArrayList<String> friends, int gold, int wins, int losses) {
+		this.email = email;
+		this.username = username;
+		this.password = password;
+		this.cardCollection = cardCollection;
+		this.decks = decks;
+		this.rank = rank;
+		this.friends = friends;
+		this.gold = gold;
+	}
+>>>>>>> master
 }

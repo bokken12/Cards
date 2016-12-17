@@ -44,4 +44,12 @@ public class Ability implements GameListener
         return description;
     }
 
+	/* (non-Javadoc)
+	 * @see events.GameListener#passEvent(events.GameEvent)
+	 */
+	@Override
+	public void passEvent(GameEvent event) {
+		passEvent(event, board);
+	}
+
 }

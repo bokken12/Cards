@@ -20,6 +20,7 @@ public class ModifyEvent extends GameEvent{
 	    super(gs);
 		this.power = power;
 		this.health = health;
+		this.target = target;
 	}
 
 }

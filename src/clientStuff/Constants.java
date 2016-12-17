@@ -23,4 +23,5 @@ public interface Constants {
     public static final int ARRIVAL_CREATURE_Y = 350;
     public static final int ARRIVAL_CREATURE_Y_2 = 150;
     public static final int STARTING_HAND_SIZE = 3;
+    public static final int CARD_SPACING = 5;
 }
